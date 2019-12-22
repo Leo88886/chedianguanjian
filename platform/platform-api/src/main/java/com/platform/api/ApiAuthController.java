@@ -141,6 +141,7 @@ public class ApiAuthController extends ApiBaseAction {
         resultObj.put("token", token);
         resultObj.put("userInfo", userInfo);
         resultObj.put("userId", userVo.getUserId());
+        resultObj.put("openId", sessionData.getString("openid")); //添加返回openId
         return toResponsSuccess(resultObj);
     }
 

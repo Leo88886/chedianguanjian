@@ -48,7 +48,8 @@ Page({
           wx.setStorageSync('userInfo', res.data.userInfo);
           wx.setStorageSync('token', res.data.token);
           wx.setStorageSync('userId', res.data.userId);
-
+          wx.setStorageSync('openId', res.data.openId);
+          console.log(res.data.openId)
         } else {
           // util.showErrorToast(res.errmsg)
           wx.showModal({

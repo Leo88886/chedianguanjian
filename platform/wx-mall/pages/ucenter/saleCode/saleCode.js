@@ -6,7 +6,7 @@ Page({
     salerId:''
   },
   onLoad:function(options){
-    // 页面初始化 options为页面跳转所带来的参数
+    // 页面初始化 options为页面跳转所带来的参数123
     // 页面显示
   },  
   //获取用户输入的用户名

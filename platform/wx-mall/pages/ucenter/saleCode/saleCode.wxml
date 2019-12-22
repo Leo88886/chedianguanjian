@@ -1,0 +1,7 @@
+<view class="container">
+  <view>
+  <input type="text" placeholder="请输入分销码" placeholder-class="placeholder" bindinput="salerId" />
+
+  <button bindtap="saveSalerId">保存</button>
+</view>
+</view>

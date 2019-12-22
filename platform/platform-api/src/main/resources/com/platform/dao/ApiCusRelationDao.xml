@@ -17,11 +17,11 @@
         </if>
     </sql>
 
-    <select id="selectCusRelationPage" resultType="com.platform.entity.ApiCusRelationEntity">
+    <select id="selectCusRelationPage" resultType="com.platform.entity.CusRelationEntity">
         <include refid="selectSql"/>
     </select>
 
-    <select id="queryAll" resultType="com.platform.entity.ApiCusRelationEntity">
+    <select id="queryAll" resultType="com.platform.entity.CusRelationEntity">
         <include refid="selectSql"/>
     </select>
 </mapper>

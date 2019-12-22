@@ -24,7 +24,7 @@ import java.io.Serializable;
  */
 @Data
 @TableName("nideshop_cus_relation")
-public class ApiCusRelationEntity implements Serializable {
+public class ApiCusRelationVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

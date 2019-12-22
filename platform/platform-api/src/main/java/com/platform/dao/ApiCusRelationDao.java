@@ -12,7 +12,7 @@ package com.platform.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.platform.entity.ApiCusRelationEntity;
+import com.platform.entity.ApiCusRelationVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,7 +26,7 @@ import java.util.Map;
  * @date 2019-12-22 22:21:10
  */
 @Mapper
-public interface ApiCusRelationDao extends BaseMapper<ApiCusRelationEntity> {
+public interface ApiCusRelationDao extends BaseDao<ApiCusRelationVo> {
 
     /**
      * 查询所有列表
@@ -34,7 +34,7 @@ public interface ApiCusRelationDao extends BaseMapper<ApiCusRelationEntity> {
      * @param params 查询参数
      * @return List
      */
-    List<ApiCusRelationEntity> queryAll(@Param("params") Map<String, Object> params);
+    List<ApiCusRelationVo> queryAll(@Param("params") Map<String, Object> params);
 
     /**
      * 自定义分页查询
@@ -43,5 +43,5 @@ public interface ApiCusRelationDao extends BaseMapper<ApiCusRelationEntity> {
      * @param params 查询参数
      * @return List
      */
-    List<ApiCusRelationEntity> selectCusRelationPage(IPage page, @Param("params") Map<String, Object> params);
+    List<ApiCusRelationVo> selectCusRelationPage(IPage page, @Param("params") Map<String, Object> params);
 }

@@ -28,7 +28,7 @@ public class ApiUploadController extends ApiBaseAction {
     /**
      * 上传文件
      */
-	@ApiOperation(value = "上传文件")
+    @ApiOperation(value = "上传文件")
     @IgnoreAuth
     @PostMapping("/upload")
     public Object upload(@RequestParam("file") MultipartFile file) throws Exception {

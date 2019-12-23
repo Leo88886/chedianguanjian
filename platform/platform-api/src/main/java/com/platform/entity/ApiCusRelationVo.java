@@ -15,11 +15,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 实体
  *
- * @author lipengjun
+ * @author heguoqiang
  * @date 2019-12-22 22:21:10
  */
 @Data
@@ -28,10 +29,10 @@ public class ApiCusRelationVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     *
      */
     @TableId
-    private String id;
+    private Integer id;
     /**
      * 推荐者openId
      */
@@ -43,9 +44,65 @@ public class ApiCusRelationVo implements Serializable {
     /**
      * 创建时间
      */
-    private String createTime;
+    private Date createTime;
     /**
      * 销售码
      */
-    private String salerId;
+    private Integer salerId;
+
+    public ApiCusRelationVo() {
+
+    }
+
+    public ApiCusRelationVo(Integer id, String fromOpenId, String toOpenId, Date createTime, Integer salerId) {
+        this.id = id;
+        this.fromOpenId = fromOpenId;
+        this.toOpenId = toOpenId;
+        this.createTime = createTime;
+        this.salerId = salerId;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFromOpenId() {
+        return fromOpenId;
+    }
+
+    public void setFromOpenId(String fromOpenId) {
+        this.fromOpenId = fromOpenId;
+    }
+
+    public String getToOpenId() {
+        return toOpenId;
+    }
+
+    public void setToOpenId(String toOpenId) {
+        this.toOpenId = toOpenId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getSalerId() {
+        return salerId;
+    }
+
+    public void setSalerId(Integer salerId) {
+        this.salerId = salerId;
+    }
 }

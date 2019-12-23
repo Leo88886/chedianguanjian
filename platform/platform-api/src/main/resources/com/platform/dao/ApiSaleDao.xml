@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiCusRelationDao">
+<mapper namespace="com.platform.dao.ApiSaleDao">
 
     <sql id="selectSql">
         SELECT
-        T.id,
-        T.from_open_id,
-        T.to_open_id,
-        T.create_time,
-        T.saler_id
-        FROM nideshop_cus_relation T
+        T.saler_id,
+        T.open_id
+        FROM nideshop_sale T
         WHERE 1=1
         <if test="params.name != null and params.name.trim() != ''">
             AND T.NAME LIKE '%${params.name}%'
         </if>
     </sql>
 
-    <select id="selectCusRelationPage" resultType="com.platform.entity.ApiCusRelationVo">
+    <select id="selectSalePage" resultType="com.platform.entity.ApiSaleVo">
         <include refid="selectSql"/>
     </select>
 
-    <select id="queryAll" resultType="com.platform.entity.ApiCusRelationVo">
+    <select id="queryAll" resultType="com.platform.entity.ApiSaleVo">
         <include refid="selectSql"/>
     </select>
 </mapper>

@@ -9,9 +9,7 @@
         T.open_id
         FROM nideshop_sale T
         WHERE 1=1
-        <if test="params.name != null and params.name.trim() != ''">
-            AND T.NAME LIKE '%${params.name}%'
-        </if>
+
     </sql>
 
     <select id="selectSalePage" resultType="com.platform.entity.ApiSaleVo">
@@ -20,5 +18,15 @@
 
     <select id="queryAll" resultType="com.platform.entity.ApiSaleVo">
         <include refid="selectSql"/>
+        <if test="params.salerId != null and params.salerId.trim() != ''">
+            AND T.NAME LIKE '%${params.name}%'
+        </if>
+    </select>
+
+    <select id="getSalerId" resultType="com.platform.entity.ApiSaleVo">
+        <include refid="selectSql"/>
+        <if test="params.fromOpenId != null and params.fromOpenId.trim() != ''">
+            AND T.open_id = '%${params.fromOpenId}%'
+        </if>
     </select>
 </mapper>

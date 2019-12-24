@@ -21,13 +21,13 @@ public class ApiCusRelationService {
         cusRelationDao.save(cusRelationVo);
     }
 
-    /**
-     * 通過识别码查询销售openId
-     * @param params
-     * @return
-     */
     public List<ApiCusRelationVo> queryAll (@Param("params") Map<String, Object> params){
         List<ApiCusRelationVo> list = cusRelationDao.queryAll(params);
+        return list;
+    }
+
+    public List<ApiCusRelationVo> getCusByToOpenid (@Param("params") Map<String, Object> params){
+        List<ApiCusRelationVo> list = cusRelationDao.getCusByToOpenid(params);
         return list;
     }
 }

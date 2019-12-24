@@ -43,4 +43,8 @@ public interface ApiSaleDao extends BaseDao<ApiSaleVo> {
      * @return List
      */
     List<ApiSaleVo> selectSalePage(IPage page, @Param("params") Map<String, Object> params);
+
+    ApiSaleVo getSalerId(@Param("params") Map<String, Object> params);
+
+
 }

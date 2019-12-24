@@ -19,13 +19,14 @@ public class ApiSaleService {
         saleDao.save(saleVo);
     }
 
-    /**
-     * 通過识别码查询销售openId
-     * @param params
-     * @return
-     */
     public List<ApiSaleVo> queryAll (@Param("params") Map<String, Object> params){
         List<ApiSaleVo> list = saleDao.queryAll(params);
         return list;
     }
+
+    public ApiSaleVo getSalerId (@Param("params") Map<String, Object> params){
+        ApiSaleVo saleVo = saleDao.getSalerId(params);
+        return saleVo;
+    }
+
 }

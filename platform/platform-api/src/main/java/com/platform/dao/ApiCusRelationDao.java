@@ -44,4 +44,13 @@ public interface ApiCusRelationDao extends BaseDao<ApiCusRelationVo> {
      * @return List
      */
     List<ApiCusRelationVo> selectCusRelationPage(IPage page, @Param("params") Map<String, Object> params);
+
+
+    /**
+     * 通过toOpenId查询
+     *
+     * @param params 查询参数
+     * @return List
+     */
+    List<ApiCusRelationVo> getCusByToOpenid(@Param("params") Map<String, Object> params);
 }

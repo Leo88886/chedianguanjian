@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://39.97.171.35:8080/platform-framework/api/';
+const API_BASE_URL = 'http://localhost:8080/platform_framework/api/';
 module.exports = {
   IndexUrlNewGoods: API_BASE_URL + 'index/newGoods', //新品首发
   IndexUrlHotGoods: API_BASE_URL + 'index/hotGoods', //热卖商品
@@ -76,4 +76,6 @@ module.exports = {
   HelpTypeList: API_BASE_URL + 'helpissue/typeList', //查看帮助类型列表
   HelpIssueList: API_BASE_URL + 'helpissue/issueList', //查看问题列表
   SaveSalerId: API_BASE_URL + 'saveSalerId/save', //保存salerId
+  IsSaveSalerId: API_BASE_URL + 'saveSalerId/isSave', //查看是否绑定salerId
+  SaveForwardSalerId: API_BASE_URL + 'saveSalerId/saveForwardSalerId', //查看是否绑定salerId
 };

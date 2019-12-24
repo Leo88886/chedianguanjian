@@ -1,7 +1,9 @@
 <view class="container">
-  <view>
-  <input type="text" placeholder="请输入分销码" placeholder-class="placeholder" bindinput="salerId" />
-
-  <button bindtap="saveSalerId">保存</button>
-</view>
+  <view wx:if="{{flag}}">
+    <input type="text" placeholder="请输入分销码" placeholder-class="placeholder" bindinput="salerId" />
+    <button bindtap="saveSalerId">保存</button>
+  </view>
+    <view wx:if="{{flag2}}">
+    <input type="text"  placeholder-class="placeholder" value="{{text}}"  disabled='disabled'/>
+  </view>
 </view>

@@ -50,6 +50,8 @@ Page({
   },
   onLoad: function (options) {
     var that = this;
+    util.request(api.CartList).then(function (res) {
+    });
     that.getIndexData();
     let qrUrl = decodeURIComponent(options.q);
     if (qrUrl != "undefined") {   //通过转发进入的页面

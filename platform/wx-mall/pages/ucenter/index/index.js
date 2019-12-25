@@ -46,7 +46,8 @@ Page({
     }
   },
   onShow: function() {
-
+    util.request(api.CartList).then(function (res) {
+    });
     let userInfo = wx.getStorageSync('userInfo');
     let token = wx.getStorageSync('token');
 

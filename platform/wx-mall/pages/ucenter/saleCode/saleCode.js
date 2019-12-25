@@ -4,14 +4,14 @@ const user = require('../../../services/user.js');
 Page({
   data: {
     salerId: '',
-    flag : false,
-    flag2 : false,
-    text:''
+    flag: false,
+    flag2: false,
+    text: ''
   },
   onLoad: function(options) {
     var that = this;
     wx.request({
-      url: api.IsSaveSalerId,   
+      url: api.IsSaveSalerId,
       data: {
         openId: wx.getStorageSync('openId'), //当前登陆用户openId
       },
@@ -19,16 +19,16 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function (res) {
-        if (null != res.data && res.data != '') {   //已绑定
-        console.log(res.data);
+      success: function(res) {
+        if (null != res.data && res.data != '') { //已绑定
+          console.log(res.data);
           that.setData({
-            flag2: true,  // 不显示保存按钮
-            text:res.data
+            flag2: true, // 不显示保存按钮
+            text: res.data
           })
-        }else{
+        } else {
           that.setData({
-            flag: true,  
+            flag: true,
           })
         }
       }
@@ -62,6 +62,9 @@ Page({
             title: '保存成功',
             icon: 'success',
             duration: 2000
+          })
+          wx.navigateBack({
+            delta: 1
           })
         } else {
           wx.showLoading

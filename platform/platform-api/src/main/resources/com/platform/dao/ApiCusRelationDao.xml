@@ -46,13 +46,15 @@
 
     <select id="getCusByToOpenid" resultType="com.platform.entity.ApiCusRelationVo">
         <include refid="selectSql"/>
-        <if test="params.toOpenId != null and params.toOpenId.trim() != ''">
-            AND T.to_open_id = '%${params.toOpenId}%'
-        </if>
-        <if test="params.salerId != null and params.salerId.trim() != ''">
-            AND T.saler_id != params.salerId
-        </if>
+            AND T.to_open_id = #{toOpenId}
+            AND T.saler_id != #{salerId}
 
+    </select>
+
+    <select id="getRelation" resultType="com.platform.entity.ApiCusRelationVo">
+        <include refid="selectSql"/>
+        AND T.to_open_id = #{toOpenId}
+        AND T.from_open_id = #{fromOpenId}
     </select>
 
 </mapper>

@@ -33,4 +33,11 @@ public interface ApiUserMapper extends BaseDao<UserVo> {
      * @return
      */
     int saveSmsCodeLog(SmsLogVo smsLogVo);
+
+    /**
+     * 通过openId查询用户
+     * @param fromOpenId
+     * @return
+     */
+    UserVo getUserByOpenId(@Param("fromOpenId") String fromOpenId);
 }

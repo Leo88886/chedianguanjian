@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.ApiCusRelationVo;
 import com.platform.entity.ApiSaleVo;
+import com.platform.entity.UserCouponVo;
+import com.platform.entity.UserVo;
 import com.platform.service.ApiCusRelationService;
 import com.platform.service.ApiSaleService;
+import com.platform.service.ApiUserCouponService;
+import com.platform.service.ApiUserService;
 import com.platform.util.ApiBaseAction;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +41,10 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
     private ApiCusRelationService cusRelationService;
     @Autowired
     private ApiSaleService saleService;
+    @Autowired
+    private ApiUserCouponService userCouponService;
+    @Autowired
+    private ApiUserService userService;
 
     /**
      * 保存salerId
@@ -54,16 +63,16 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("salerId"))) {
             salerId = jsonParam.getString("salerId");
         }
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("salerId",salerId);
-        List<ApiSaleVo> saleList = saleService.queryAll(map);     //通過识别码查询销售openId
-        if(null != saleList && saleList.size() > 0){
-            fromOpenId = saleList.get(0).getOpenId();
+
+        ApiSaleVo saleVo = saleService.getSalerIdBySalerId(salerId);     //通過salerId查询fromOpenId
+        if(null != saleVo){
+            fromOpenId = saleVo.getOpenId();
             ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
             cusRelationVo.setFromOpenId(fromOpenId);
             cusRelationVo.setToOpenId(openId);
             cusRelationVo.setSalerId(Integer.valueOf(salerId));
             cusRelationVo.setId(null);
+            cusRelationVo.setCreateTime(new Date());
             cusRelationService.save(cusRelationVo);
             return "1";         //  保存成功
         }else{
@@ -84,12 +93,9 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("openId"))) {
             toOpenId = jsonParam.getString("openId");
         }
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("toOpenId",toOpenId);
-        map.put("salerId",0);
-        List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(map);       //通过toOpenId，且salerId!=0查询是否存在关系
+        List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(toOpenId,0);       //通过toOpenId，且salerId!=0查询是否存在关系
         if(null != list && list.size() > 0){
-            return "2";     // 已经绑定过识别码
+            return list.get(0).getSalerId().toString();     // 已经绑定过识别码
         }else{
             return "";
         }
@@ -111,19 +117,23 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("fromOpenId"))) {
             fromOpenId = jsonParam.getString("fromOpenId");
         }
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("toOpenId",toOpenId);
-        map.put("fromOpenId",fromOpenId);
 
-       List<ApiCusRelationVo> list =  cusRelationService.queryAll(map);         //通过fromOpenId toOpenId 查询是否存在关系
-       if(null == list || list.size() < 0){
-           Map<String,Object> map2 = new HashMap<String,Object>();
-           map.put("fromOpenId",fromOpenId);
-           ApiSaleVo saleVo = saleService.getSalerId(map2);         //通过fromOpenId获取salerId
+       List<ApiCusRelationVo> list =  cusRelationService.getRelation(fromOpenId,toOpenId);         //通过fromOpenId toOpenId 查询是否存在关系
+       if(null == list || list.size() <= 0){
+           ApiSaleVo saleVo = saleService.getSalerIdByOpenId(fromOpenId);         //通过fromOpenId获取salerId
            ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
            if(null != saleVo){
                cusRelationVo.setSalerId(saleVo.getSalerId());
            }else {
+               UserVo user =  userService.getUserByOpenId(fromOpenId);
+               UserCouponVo userCouponVo = new UserCouponVo();
+               userCouponVo.setId(null);
+               userCouponVo.setCoupon_id(2);
+               userCouponVo.setCoupon_number("1");
+               userCouponVo.setUser_id(user.getUserId());
+               userCouponVo.setAdd_time(new Date());
+               userCouponService.save(userCouponVo);
+
                cusRelationVo.setSalerId(0);         //普通用户转发
            }
            cusRelationVo.setFromOpenId(fromOpenId);

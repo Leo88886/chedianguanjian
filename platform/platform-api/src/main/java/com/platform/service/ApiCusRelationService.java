@@ -26,8 +26,13 @@ public class ApiCusRelationService {
         return list;
     }
 
-    public List<ApiCusRelationVo> getCusByToOpenid (@Param("params") Map<String, Object> params){
-        List<ApiCusRelationVo> list = cusRelationDao.getCusByToOpenid(params);
+    public List<ApiCusRelationVo> getCusByToOpenid (String toOpenId,Integer salerId){
+        List<ApiCusRelationVo> list = cusRelationDao.getCusByToOpenid(toOpenId,salerId);
+        return list;
+    }
+
+    public List<ApiCusRelationVo> getRelation(String fromOpenId, String toOpenId) {
+        List<ApiCusRelationVo> list = cusRelationDao.getRelation(fromOpenId,toOpenId);
         return list;
     }
 }

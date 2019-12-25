@@ -23,10 +23,12 @@
         </if>
     </select>
 
-    <select id="getSalerId" resultType="com.platform.entity.ApiSaleVo">
+    <select id="getSalerIdByOpenId" resultType="com.platform.entity.ApiSaleVo">
         <include refid="selectSql"/>
-        <if test="params.fromOpenId != null and params.fromOpenId.trim() != ''">
-            AND T.open_id = '%${params.fromOpenId}%'
-        </if>
+            AND T.open_id = #{openId}
+    </select>
+    <select id="getSalerIdBySalerId" resultType="com.platform.entity.ApiSaleVo">
+        <include refid="selectSql"/>
+        AND T.saler_id = #{salerId}
     </select>
 </mapper>

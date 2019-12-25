@@ -97,4 +97,8 @@ public class ApiUserService {
         }
         return result;
     }
+
+    public UserVo getUserByOpenId(String fromOpenId) {
+        return userDao.getUserByOpenId(fromOpenId);
+    }
 }

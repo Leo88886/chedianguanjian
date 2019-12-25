@@ -155,4 +155,10 @@
         )
     </insert>
 
+    <select id="getUserByOpenId" resultMap="userMap">
+        select * from nideshop_user a
+        where a.weixin_openid = #{fromOpenId}
+
+    </select>
+
 </mapper>

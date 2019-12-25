@@ -47,4 +47,7 @@ public interface ApiSaleDao extends BaseDao<ApiSaleVo> {
     ApiSaleVo getSalerId(@Param("params") Map<String, Object> params);
 
 
+    ApiSaleVo getSalerIdByOpenId(@Param("openId") String openId);
+
+    ApiSaleVo getSalerIdBySalerId(@Param("salerId") String salerId);
 }

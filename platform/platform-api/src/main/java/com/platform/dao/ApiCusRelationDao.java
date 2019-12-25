@@ -47,10 +47,12 @@ public interface ApiCusRelationDao extends BaseDao<ApiCusRelationVo> {
 
 
     /**
-     * 通过toOpenId查询
      *
-     * @param params 查询参数
-     * @return List
+     * @param toOpenId
+     * @param salerId
+     * @return
      */
-    List<ApiCusRelationVo> getCusByToOpenid(@Param("params") Map<String, Object> params);
+    List<ApiCusRelationVo> getCusByToOpenid(@Param("toOpenId") String toOpenId, @Param("salerId") Integer salerId);
+
+    List<ApiCusRelationVo> getRelation(@Param("fromOpenId") String fromOpenId ,@Param("toOpenId") String toOpenId);
 }

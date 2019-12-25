@@ -24,9 +24,13 @@ public class ApiSaleService {
         return list;
     }
 
-    public ApiSaleVo getSalerId (@Param("params") Map<String, Object> params){
-        ApiSaleVo saleVo = saleDao.getSalerId(params);
+    public ApiSaleVo getSalerIdByOpenId(String openId) {
+        ApiSaleVo saleVo = saleDao.getSalerIdByOpenId(openId);
         return saleVo;
     }
 
+    public ApiSaleVo getSalerIdBySalerId(String salerId) {
+        ApiSaleVo saleVo = saleDao.getSalerIdBySalerId(salerId);
+        return saleVo;
+    }
 }

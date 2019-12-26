@@ -118,32 +118,49 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
             fromOpenId = jsonParam.getString("fromOpenId");
         }
 
-       List<ApiCusRelationVo> list =  cusRelationService.getRelation(fromOpenId,toOpenId);         //通过fromOpenId toOpenId 查询是否存在关系
-       if(null == list || list.size() <= 0){
-           ApiSaleVo saleVo = saleService.getSalerIdByOpenId(fromOpenId);         //通过fromOpenId获取salerId
-           ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
-           if(null != saleVo){
-               cusRelationVo.setSalerId(saleVo.getSalerId());
-           }else {
-               UserVo user =  userService.getUserByOpenId(fromOpenId);
-               UserCouponVo userCouponVo = new UserCouponVo();
-               userCouponVo.setId(null);
-               userCouponVo.setCoupon_id(2);
-               userCouponVo.setCoupon_number("1");
-               userCouponVo.setUser_id(user.getUserId());
-               userCouponVo.setAdd_time(new Date());
-               userCouponService.save(userCouponVo);
+        ApiSaleVo saleVo = saleService.getSalerIdByOpenId(fromOpenId);         //判断转发者是否为销售
+        if (null != saleVo) {             //销售转发
+            List<ApiCusRelationVo> list = cusRelationService.getRelation(toOpenId);         //判断是否已绑定销售
+            if (null == list || list.size() <= 0) {
+                ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
+                cusRelationVo.setSalerId(saleVo.getSalerId());
+                cusRelationVo.setFromOpenId(fromOpenId);
+                cusRelationVo.setToOpenId(toOpenId);
+                cusRelationVo.setId(null);
+                cusRelationService.save(cusRelationVo);
+                return "1";          //保存成功
+            } else {
+                return "2";          //已绑定销售
+            }
+        } else {             //普通用户转发
+            List<ApiCusRelationVo> list2 = cusRelationService.getCusRelation(fromOpenId);         //判断用户是否已转发过
+            if (null == list2 || list2.size() <= 0) {
+                ApiCusRelationVo cusRelationVo2 = new ApiCusRelationVo();
+                cusRelationVo2.setSalerId(0);
+                cusRelationVo2.setFromOpenId(fromOpenId);
+                cusRelationVo2.setToOpenId(toOpenId);
+                cusRelationVo2.setId(null);
+                cusRelationService.save(cusRelationVo2);
+                //第一次转发送优惠卷
+                UserVo user = userService.getUserByOpenId(fromOpenId);
+                UserCouponVo userCouponVo = new UserCouponVo();
+                userCouponVo.setId(null);
+                userCouponVo.setCoupon_id(2);
+                userCouponVo.setCoupon_number("1");
+                userCouponVo.setUser_id(user.getUserId());
+                userCouponVo.setAdd_time(new Date());
+                userCouponService.save(userCouponVo);
+                return "3";                 // 第一次转发
+            }else{
+                return "4";                 //已转发过
+            }
 
-               cusRelationVo.setSalerId(0);         //普通用户转发
-           }
-           cusRelationVo.setFromOpenId(fromOpenId);
-           cusRelationVo.setToOpenId(toOpenId);
-           cusRelationVo.setId(null);
-           cusRelationService.save(cusRelationVo);
-           return "1";          //保存成功
-       }else{
-           return "2";          //已被绑定
-       }
+        }
+
+
+
+
+
 
     }
 }

@@ -54,7 +54,12 @@
     <select id="getRelation" resultType="com.platform.entity.ApiCusRelationVo">
         <include refid="selectSql"/>
         AND T.to_open_id = #{toOpenId}
-        AND T.from_open_id = #{fromOpenId}
+        AND T.saler_id != 0
+    </select>
+
+    <select id="getCusRelation" resultType="com.platform.entity.ApiCusRelationVo">
+        <include refid="selectSql"/>
+        AND T.from_open_id = #{toOpenId}
     </select>
 
 </mapper>

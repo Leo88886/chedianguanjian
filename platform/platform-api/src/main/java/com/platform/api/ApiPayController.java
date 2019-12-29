@@ -86,11 +86,11 @@ public class ApiPayController extends ApiBaseAction {
             Map orderGoodsParam = new HashMap();
             orderGoodsParam.put("order_id", orderId);
             // 商品描述
-            parame.put("body", "超市-支付");
+            parame.put("body", "chechedianguanjia");
             //订单的商品
             List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
             if (null != orderGoods) {
-                String body = "超市-";
+                String body = "cheche-";
                 for (OrderGoodsVo goodsVo : orderGoods) {
                     body = body + goodsVo.getGoods_name() + "、";
                 }

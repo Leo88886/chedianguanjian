@@ -3,14 +3,14 @@
   <swiper class="banner" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
     <swiper-item wx:for="{{banner}}" wx:key="{{item.id}}">
       <navigator url="{{item.link}}">
-        <image src="{{item.image_url}}" background-size="cover"></image>
+        <image src="{{item.image_url}}" background-size="cover" mode="scaleToFill"></image>
       </navigator>
     </swiper-item>
   </swiper>
   <view class="a-section a-topic" wx:if="{{channel.length > 0}}">
     <view class="m-menu">
       <navigator class="item" url="{{item.url}}" wx:for="{{channel}}" wx:key="{{item.id}}">
-        <image src="{{item.icon_url}}" background-size="cover"></image>
+        <image src="{{item.icon_url}}" background-size="cover" ></image>
         <text>{{item.name}}</text>
       </navigator>
     </view>

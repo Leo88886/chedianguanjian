@@ -53,13 +53,15 @@ Page({
     util.request(api.CartList).then(function (res) {
     });
     that.getIndexData();
-    let qrUrl = decodeURIComponent(options.q);
-    if (qrUrl != "undefined") {   //通过转发进入的页面
-      fromOpenId = that.getQueryString(qrUrl, 'fromOpenId');
+    var formOpenId = decodeURIComponent(options.formOpenId);
+    //console.log(options);
+    console.log(decodeURIComponent(options.formOpenId));
+    console.log(api.SaveSalerId);
+    if (formOpenId != "undefined" && formOpenId != null && formOpenId !="") {   //通过转发进入的页面
       wx.request({
-        url: api.SaveSalerId,
+        url: api.SaveForwardSalerId,
         data: {
-          fromOpenId: fromOpenId,
+          fromOpenId: formOpenId,
           openId: wx.getStorageSync('openId'),
         },
         method: 'POST',
@@ -67,14 +69,11 @@ Page({
           'content-type': 'application/json'
         },
         success: function (res) {
-          if (res.data == '1') {
-            console.log('保存成功');
-          } else {
-            console.log('已绑定');
-          }
+          console.log(res.data);
         }
       });
     }
+
   },
   onReady: function () {
     // 页面渲染完成

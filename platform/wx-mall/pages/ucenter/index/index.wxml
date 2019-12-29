@@ -40,7 +40,7 @@
      <view class="item">
       <navigator url="../saleCode/saleCode" class="a">
         <text class="icon feedback"></text>
-        <text class="txt">分校码</text>
+        <text class="txt">分销码</text>
       </navigator>
     </view>
     

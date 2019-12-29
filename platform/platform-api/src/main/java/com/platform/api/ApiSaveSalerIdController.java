@@ -120,7 +120,7 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
 
         ApiSaleVo saleVo = saleService.getSalerIdByOpenId(fromOpenId);         //判断转发者是否为销售
         if (null != saleVo) {             //销售转发
-            List<ApiCusRelationVo> list = cusRelationService.getRelation(toOpenId);         //判断是否已绑定销售
+            List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(toOpenId,0);         //判断是否已绑定销售
             if (null == list || list.size() <= 0) {
                 ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
                 cusRelationVo.setSalerId(saleVo.getSalerId());

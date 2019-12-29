@@ -284,12 +284,25 @@ public class MapUtils {
             while (keyIte.hasNext()) {
                 String key = (String) keyIte.next();
                 String val = String.valueOf(paraMap.get(key));
+                if("sign".equals(key)){
+                    continue;
+                }
                 xmlStr.append("<");
                 xmlStr.append(key);
                 xmlStr.append(">");
                 xmlStr.append(val);
                 xmlStr.append("</");
                 xmlStr.append(key);
+                xmlStr.append(">");
+            }
+            String signStr = (String)paraMap.get("sign");
+            if(StringUtils.isNotEmpty(signStr)){
+                xmlStr.append("<");
+                xmlStr.append("sign");
+                xmlStr.append(">");
+                xmlStr.append(signStr);
+                xmlStr.append("</");
+                xmlStr.append("sign");
                 xmlStr.append(">");
             }
             xmlStr.append("</xml>");

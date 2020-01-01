@@ -1,22 +1,22 @@
 package com.platform.controller;
 
-import com.platform.entity.SaleVo;
 import com.platform.entity.UserEntity;
 import com.platform.service.SaleService;
 import com.platform.service.UserService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
+import com.platform.utils.StringUtils;
 import com.platform.utils.excel.ExcelExport;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller
@@ -45,11 +45,75 @@ public class UserController {
         List<UserEntity> userList = userService.queryList(query);
         int total = userService.queryTotal(query);
 
+        if (CollectionUtils.isEmpty(userList)) {
+            PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
+            return R.ok().put("page", pageUtil);
+        }
+
+        List<UserEntity> AllSalerNumList = new ArrayList<>();
+        List<UserEntity> MonthSalerNumList = new ArrayList();
+        try {
+            Calendar cale = null;
+            cale = Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String firstday, lastday;
+            // 获取本月的第一天
+            cale = Calendar.getInstance();
+            cale.add(Calendar.MONTH, 0);
+            cale.set(Calendar.DAY_OF_MONTH, 1);
+            firstday = format.format(cale.getTime());
+            // 获取本月的最后一天
+            cale = Calendar.getInstance();
+            cale.add(Calendar.MONTH, 1);
+            cale.set(Calendar.DAY_OF_MONTH, 0);
+            lastday = format.format(cale.getTime());
+            AllSalerNumList = userService.querySalesAllBySaler();
+            MonthSalerNumList = userService.querySalesMonBySaler(firstday, lastday);
+        } catch (Exception e) {
+            System.out.println("查询销售全量、当月数量出错" + e);
+            PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
+            return R.ok().put("page", pageUtil);
+        }
+
+        try {
+            // key:salerId value:user实体
+            Map<String, List<UserEntity>> salerIdMap =
+                    userList.stream().collect(Collectors.groupingBy(UserEntity::getSalerId));
+            //为销售设置全量推广用户数
+            if (CollectionUtils.isNotEmpty(AllSalerNumList)) {
+                for (UserEntity userAllNum : AllSalerNumList) {
+                    if(StringUtils.isNullOrEmpty(userAllNum.getSalerId())){
+                        continue;
+                    }
+                    List<UserEntity> userEntities = salerIdMap.get(userAllNum.getSalerId());
+                    for (UserEntity user: userEntities) {
+                        user.setSalesAll(userAllNum.getSalesAll());
+                    }
+                }
+            }
+
+            //为销售设置当月推广用户数
+            if (CollectionUtils.isNotEmpty(MonthSalerNumList)) {
+                for (UserEntity userMonthNum : MonthSalerNumList) {
+                    if(StringUtils.isNullOrEmpty(userMonthNum.getSalerId())){
+                        continue;
+                    }
+                    List<UserEntity> userEntities = salerIdMap.get(userMonthNum.getSalerId());
+                    for (UserEntity user: userEntities) {
+                        user.setSalesMon(userMonthNum.getSalesMon());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("为销售设置分销用户数出错" + e);
+            PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
+            return R.ok().put("page", pageUtil);
+        }
+
         PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
 
         return R.ok().put("page", pageUtil);
     }
-
 
     /**
      * 查看信息

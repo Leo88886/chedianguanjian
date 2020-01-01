@@ -77,6 +77,39 @@
         </if>
     </select>
 
+    <select id="querySalesMonBySaler" resultType="com.platform.entity.UserEntity">
+        select
+        t1.saler_id as salerId,
+        count (distinct t4.user_id) as salesMon
+        from
+        nideshop_sale t1
+        LEFT JOIN
+        nideshop_cus_relation t2 on t1.open_id = t2.from_open_id
+        LEFT JOIN
+        nideshop_user t3 on t2.to_open_id = t3.weixin_openid
+        LEFT JOIN
+        nideshop_order t4 on t3.id = t4.user_id
+        where t4.pay_status = 2 and t4.pay_time is not null and t4.pay_time <![CDATA[ > ]]> #{thisMonth}
+        and t4.pay_time <![CDATA[ < ]]> #{nextMonth}
+        group by t1.saler_id
+    </select>
+
+    <select id="querySalesAllBySaler" resultType="com.platform.entity.UserEntity">
+        select
+        t1.saler_id as salerId,
+        count (distinct t4.user_id) as salesAll
+        from
+        nideshop_sale t1
+        LEFT JOIN
+        nideshop_cus_relation t2 on t1.open_id = t2.from_open_id
+        LEFT JOIN
+        nideshop_user t3 on t2.to_open_id = t3.weixin_openid
+        LEFT JOIN
+        nideshop_order t4 on t3.id = t4.user_id
+        where t4.pay_status = 2 and t4.pay_time is not null
+        group by t1.saler_id
+    </select>
+
     <select id="queryTotal" resultType="int">
         select count(*) from nideshop_user
         WHERE 1=1

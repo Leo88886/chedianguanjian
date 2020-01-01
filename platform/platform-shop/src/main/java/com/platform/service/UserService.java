@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.platform.entity.UserEntity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,20 @@ import java.util.Map;
  * @date 2017-08-16 15:02:28
  */
 public interface UserService {
+
+    /**
+     * 查询销售推广的当月用户量
+     * @param thisMonth
+     * @param nextMonth
+     * @return
+     */
+    List<UserEntity> querySalesMonBySaler(String thisMonth, String nextMonth);
+
+    /**
+     * 查询销售推广的全量用户数
+     * @return
+     */
+    List<UserEntity> querySalesAllBySaler();
 
     /**
      * 根据主键查询实体

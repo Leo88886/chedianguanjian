@@ -23,6 +23,16 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
+    public List<UserEntity> querySalesMonBySaler(String thisMonth, String nextMonth) {
+        return userDao.querySalesMonBySaler(thisMonth,nextMonth);
+    }
+
+    @Override
+    public List<UserEntity> querySalesAllBySaler() {
+        return userDao.querySalesAllBySaler();
+    }
+
+    @Override
     public UserEntity queryObject(Integer id) {
         return userDao.queryObject(id);
     }

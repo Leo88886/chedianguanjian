@@ -46,11 +46,27 @@ public class UserEntity implements Serializable {
     private String salerId;
     //销售码标识
     private String salerIdFlag;     //是否为销售 1为是 2为否
-    //本月销售额
-    private String salesMon;
-    //全部销售额
-    private String salesAll;
 
+    //本月销售额
+    private Integer salesMon;
+    //全部销售额
+    private Integer salesAll;
+
+    public Integer getSalesMon() {
+        return salesMon;
+    }
+
+    public void setSalesMon(Integer salesMon) {
+        this.salesMon = salesMon;
+    }
+
+    public Integer getSalesAll() {
+        return salesAll;
+    }
+
+    public void setSalesAll(Integer salesAll) {
+        this.salesAll = salesAll;
+    }
 
     /**
      * 翻译用的字段

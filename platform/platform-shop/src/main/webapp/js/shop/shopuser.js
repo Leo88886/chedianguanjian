@@ -11,19 +11,19 @@ $(function () {
             label: '性别', name: 'gender', index: 'gender', width: 40, formatter: function (value) {
                 return transGender(value);
             }
-        }, {
+        }, /*{
             label: '出生日期', name: 'birthday', index: 'birthday', width: 80, formatter: function (value) {
                 return transDate(value);
             }
-        }, {
+        }, */{
             label: '注册时间', name: 'registerTime', index: 'register_time', width: 80, formatter: function (value) {
                 return transDate(value);
             }
-        }, {
+        },/* {
             label: '最后登录时间', name: 'lastLoginTime', index: 'last_login_time', width: 80, formatter: function (value) {
                 return transDate(value);
             }
-        }, {
+        },*/ {
             label: '最后登录Ip', name: 'lastLoginIp', index: 'last_login_ip', hidden: true
         }, {
             label: '会员等级', name: 'levelName', width: 40
@@ -32,8 +32,12 @@ $(function () {
         }, {
             label: '手机号码', name: 'mobile', index: 'mobile', width: 120
         },  {
-            label: '销售码', name: 'salerId', index: 'salerId', width: 80
+            label: '销售码', name: 'salerId', index: 'salerId', width: 60
         }, {
+            label: '本月销售额', name: 'salesMon', index: 'salesMon', width: 60
+        },  {
+            label: '全部销售额', name: 'salesAll', index: 'salesAll', width: 60
+        },  {
             label: '注册Ip', name: 'registerIp', index: 'register_ip', hidden: true
         }, {
             label: '头像', name: 'avatar', index: 'avatar', width: 80, formatter: function (value) {

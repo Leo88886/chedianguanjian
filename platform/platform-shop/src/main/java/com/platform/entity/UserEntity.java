@@ -46,6 +46,10 @@ public class UserEntity implements Serializable {
     private String salerId;
     //销售码标识
     private String salerIdFlag;     //是否为销售 1为是 2为否
+    //本月销售额
+    private String salesMon;
+    //全部销售额
+    private String salesAll;
 
 
     /**

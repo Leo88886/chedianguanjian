@@ -139,6 +139,7 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
                 cusRelationVo2.setSalerId(0);
                 cusRelationVo2.setFromOpenId(fromOpenId);
                 cusRelationVo2.setToOpenId(toOpenId);
+                cusRelationVo2.setCreateTime(new Date());
                 cusRelationVo2.setId(null);
                 cusRelationService.save(cusRelationVo2);
                 //第一次转发送优惠卷

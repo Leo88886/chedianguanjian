@@ -49,6 +49,23 @@ Page({
           wx.setStorageSync('token', res.data.token);
           wx.setStorageSync('userId', res.data.userId);
           wx.setStorageSync('openId', res.data.openId);
+          var formOpenId = wx.getStorageSync('formOpenId');
+          if (formOpenId != "undefined" && formOpenId != null && formOpenId !="") {   //通过转发进入的页面
+            wx.request({
+              url: api.SaveForwardSalerId,
+              data: {
+                fromOpenId: formOpenId,
+                openId: wx.getStorageSync('openId'),
+              },
+              method: 'POST',
+              header: {
+                'content-type': 'application/json'
+              },
+              success: function (res) {
+                console.log(res.data);
+              }
+            });
+          }
           console.log(res.data.openId)
         } else {
           // util.showErrorToast(res.errmsg)

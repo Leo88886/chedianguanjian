@@ -8,6 +8,7 @@
     "pages/ucenter/addressAdd/addressAdd",
     "pages/ucenter/footprint/footprint",
     "pages/ucenter/saleCode/saleCode",
+    "pages/ucenter/storeInfo/storeInfo",
     "pages/ucenter/order/order",
     "pages/ucenter/orderDetail/orderDetail",
     "pages/ucenter/feedback/feedback",

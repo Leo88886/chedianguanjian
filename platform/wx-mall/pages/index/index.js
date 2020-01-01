@@ -12,11 +12,10 @@ Page({
   },
 
   onShareAppMessage: function () {
-    var that = this;
     return {
       title: '车车店管家',
-      path: '/pages/index/index?formOpenId=' + wx.getStorageSync('openId'),//当前登陆用户openId,
-      success: function (res) { }
+      path: '/pages/index/index?formOpenId=' + wx.getStorageSync('openId'), //当前登陆用户openId,
+      success: function (res) {}
     }
   },
   onPullDownRefresh() {
@@ -50,14 +49,13 @@ Page({
   },
   onLoad: function (options) {
     var that = this;
-    util.request(api.CartList).then(function (res) {
-    });
-    that.getIndexData();
     var formOpenId = decodeURIComponent(options.formOpenId);
-    //console.log(options);
-    console.log(decodeURIComponent(options.formOpenId));
-    console.log(api.SaveSalerId);
-    if (formOpenId != "undefined" && formOpenId != null && formOpenId !="") {   //通过转发进入的页面
+    wx.setStorageSync('formOpenId', formOpenId);
+    var openId = wx.getStorageSync('openId');
+       //保存转发用户关系
+    if(openId == "undefined" || openId == null || openId == ""){
+      util.request(api.CartList).then(function (res) {});
+    }else{
       wx.request({
         url: api.SaveForwardSalerId,
         data: {
@@ -73,7 +71,9 @@ Page({
         }
       });
     }
-
+    that.getIndexData();
+    //console.log(options);
+    console.log("formOpenId:" + decodeURIComponent(options.formOpenId));
   },
   onReady: function () {
     // 页面渲染完成

@@ -6,6 +6,7 @@ Page({
     salerId: '',
     flag: false,
     flag2: false,
+    flag3: false,
     text: ''
   },
   onLoad: function(options) {
@@ -20,17 +21,24 @@ Page({
         'content-type': 'application/json'
       },
       success: function(res) {
-        if (null != res.data && res.data != '') { //已绑定
-          console.log(res.data);
-          that.setData({
-            flag2: true, // 不显示保存按钮
-            text: res.data
+        if (null != res.data.saveSaleId && res.data.saveSaleId != '') { //未绑定
+          that.setData({   
+            flag : true, 
+            text: res.data.saveSaleId
           })
-        } else {
-          that.setData({
-            flag: true,
+        } 
+        if (null != res.data.user && res.data.user != '') { //已绑定
+          that.setData({   // 不显示保存按钮
+            flag2: true, 
+            text: res.data.user
           })
-        }
+        } 
+        if (null != res.data.saler && res.data.saler != '') { // 销售页面
+          that.setData({
+            flag3: true, 
+            text: res.data.saler
+          })
+        } 
       }
     });
   },

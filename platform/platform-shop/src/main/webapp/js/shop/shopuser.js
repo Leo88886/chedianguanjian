@@ -34,9 +34,9 @@ $(function () {
         },  {
             label: '销售码', name: 'salerId', index: 'salerId', width: 60
         }, {
-            label: '本月销售额', name: 'salesMon', index: 'salesMon', width: 60
+            label: '本月推广数', name: 'salesMon', index: 'salesMon', width: 60
         },  {
-            label: '全部销售额', name: 'salesAll', index: 'salesAll', width: 60
+            label: '全部推广数', name: 'salesAll', index: 'salesAll', width: 60
         },  {
             label: '注册Ip', name: 'registerIp', index: 'register_ip', hidden: true
         }, {

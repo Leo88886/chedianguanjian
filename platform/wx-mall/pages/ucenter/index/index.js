@@ -9,45 +9,19 @@ Page({
     hasMobile: ''
   },
   onLoad: function(options) {
-    // 页面初始化 options为页面跳转所带来的参数
-    var that = this;
-    let qrUrl = decodeURIComponent(options.q);
-    if (qrUrl != "undefined") { //通过转发进入的页面
-      fromOpenId = that.getQueryString(qrUrl, 'fromOpenId');
-      wx.request({
-        url: api.SaveSalerId,
-        data: {
-          fromOpenId: fromOpenId,
-          openId: wx.getStorageSync('openId'),
-        },
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        success: function(res) {
-          if (res.data == '1') {
-            console.log('保存成功');
-          } else {
-            console.log('已绑定');
-          }
-        }
-      });
-    }
+
   },
   onReady: function() {
 
   },
   onShareAppMessage: function() {
-    var that = this;
     return {
       title: '车车店管家',
-      path: '/pages/index/index?formOpenId=' + wx.getStorageSync('openId'), //当前登陆用户openId,
-      success: function(res) {}
+      path: '/pages/index/index?formOpenId=' + wx.getStorageSync('openId'),//当前登陆用户openId,
+      success: function (res) { }
     }
   },
   onShow: function() {
-    util.request(api.CartList).then(function (res) {
-    });
     let userInfo = wx.getStorageSync('userInfo');
     let token = wx.getStorageSync('token');
 
@@ -128,17 +102,5 @@ Page({
         }
       }
     })
-
-  },
-  //解析链接方法
-  getQueryString: function(url, name) {
-    var reg = new RegExp('(^|&|/?)' + name + '=([^&|/?]*)(&|/?|$)', 'i');
-    var r = url.substr(1).match(reg);
-    if (r != null) {
-      // console.log("r = " + r)
-      // console.log("r[2] = " + r[2])
-      return r[2];
-    }
-    return null;
   }
 })

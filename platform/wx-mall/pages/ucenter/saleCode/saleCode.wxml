@@ -18,12 +18,31 @@
   </view>
   </view>
 </view>
+
 <view class='all'  wx:if="{{flag2}}">
   <view class='verCodeView'>
     <text style='font-size:44rpx;color:#262626'>您的分销码为：</text>
   </view>
   <view class='verCodeSendView'>
     <text style='font-size:28rpx;color:#9b9b9b'>您已绑定过销售,无需再次绑定</text>
+  </view>
+  <view class="code">
+    <view class="input-content-wrap">
+      <view catchtap="set_Focus" class="input-code-wrap">
+         <view class="input">
+          <text>{{text}}</text>
+        </view>  
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class='all'  wx:if="{{flag3}}">
+  <view class='verCodeView'>
+    <text style='font-size:44rpx;color:#262626'>您的分销码为：</text>
+  </view>
+  <view class='verCodeSendView'>
+    <text style='font-size:28rpx;color:#9b9b9b'>您为车车管家销售人员</text>
   </view>
   <view class="code">
     <view class="input-content-wrap">

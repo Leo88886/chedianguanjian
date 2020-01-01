@@ -80,24 +80,32 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
         }
     }
 
-
     /**
      * 是否保存过salerId
      */
     @IgnoreAuth
     @PostMapping("isSave")
     @ApiOperation(value = "是否保存过salerId接口")
-    public String isSave() {
+    public Map<String,Integer> isSave() {
         JSONObject jsonParam = this.getJsonRequest();
+        Map<String,Integer> map = new HashMap<String,Integer>();
         String toOpenId = "";
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("openId"))) {
             toOpenId = jsonParam.getString("openId");
         }
-        List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(toOpenId,0);       //通过toOpenId，且salerId!=0查询是否存在关系
-        if(null != list && list.size() > 0){
-            return list.get(0).getSalerId().toString();     // 已经绑定过识别码
-        }else{
-            return "";
+        ApiSaleVo saleVo = saleService.getSalerIdByOpenId(toOpenId);         //判断转发者是否为销售
+        if(null == saleVo){                 // 判断是否为销售
+            List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(toOpenId,0);       //通过toOpenId，且salerId!=0查询是否存在关系
+            if(null != list && list.size() > 0){
+                map.put("user", list.get(0).getSalerId()); // 已经绑定过识别码
+                return map;
+            }else{
+                map.put("saveSaleId", 0);  // 未绑定过识别码
+                return map;
+            }
+        }else{                                  //是销售直接返回销售码
+            map.put("saler", saleVo.getSalerId()); // 已经绑定过识别码
+            return map;
         }
     }
 
@@ -117,7 +125,6 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("fromOpenId"))) {
             fromOpenId = jsonParam.getString("fromOpenId");
         }
-
         ApiSaleVo saleVo = saleService.getSalerIdByOpenId(fromOpenId);         //判断转发者是否为销售
         if (null != saleVo) {             //销售转发
             List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(toOpenId,0);         //判断是否已绑定销售
@@ -155,13 +162,6 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
             }else{
                 return "4";                 //已转发过
             }
-
         }
-
-
-
-
-
-
     }
 }

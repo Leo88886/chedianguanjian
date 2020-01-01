@@ -43,13 +43,6 @@ public class UserController {
         Query query = new Query(params);
 
         List<UserEntity> userList = userService.queryList(query);
-        for(int i=0;i<userList.size();i++){
-            if(null != userList.get(i).getSalerId() && !"".equals(userList.get(i).getSalerId())){
-                userList.get(i).setSalerIdFlag("1");
-            }else {
-                userList.get(i).setSalerIdFlag("2");
-            }
-        }
         int total = userService.queryTotal(query);
 
         PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
@@ -65,7 +58,11 @@ public class UserController {
     @RequiresPermissions("user:info")
     public R info(@PathVariable("id") Integer id) {
         UserEntity user = userService.queryObject(id);
-
+        if(null != user.getSalerId() && !"".equals(user.getSalerId())){
+            user.setSalerIdFlag("1");            //是销售
+        }else {
+            user.setSalerIdFlag("2");            //不是销售
+        }
         return R.ok().put("user", user);
     }
 

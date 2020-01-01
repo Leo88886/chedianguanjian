@@ -23,8 +23,7 @@ public class SaleServiceImpl implements SaleService {
         SaleVo saleVo = new SaleVo();
         saleVo.setOpenId(openId);
         saleVo.setSalerId(null);
-        saleDao.save(saleVo);
-        return 0;
+        return saleDao.save(saleVo);
     }
 
     @Override

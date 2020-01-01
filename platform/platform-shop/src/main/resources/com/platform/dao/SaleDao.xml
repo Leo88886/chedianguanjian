@@ -35,4 +35,13 @@
     <delete id="deleteByOpenId">
         delete from nideshop_sale where open_id =  #{openId}
     </delete>
+
+    <insert id="save" parameterType="com.platform.entity.SaleVo" useGeneratedKeys="true" keyProperty="salerId">
+		insert into nideshop_sale(
+			`open_id`,
+			`saler_id`)
+		values(
+			#{openId},
+			#{salerId})
+	</insert>
 </mapper>

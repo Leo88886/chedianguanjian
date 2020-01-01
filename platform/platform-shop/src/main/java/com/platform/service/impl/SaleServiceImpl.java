@@ -1,12 +1,11 @@
 package com.platform.service.impl;
 
-import com.platform.dao.ApiSaleDao;
-import com.platform.entity.ApiSaleVo;
-import com.platform.service.ApiSaleService;
+import com.platform.dao.SaleDao;
+import com.platform.entity.SaleVo;
+import com.platform.service.SaleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  * Service实现类
@@ -15,13 +14,13 @@ import java.util.Map;
  * @email 939961241@qq.com
  * @date 2017-08-16 17:22:46
  */
-@Service("apiSaleService")
-public class ApiSaleServiceImpl implements ApiSaleService {
-
-    private ApiSaleDao saleDao;
+@Service("saleService")
+public class SaleServiceImpl implements SaleService {
+    @Autowired
+    private SaleDao saleDao;
     @Override
     public int save(String weixinOpenid) {
-        ApiSaleVo saleVo = new ApiSaleVo();
+        SaleVo saleVo = new SaleVo();
         saleVo.setOpenId(weixinOpenid);
         saleVo.setSalerId(null);
         saleDao.save(saleVo);

@@ -24,7 +24,7 @@ import java.io.Serializable;
  */
 @Data
 @TableName("nideshop_sale")
-public class ApiSaleVo implements Serializable {
+public class SaleVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -37,11 +37,10 @@ public class ApiSaleVo implements Serializable {
      */
     private String openId;
 
-    public ApiSaleVo() {
-
+    public SaleVo() {
     }
 
-    public ApiSaleVo(Integer salerId, String openId) {
+    public SaleVo(Integer salerId, String openId) {
         this.salerId = salerId;
         this.openId = openId;
     }

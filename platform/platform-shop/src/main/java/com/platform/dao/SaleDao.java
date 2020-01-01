@@ -11,7 +11,7 @@
 package com.platform.dao;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.platform.entity.ApiSaleVo;
+import com.platform.entity.SaleVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,11 +21,11 @@ import java.util.Map;
 /**
  * Dao
  *
- * @author lipengjun
+ * @author heguoqiang
  * @date 2019-12-23 22:05:23
  */
 @Mapper
-public interface ApiSaleDao extends BaseDao<ApiSaleVo> {
+public interface SaleDao extends BaseDao<SaleVo> {
 
     /**
      * 查询所有列表
@@ -33,7 +33,7 @@ public interface ApiSaleDao extends BaseDao<ApiSaleVo> {
      * @param params 查询参数
      * @return List
      */
-    List<ApiSaleVo> queryAll(@Param("params") Map<String, Object> params);
+    List<SaleVo> queryAll(@Param("params") Map<String, Object> params);
 
     /**
      * 自定义分页查询
@@ -42,9 +42,9 @@ public interface ApiSaleDao extends BaseDao<ApiSaleVo> {
      * @param params 查询参数
      * @return List
      */
-    List<ApiSaleVo> selectSalePage(IPage page, @Param("params") Map<String, Object> params);
+    List<SaleVo> selectSalePage(IPage page, @Param("params") Map<String, Object> params);
 
-    ApiSaleVo getSalerIdByOpenId(@Param("openId") String openId);
+    SaleVo getSalerIdByOpenId(@Param("openId") String openId);
 
-    ApiSaleVo getSalerIdBySalerId(@Param("salerId") String salerId);
+    SaleVo getSalerIdBySalerId(@Param("salerId") String salerId);
 }

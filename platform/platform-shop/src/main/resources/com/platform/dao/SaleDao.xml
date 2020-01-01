@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.SaleDao">
+
+    <sql id="selectSql">
+        SELECT
+        T.saler_id,
+        T.open_id
+        FROM nideshop_sale T
+        WHERE 1=1
+
+    </sql>
+
+    <select id="selectSalePage" resultType="com.platform.entity.ApiSaleVo">
+        <include refid="selectSql"/>
+    </select>
+
+    <select id="queryAll" resultType="com.platform.entity.ApiSaleVo">
+        <include refid="selectSql"/>
+        <if test="params.salerId != null and params.salerId.trim() != ''">
+            AND T.NAME LIKE '%${params.name}%'
+        </if>
+    </select>
+
+    <select id="getSalerIdByOpenId" resultType="com.platform.entity.ApiSaleVo">
+        <include refid="selectSql"/>
+            AND T.open_id = #{openId}
+    </select>
+    <select id="getSalerIdBySalerId" resultType="com.platform.entity.ApiSaleVo">
+        <include refid="selectSql"/>
+        AND T.saler_id = #{salerId}
+    </select>
+</mapper>

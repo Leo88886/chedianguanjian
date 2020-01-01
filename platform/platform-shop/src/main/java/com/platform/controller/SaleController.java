@@ -1,17 +1,11 @@
 package com.platform.controller;
 
-import com.platform.entity.AdEntity;
-import com.platform.service.AdService;
-import com.platform.service.ApiSaleService;
-import com.platform.utils.PageUtils;
-import com.platform.utils.Query;
+
+import com.platform.service.SaleService;
 import com.platform.utils.R;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Controller
@@ -22,9 +16,9 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("apiSale")
-public class ApiSaleController {
+public class SaleController {
     @Autowired
-    private ApiSaleService saleService;
+    private SaleService saleService;
     /**
      * 保存
      */

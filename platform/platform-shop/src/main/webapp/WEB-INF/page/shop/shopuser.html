@@ -83,6 +83,16 @@
             <Form-item label="手机号码" prop="mobile">
                 <i-input v-model="user.mobile" placeholder="手机号码"/>
             </Form-item>
+            <Form-item label="是否为销售" prop="salerIdFlag">
+                <Radio-group v-model="user.salerIdFlag">
+                    <Radio label="1">
+                        <span>是</span>
+                    </Radio>
+                    <Radio label="2">
+                        <span>否</span>
+                    </Radio>
+                </Radio-group>
+            </Form-item>
             <!--<Form-item label="注册Ip" prop="registerIp">-->
             <!--<i-input v-model="user.registerIp" placeholder="注册Ip"/>-->
             <!--</Form-item>-->

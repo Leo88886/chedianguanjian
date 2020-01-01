@@ -19,11 +19,16 @@ public class SaleServiceImpl implements SaleService {
     @Autowired
     private SaleDao saleDao;
     @Override
-    public int save(String weixinOpenid) {
+    public int save(String openId) {
         SaleVo saleVo = new SaleVo();
-        saleVo.setOpenId(weixinOpenid);
+        saleVo.setOpenId(openId);
         saleVo.setSalerId(null);
         saleDao.save(saleVo);
         return 0;
+    }
+
+    @Override
+    public void delete(String openId) {
+        saleDao.deleteByOpenId(openId);
     }
 }

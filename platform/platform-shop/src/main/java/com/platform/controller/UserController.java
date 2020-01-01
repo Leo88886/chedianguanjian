@@ -1,6 +1,8 @@
 package com.platform.controller;
 
+import com.platform.entity.SaleVo;
 import com.platform.entity.UserEntity;
+import com.platform.service.SaleService;
 import com.platform.service.UserService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
@@ -28,6 +30,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private SaleService saleService;
 
     /**
      * 查看列表
@@ -39,6 +43,13 @@ public class UserController {
         Query query = new Query(params);
 
         List<UserEntity> userList = userService.queryList(query);
+        for(int i=0;i<userList.size();i++){
+            if(null != userList.get(i).getSalerId() && !"".equals(userList.get(i).getSalerId())){
+                userList.get(i).setSalerIdFlag("1");
+            }else {
+                userList.get(i).setSalerIdFlag("2");
+            }
+        }
         int total = userService.queryTotal(query);
 
         PageUtils pageUtil = new PageUtils(userList, total, query.getLimit(), query.getPage());
@@ -75,6 +86,11 @@ public class UserController {
     @RequestMapping("/update")
     @RequiresPermissions("user:update")
     public R update(@RequestBody UserEntity user) {
+        if(user.getSalerIdFlag().equals("1")){  //是否为销售 1为是 2为否
+            saleService.save(user.getWeixinOpenid());
+        }else{
+            saleService.delete(user.getWeixinOpenid());
+        }
         userService.update(user);
 
         return R.ok();

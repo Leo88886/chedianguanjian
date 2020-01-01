@@ -31,6 +31,8 @@ $(function () {
             label: '微信名', name: 'nickname', index: 'nickname', width: 80
         }, {
             label: '手机号码', name: 'mobile', index: 'mobile', width: 120
+        },  {
+            label: '销售码', name: 'salerId', index: 'salerId', width: 80
         }, {
             label: '注册Ip', name: 'registerIp', index: 'register_ip', hidden: true
         }, {

@@ -31,4 +31,8 @@
         <include refid="selectSql"/>
         AND T.saler_id = #{salerId}
     </select>
+
+    <delete id="deleteByOpenId">
+        delete from nideshop_sale where open_id =  #{openId}
+    </delete>
 </mapper>

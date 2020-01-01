@@ -47,4 +47,6 @@ public interface SaleDao extends BaseDao<SaleVo> {
     SaleVo getSalerIdByOpenId(@Param("openId") String openId);
 
     SaleVo getSalerIdBySalerId(@Param("salerId") String salerId);
+
+    void deleteByOpenId(@Param("openId") String openId);
 }

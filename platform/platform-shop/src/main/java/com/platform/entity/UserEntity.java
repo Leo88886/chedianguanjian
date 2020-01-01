@@ -42,6 +42,10 @@ public class UserEntity implements Serializable {
     private String avatar;
     //微信Id
     private String weixinOpenid;
+    //销售码
+    private String salerId;
+    //销售码标识
+    private String salerIdFlag;     //是否为销售 1为是 2为否
 
 
     /**
@@ -252,5 +256,21 @@ public class UserEntity implements Serializable {
 
     public void setLevelName(String levelName) {
         this.levelName = levelName;
+    }
+
+    public String getSalerId() {
+        return salerId;
+    }
+
+    public void setSalerId(String salerId) {
+        this.salerId = salerId;
+    }
+
+    public String getSalerIdFlag() {
+        return salerIdFlag;
+    }
+
+    public void setSalerIdFlag(String salerIdFlag) {
+        this.salerIdFlag = salerIdFlag;
     }
 }

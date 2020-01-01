@@ -77,18 +77,21 @@ public class UserController {
 
         try {
             // key:salerId value:user实体
-            Map<String, List<UserEntity>> salerIdMap =
-                    userList.stream().collect(Collectors.groupingBy(UserEntity::getSalerId));
+            Map<String, UserEntity> salerIdMap = new HashMap<>();
+            for (UserEntity user: userList) {
+                if(StringUtils.isNullOrEmpty(user.getSalerId())){
+                    continue;
+                }
+                salerIdMap.put(user.getSalerId(),user);
+            }
             //为销售设置全量推广用户数
             if (CollectionUtils.isNotEmpty(AllSalerNumList)) {
                 for (UserEntity userAllNum : AllSalerNumList) {
                     if(StringUtils.isNullOrEmpty(userAllNum.getSalerId())){
                         continue;
                     }
-                    List<UserEntity> userEntities = salerIdMap.get(userAllNum.getSalerId());
-                    for (UserEntity user: userEntities) {
-                        user.setSalesAll(userAllNum.getSalesAll());
-                    }
+                    UserEntity userEntities = salerIdMap.get(userAllNum.getSalerId());
+                    userEntities.setSalesAll(userAllNum.getSalesAll());
                 }
             }
 
@@ -98,10 +101,8 @@ public class UserController {
                     if(StringUtils.isNullOrEmpty(userMonthNum.getSalerId())){
                         continue;
                     }
-                    List<UserEntity> userEntities = salerIdMap.get(userMonthNum.getSalerId());
-                    for (UserEntity user: userEntities) {
-                        user.setSalesMon(userMonthNum.getSalesMon());
-                    }
+                    UserEntity userEntities = salerIdMap.get(userMonthNum.getSalerId());
+                    userEntities.setSalesMon(userMonthNum.getSalesMon());
                 }
             }
         } catch (Exception e) {

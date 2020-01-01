@@ -1,6 +1,7 @@
 package com.platform.dao;
 
 import com.platform.entity.UserEntity;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,7 +14,8 @@ import java.util.List;
  */
 public interface UserDao extends BaseDao<UserEntity> {
 
-    List<UserEntity> querySalesMonBySaler(String thisMonth,String nextMonth);
+    List<UserEntity> querySalesMonBySaler(@Param("thisMonth") String thisMonth,
+                                          @Param("nextMonth") String nextMonth);
 
     List<UserEntity> querySalesAllBySaler();
 

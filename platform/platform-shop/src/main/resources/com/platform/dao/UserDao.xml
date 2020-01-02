@@ -35,8 +35,10 @@
 			mobile,
 			register_ip,
 			avatar,
-			weixin_openid
+			weixin_openid,
+			 nideshop_sale.saler_id salerId
 		from nideshop_user
+		  LEFT JOIN nideshop_sale ON nideshop_user.weixin_openid=nideshop_sale.open_id
 		where id = #{id}
 	</select>
 

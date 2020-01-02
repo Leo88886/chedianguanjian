@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -86,9 +84,9 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
     @IgnoreAuth
     @PostMapping("isSave")
     @ApiOperation(value = "是否保存过salerId接口")
-    public Map<String,Integer> isSave() {
+    public Map<String,Object> isSave() {
         JSONObject jsonParam = this.getJsonRequest();
-        Map<String,Integer> map = new HashMap<String,Integer>();
+        Map<String,Object> map = new HashMap<String,Object>();
         String toOpenId = "";
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("openId"))) {
             toOpenId = jsonParam.getString("openId");
@@ -103,8 +101,28 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
                 map.put("saveSaleId", 0);  // 未绑定过识别码
                 return map;
             }
-        }else{                                  //是销售直接返回销售码
+        }else{
+            Calendar cale = null;
+            cale = Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String firstday, lastday;
+            String saleMon,saleAll;
+            // 获取本月的第一天
+            cale = Calendar.getInstance();
+            cale.add(Calendar.MONTH, 0);
+            cale.set(Calendar.DAY_OF_MONTH, 1);
+            firstday = format.format(cale.getTime());
+            // 获取本月的最后一天
+            cale = Calendar.getInstance();
+            cale.add(Calendar.MONTH, 1);
+            cale.set(Calendar.DAY_OF_MONTH, 0);
+            lastday = format.format(cale.getTime());
+            saleAll = userService.querySalesAllBySaler(saleVo.getSalerId());          //查询销售全部推广人数
+            saleMon = userService.querySalesMonBySaler(firstday, lastday, saleVo.getSalerId());       //销售本月推广人数
+            //是销售直接返回销售码
             map.put("saler", saleVo.getSalerId()); // 已经绑定过识别码
+            map.put("saleMon", saleMon); // 已经绑定过识别码
+            map.put("saleAll", saleAll); // 已经绑定过识别码
             return map;
         }
     }

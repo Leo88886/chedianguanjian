@@ -101,4 +101,12 @@ public class ApiUserService {
     public UserVo getUserByOpenId(String fromOpenId) {
         return userDao.getUserByOpenId(fromOpenId);
     }
+
+    public String querySalesAllBySaler(Integer salerId) {
+        return userDao.querySalesAllBySaler(salerId);
+    }
+
+    public String querySalesMonBySaler(String firstday, String lastday, Integer salerId) {
+        return userDao.querySalesMonBySaler(firstday,lastday,salerId);
+    }
 }

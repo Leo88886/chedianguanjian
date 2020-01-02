@@ -40,4 +40,8 @@ public interface ApiUserMapper extends BaseDao<UserVo> {
      * @return
      */
     UserVo getUserByOpenId(@Param("fromOpenId") String fromOpenId);
+
+    String querySalesAllBySaler(@Param("salerId") Integer salerId);
+
+    String querySalesMonBySaler(@Param("firstday") String firstday,@Param("lastday") String lastday,@Param("salerId") Integer salerId);
 }

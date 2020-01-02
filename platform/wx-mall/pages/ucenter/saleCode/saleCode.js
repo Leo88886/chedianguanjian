@@ -7,7 +7,9 @@ Page({
     flag: false,
     flag2: false,
     flag3: false,
-    text: ''
+    text: '',
+    saleMon:'',
+    saleAll:''
   },
   onLoad: function(options) {
     var that = this;
@@ -21,6 +23,7 @@ Page({
         'content-type': 'application/json'
       },
       success: function(res) {
+        console.log(res.data)
         if (null != res.data.saveSaleId && res.data.saveSaleId != '') { //未绑定
           that.setData({   
             flag : true, 
@@ -36,6 +39,8 @@ Page({
         if (null != res.data.saler && res.data.saler != '') { // 销售页面
           that.setData({
             flag3: true, 
+            saleMon: res.data.saleMon,
+            saleAll: res.data.saleAll,
             text: res.data.saler
           })
         } 

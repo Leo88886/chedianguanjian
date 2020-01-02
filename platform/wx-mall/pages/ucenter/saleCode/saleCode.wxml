@@ -42,7 +42,8 @@
     <text style='font-size:44rpx;color:#262626'>您的分销码为：</text>
   </view>
   <view class='verCodeSendView'>
-    <text style='font-size:28rpx;color:#9b9b9b'>您为车车管家销售人员</text>
+    <text style='font-size:28rpx;color:#9b9b9b'>本月推广 {{saleMon}} 家店铺</text>
+    <text style='font-size:28rpx;color:#9b9b9b;margin-left:35px'>总计推广 {{saleAll}} 家店铺</text>
   </view>
   <view class="code">
     <view class="input-content-wrap">

@@ -17,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -77,10 +76,10 @@ public class ApiStoreController extends ApiBaseAction {
             ApiStore store = new ApiStore();
             store.setOpenId(openId);
             store.setStoreName(storeName);
-            store.setStoreName(storeLocation);
-            store.setStoreName(phone);
-            store.setStoreName(businessLicenseNo);
-            store.setStoreName(shopkeeperName);
+            store.setStoreLocation(storeLocation);
+            store.setPhone(phone);
+            store.setBusinessLicenseNo(businessLicenseNo);
+            store.setShopkeeperName(shopkeeperName);
             try {
                 storeService.saveOrUpdateStoreData(store);
             } catch (Exception e) {

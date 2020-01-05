@@ -16,7 +16,7 @@
     </select>
 
     <insert id="saveOrUpdate" parameterType="com.platform.entity.ApiStore" >
-		insert into nideshop_store(
+		replace into nideshop_store(
 			`open_id`,
 			`store_name`,
 			`store_location`,
@@ -26,14 +26,11 @@
 		values(
 			#{store.openId},
 			#{store.storeName},
-			#{store.storeLocation},
+			<![CDATA[ #{store.storeLocation} ]]>,
 			#{store.phone},
 			#{store.businessLicenseNo},
 			#{store.shopkeeperName}
 			)
-		on duplicate key update `store_name`= values(#{store.storeName}),
-		`store_location`= values(#{store.storeLocation}),`phone`= values(#{store.phone}),
-		`business_license_no`= values(#{store.businessLicenseNo}),`shopkeeper_name`= values(#{store.shopkeeperName})
 	</insert>
 
 </mapper>

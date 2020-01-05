@@ -58,7 +58,6 @@ Page({
     var that = this;
     console.log(api.SaveSalerId);
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
-    wx.setStorageSync
     wx.request({
       url: api.SaveSalerId,
       data: {

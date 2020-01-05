@@ -97,4 +97,12 @@ public class ApiStore implements Serializable {
     public void setShopkeeperName(String shopkeeperName) {
         this.shopkeeperName = shopkeeperName;
     }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 }

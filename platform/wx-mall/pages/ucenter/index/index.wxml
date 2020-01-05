@@ -43,12 +43,12 @@
 				<text class="txt">销售信息</text>
 			</navigator>
 		</view>
-		<!--<view class="item">
+		<view class="item">
 			<navigator url="../storeInfo/storeInfo" class="a">
 				<text class="icon feedback"></text>
 				<text class="txt">门店信息</text>
 			</navigator>
-		</view> -->
+		</view> 
 
 		<!-- <button class='service' open-type="contact">
       <view class="item no-border">

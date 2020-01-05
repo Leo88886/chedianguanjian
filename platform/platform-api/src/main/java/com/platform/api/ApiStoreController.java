@@ -2,19 +2,19 @@
 package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.platform.annotation.LoginUser;
+import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.ApiStore;
-import com.platform.entity.UserVo;
 import com.platform.service.ApiStoreService;
-import com.platform.controller.AbstractController;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,19 +25,22 @@ import java.util.Map;
  */
 @Api(tags = "店铺信息")
 @RestController
-@RequestMapping("nideshop/store")
+@RequestMapping("/api/store")
 public class ApiStoreController extends ApiBaseAction {
 
     @Autowired
     private ApiStoreService storeService;
 
-    @ApiOperation(value = "查询店铺信息", response = Map.class)
+    @IgnoreAuth
+    @ApiOperation(value = "查询店铺信息")
     @PostMapping("query")
-    public Object query(@LoginUser UserVo loginUser) {
-        if (loginUser != null && StringUtils.isNotEmpty(loginUser.getWeixin_openid())) {
+    public Object query() {
+        JSONObject jsonParam = this.getJsonRequest();
+        String openId = jsonParam.getString("openId");
+        if (StringUtils.isNotEmpty(openId)) {
             ApiStore storeDataByOpenId = null;
             try {
-                storeDataByOpenId = storeService.getStoreDataByOpenId(loginUser.getWeixin_openid());
+                storeDataByOpenId = storeService.getStoreDataByOpenId(openId);
             } catch (Exception e) {
                 logger.error("查询店铺信息报错", e);
                 toResponsFail("查询异常");
@@ -48,14 +51,25 @@ public class ApiStoreController extends ApiBaseAction {
         }
     }
 
-    @ApiOperation(value = "插入或更新店铺信息", response = Map.class)
+    @IgnoreAuth
+    @ApiOperation(value = "插入或更新店铺信息")
     @PostMapping("saveOrUpdate")
-    @ResponseBody
-    public Object saveOrUpdate(@RequestBody ApiStore store) {
-//        store.setBusinessLicenseNo("123");
-//        store.setOpenId("123");
-//        System.out.println(JSONObject.toJSON(store));
-        if (store != null && StringUtils.isNotEmpty(store.getOpenId())) {
+    public Object saveOrUpdate() {
+        JSONObject jsonParam = this.getJsonRequest();
+        String openId = jsonParam.getString("openId");
+        String storeName = jsonParam.getString("storeName");
+        String storeLocation = jsonParam.getString("storeLocation");
+        String phone = jsonParam.getString("phone");
+        String businessLicenseNo = jsonParam.getString("businessLicenseNo");
+        String shopkeeperName = jsonParam.getString("shopkeeperName");
+        if (StringUtils.isNotEmpty(openId)) {
+            ApiStore store = new ApiStore();
+            store.setOpenId(openId);
+            store.setStoreName(storeName);
+            store.setStoreName(storeLocation);
+            store.setStoreName(phone);
+            store.setStoreName(businessLicenseNo);
+            store.setStoreName(shopkeeperName);
             try {
                 storeService.saveOrUpdateStoreData(store);
             } catch (Exception e) {

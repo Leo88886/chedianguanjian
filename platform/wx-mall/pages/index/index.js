@@ -53,15 +53,13 @@ Page({
         that.setData(data);
       }
     });
-
   },
   onLoad: function(options) {
     var that = this;
-
     var formOpenId = decodeURIComponent(options.formOpenId);
     wx.setStorageSync('formOpenId', formOpenId);
     var openId = wx.getStorageSync('openId');
-    //保存转发用户关系
+    //保存转发用户关系  session里没有opneId 提示授权登陆
     if (openId == "undefined" || openId == null || openId == "") {
       util.request(api.CartList).then(function(res) {});
     } else {
@@ -77,14 +75,31 @@ Page({
         },
         success: function(res) {
           console.log(res.data);
-          //加判断
-          that.setData({
-            showModalStatus: true
-          });
+        }
+      });
+      //查询门店信息  如果没有弹出框添加，如果有 不弹出弹出框
+      wx.request({
+        url: api.QueryStore,
+        data: {
+          fromOpenId: formOpenId,
+          openId: wx.getStorageSync('openId'),
+        },
+        method: 'POST',
+        header: {
+          'content-type': 'application/json'
+        },
+        success: function(res) {
+          if (res.data.errno == "1") {
+            //加判断
+            that.setData({
+              showModalStatus: true
+            });
+          }
         }
       });
     }
     that.getIndexData();
+
     //console.log(options);
     console.log("formOpenId:" + decodeURIComponent(options.formOpenId));
   },

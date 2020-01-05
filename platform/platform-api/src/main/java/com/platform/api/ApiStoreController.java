@@ -37,7 +37,6 @@ public class ApiStoreController extends ApiBaseAction {
     public Object query() {
         JSONObject jsonParam = this.getJsonRequest();
         String openId = jsonParam.getString("openId");
-        if (StringUtils.isNotEmpty(openId)) {
             ApiStore storeDataByOpenId = null;
             try {
                 storeDataByOpenId = storeService.getStoreDataByOpenId(openId);
@@ -45,10 +44,11 @@ public class ApiStoreController extends ApiBaseAction {
                 logger.error("查询店铺信息报错", e);
                 toResponsFail("查询异常");
             }
-            return toResponsSuccess(storeDataByOpenId);
-        } else {
-            return toResponsFail("查询异常,入参为空");
-        }
+            if(null == storeDataByOpenId){
+                return toResponsFail("查询结果为空");
+            }else{
+                return toResponsSuccess(storeDataByOpenId);
+            }
     }
 
     @IgnoreAuth

@@ -79,4 +79,5 @@ module.exports = {
   IsSaveSalerId: API_BASE_URL + 'saveSalerId/isSave', //查看是否绑定salerId
   SaveForwardSalerId: API_BASE_URL + 'saveSalerId/saveForwardSalerId', //查看是否绑定salerId
   SaveOrUpdateStore: API_BASE_URL + 'store/saveOrUpdate', // 保存更新门店信息
+  QueryStore: API_BASE_URL + 'store/query', // 通过openId查询店铺
 };

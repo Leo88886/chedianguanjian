@@ -24,12 +24,11 @@ Page({
       },
       success: function(res) {
         console.log(res.data)
-        if (null != res.data.saveSaleId && res.data.saveSaleId != '') { //未绑定
-          that.setData({   
-            flag : true, 
-            text: res.data.saveSaleId
+        if (0 == res.data.saveSaleId) { //未绑定
+          that.setData({
+            flag: true
           })
-        } 
+        }
         if (null != res.data.user && res.data.user != '') { //已绑定
           that.setData({   // 不显示保存按钮
             flag2: true, 

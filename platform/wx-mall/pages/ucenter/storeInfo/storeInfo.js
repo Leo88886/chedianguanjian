@@ -75,7 +75,7 @@ Page({
       },
       success: function (res) {
         console.log(res.data)
-        if (res.data == '1') {
+        if (res.data.errno == '0') {
           wx.showToast({
             title: '保存成功',
             icon: 'success',

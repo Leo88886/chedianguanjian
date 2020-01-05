@@ -57,11 +57,6 @@ Page({
   },
   saveStore: function() {
     var that = this;
-    console.log(that.data.storeName)
-    console.log(that.data.shopkeeperName)
-    console.log(that.data.phone)
-    console.log(that.data.businessLicenseNo)
-    console.log(that.data.region+"-----" + that.data.storeLocation)
     var location = that.data.region + that.data.restoreLocationgion
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
     wx.request({

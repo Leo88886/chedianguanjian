@@ -36,17 +36,4 @@
 		`business_license_no`= values(#{store.businessLicenseNo}),`shopkeeper_name`= values(#{store.shopkeeperName})
 	</insert>
 
-	<select id="queryFromUserByOpenId" resultType="com.platform.entity.ApiCusRelationVo">
-      SELECT
-			t.id,
-			t.from_open_id,
-			t.to_open_id,
-			t.create_time,
-			t.saler_id
-		FROM
-			nideshop_cus_relation t
-		WHERE
-			t.to_open_id = #{openId}
-    </select>
-
 </mapper>

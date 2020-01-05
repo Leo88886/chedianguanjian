@@ -40,4 +40,9 @@ public class ApiCusRelationService {
         List<ApiCusRelationVo> list = cusRelationDao.getCusRelation(toOpenId);
         return list;
     }
+
+    public List<ApiCusRelationVo> getCusByToOpenid2(String toOpenId, Integer salerId) {
+        List<ApiCusRelationVo> list = cusRelationDao.getCusByToOpenid2(toOpenId,salerId);
+        return list;
+    }
 }

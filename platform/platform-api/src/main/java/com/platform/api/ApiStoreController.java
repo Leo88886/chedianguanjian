@@ -3,8 +3,13 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
+import com.platform.dao.ApiUserMapper;
+import com.platform.entity.ApiCusRelationVo;
 import com.platform.entity.ApiStore;
+import com.platform.entity.UserVo;
+import com.platform.service.ApiCusRelationService;
 import com.platform.service.ApiStoreService;
+import com.platform.service.ApiUserService;
 import com.platform.util.ApiBaseAction;
 import com.platform.utils.StringUtils;
 import io.swagger.annotations.Api;
@@ -15,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +37,10 @@ public class ApiStoreController extends ApiBaseAction {
 
     @Autowired
     private ApiStoreService storeService;
+    @Autowired
+    private ApiCusRelationService cusRelationService;
+    @Autowired
+    private ApiUserService userService;
 
     @IgnoreAuth
     @ApiOperation(value = "查询店铺信息")
@@ -82,13 +93,35 @@ public class ApiStoreController extends ApiBaseAction {
         }
     }
 
-
     @IgnoreAuth
-    @ApiOperation(value = "查询店铺信息")
-    @PostMapping("queryFromUser")
-    public Object queryFromUser() {
+    @ApiOperation(value = "查询推荐人信息")
+    @PostMapping("queryReferrer")
+    public Object queryReferrer() {
+        Map<String,Object> map = new HashMap<String,Object>();
         JSONObject jsonParam = this.getJsonRequest();
         String openId = jsonParam.getString("openId");
-        return null;
+        List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(openId,0);        //salerId !=0     销售
+        List<ApiCusRelationVo> list2 = cusRelationService.getCusByToOpenid2(openId,0);      //salerId = 0;    普通用户
+        //销售
+        if(null != list && list.size() > 0){
+            UserVo user = userService.getUserByOpenId(list.get(0).getFromOpenId());
+            map.put("referrer",user.getNickname());             //推荐人  销售
+        }else{
+            map.put("referrer","暂未绑销售");
+        }
+        //普通用户信息
+        if(null != list2 && list2.size() > 0 ){
+            String fromOpenId = list2.get(0).getFromOpenId();
+            ApiStore store = storeService.getStoreDataByOpenId(openId);       //查询推荐人的门店信息
+            if(null != store){
+                map.put("userName",store.getStoreName());           //门店信息
+            }else {
+                UserVo user = userService.getUserByOpenId(list2.get(0).getFromOpenId());
+                map.put("userName", user.getNickname());           //普通用户信息
+            }
+        }else{
+            map.put("userName", "暂无推荐人");
+        }
+        return map;
     }
 }

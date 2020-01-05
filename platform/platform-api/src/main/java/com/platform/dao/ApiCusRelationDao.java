@@ -57,4 +57,6 @@ public interface ApiCusRelationDao extends BaseDao<ApiCusRelationVo> {
     List<ApiCusRelationVo> getRelation(@Param("toOpenId") String toOpenId);
 
     List<ApiCusRelationVo> getCusRelation(@Param("toOpenId") String toOpenId);
+
+    List<ApiCusRelationVo> getCusByToOpenid2(@Param("toOpenId") String toOpenId, @Param("salerId") Integer salerId);
 }

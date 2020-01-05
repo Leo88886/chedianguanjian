@@ -74,7 +74,7 @@ public class ApiStoreController extends ApiBaseAction {
                 storeService.saveOrUpdateStoreData(store);
             } catch (Exception e) {
                 logger.error("新增、更新店铺信息报错", e);
-                toResponsFail("新增、更新");
+                return toResponsFail("新增、更新");
             }
             return toResponsMsgSuccess("新增、更新成功");
         } else {
@@ -82,4 +82,13 @@ public class ApiStoreController extends ApiBaseAction {
         }
     }
 
+
+    @IgnoreAuth
+    @ApiOperation(value = "查询店铺信息")
+    @PostMapping("queryFromUser")
+    public Object queryFromUser() {
+        JSONObject jsonParam = this.getJsonRequest();
+        String openId = jsonParam.getString("openId");
+        return null;
+    }
 }

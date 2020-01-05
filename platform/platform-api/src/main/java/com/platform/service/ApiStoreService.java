@@ -3,9 +3,12 @@ package com.platform.service;
 
 
 import com.platform.dao.ApiStoreDao;
+import com.platform.entity.ApiCusRelationVo;
 import com.platform.entity.ApiStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -35,6 +38,15 @@ public class ApiStoreService {
      */
     public void  saveOrUpdateStoreData(ApiStore store){
         apiStoreDao.saveOrUpdate(store);
+    }
+
+    /**
+     * 通过openid查询推荐者
+     * @param openId
+     * @return
+     */
+    public List<ApiCusRelationVo> queryFromUserByOpenId(String openId){
+        return apiStoreDao.queryFromUserByOpenId(openId);
     }
 
 }

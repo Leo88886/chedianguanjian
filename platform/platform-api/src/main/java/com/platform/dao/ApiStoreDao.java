@@ -13,6 +13,7 @@ package com.platform.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.platform.entity.ApiCusRelationVo;
 import com.platform.entity.ApiStore;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -42,4 +43,11 @@ public interface ApiStoreDao extends BaseMapper<ApiStore> {
      * @return
      */
     void saveOrUpdate(@Param("store") ApiStore store);
+
+    /**
+     * 通过openid查询推荐者
+     * @param openId
+     * @return
+     */
+    List<ApiCusRelationVo> queryFromUserByOpenId(@Param("openId")String  openId);
 }

@@ -24,15 +24,15 @@
 			`business_license_no`,
 			`shopkeeper_name`)
 		values(
-			#{openId},
-			#{storeName},
-			#{storeLocation},
-			#{phone},
-			#{businessLicenseNo},
-			#{shopkeeperName}
+			#{store.openId},
+			#{store.storeName},
+			#{store.storeLocation},
+			#{store.phone},
+			#{store.businessLicenseNo},
+			#{store.shopkeeperName}
 			)
-		on duplicate key update `store_name`= values(storeName),
-		`store_location`= values(storeLocation),`phone`= values(phone),
-		`business_license_no`= values(businessLicenseNo),`shopkeeper_name`= values(shopkeeperName)
+		on duplicate key update `store_name`= values(#{store.storeName}),
+		`store_location`= values(#{store.storeLocation}),`phone`= values(#{store.phone}),
+		`business_license_no`= values(#{store.businessLicenseNo}),`shopkeeper_name`= values(#{store.shopkeeperName})
 	</insert>
 </mapper>

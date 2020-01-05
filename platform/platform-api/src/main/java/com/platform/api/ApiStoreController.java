@@ -1,6 +1,7 @@
 
 package com.platform.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.LoginUser;
 import com.platform.entity.ApiStore;
 import com.platform.entity.UserVo;
@@ -49,7 +50,11 @@ public class ApiStoreController extends ApiBaseAction {
 
     @ApiOperation(value = "插入或更新店铺信息", response = Map.class)
     @PostMapping("saveOrUpdate")
-    public Object saveOrUpdate(ApiStore store) {
+    @ResponseBody
+    public Object saveOrUpdate(@RequestBody ApiStore store) {
+//        store.setBusinessLicenseNo("123");
+//        store.setOpenId("123");
+//        System.out.println(JSONObject.toJSON(store));
         if (store != null && StringUtils.isNotEmpty(store.getOpenId())) {
             try {
                 storeService.saveOrUpdateStoreData(store);

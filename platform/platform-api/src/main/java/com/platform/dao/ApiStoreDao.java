@@ -41,5 +41,5 @@ public interface ApiStoreDao extends BaseMapper<ApiStore> {
      * @param store
      * @return
      */
-    void saveOrUpdate(@Param("params") ApiStore store);
+    void saveOrUpdate(@Param("store") ApiStore store);
 }

@@ -23,26 +23,23 @@ import java.util.Map;
 /**
  * Dao
  *
- * @author lipengjun
+ * @author gaojian
  * @date 2020-01-01 17:19:20
  */
 @Mapper
 public interface ApiStoreDao extends BaseMapper<ApiStore> {
 
     /**
-     * 查询所有列表
+     * 根据openid查询
      *
-     * @param params 查询参数
      * @return List
      */
-    List<ApiStore> queryAll(@Param("params") Map<String, Object> params);
+    ApiStore queryByOpenId(@Param("openId")String  openId);
 
     /**
-     * 自定义分页查询
-     *
-     * @param page   分页参数
-     * @param params 查询参数
-     * @return List
+     * 插入、更近
+     * @param store
+     * @return
      */
-    List<ApiStore> selectStorePage(IPage page, @Param("params") Map<String, Object> params);
+    void saveOrUpdate(@Param("params") ApiStore store);
 }

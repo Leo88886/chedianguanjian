@@ -3,24 +3,36 @@
 
 <mapper namespace="com.platform.dao.ApiStoreDao">
 
-    <sql id="selectSql">
-        SELECT
-        T.id,
+    <select id="queryByOpenId" resultType="com.platform.entity.ApiStore">
+      SELECT
+        T.open_id,
         T.store_name,
         T.store_location,
-        T.phone
-        FROM nideshop_store T
-        WHERE 1=1
-        <if test="params.name != null and params.name.trim() != ''">
-            AND T.NAME LIKE '%${params.name}%'
-        </if>
-    </sql>
-
-    <select id="selectStorePage" resultType="com.platform.entity.ApiStore">
-        <include refid="selectSql"/>
+        T.phone,
+        T.business_license_no,
+        T.shopkeeper_name
+       FROM nideshop_store T
+      WHERE open_id = #{openId}
     </select>
 
-    <select id="queryAll" resultType="com.platform.entity.ApiStore">
-        <include refid="selectSql"/>
-    </select>
+    <insert id="saveOrUpdate" parameterType="com.platform.entity.ApiStore" >
+		insert into nideshop_store(
+			`open_id`,
+			`store_name`,
+			`store_location`,
+			`phone`,
+			`business_license_no`,
+			`shopkeeper_name`)
+		values(
+			#{openId},
+			#{storeName},
+			#{storeLocation},
+			#{phone},
+			#{businessLicenseNo},
+			#{shopkeeperName}
+			)
+		on duplicate key update `store_name`= values(storeName),
+		`store_location`= values(storeLocation),`phone`= values(phone),
+		`business_license_no`= values(businessLicenseNo),`shopkeeper_name`= values(shopkeeperName)
+	</insert>
 </mapper>

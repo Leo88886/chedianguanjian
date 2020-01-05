@@ -17,9 +17,8 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 实体
- *
- * @author lipengjun
+ * 店铺信息实体
+ * @author gaojian
  * @date 2020-01-01 17:19:20
  */
 @Data
@@ -28,10 +27,10 @@ public class ApiStore implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     * openId
      */
     @TableId
-    private Integer id;
+    private String  openId;
     /**
      * 门店名称
      */
@@ -45,26 +44,18 @@ public class ApiStore implements Serializable {
      */
     private String phone;
 
-    public ApiStore() {
+    /**
+     * 营业执照编号
+     */
+    private String businessLicenseNo;
 
-    }
-    public ApiStore(Integer id, String storeName, String storeLocation, String phone) {
-        this.id = id;
-        this.storeName = storeName;
-        this.storeLocation = storeLocation;
-        this.phone = phone;
-    }
+    /**
+     * 店主名称
+     */
+    private String shopkeeperName;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getStoreName() {
@@ -89,5 +80,21 @@ public class ApiStore implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getBusinessLicenseNo() {
+        return businessLicenseNo;
+    }
+
+    public void setBusinessLicenseNo(String businessLicenseNo) {
+        this.businessLicenseNo = businessLicenseNo;
+    }
+
+    public String getShopkeeperName() {
+        return shopkeeperName;
+    }
+
+    public void setShopkeeperName(String shopkeeperName) {
+        this.shopkeeperName = shopkeeperName;
     }
 }

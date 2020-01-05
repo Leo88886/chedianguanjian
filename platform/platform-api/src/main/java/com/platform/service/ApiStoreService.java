@@ -2,6 +2,9 @@
 package com.platform.service;
 
 
+import com.platform.dao.ApiStoreDao;
+import com.platform.entity.ApiStore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -13,5 +16,25 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ApiStoreService {
+
+    @Autowired
+    ApiStoreDao apiStoreDao;
+
+    /**
+     * 查询
+     * @param openId
+     * @return
+     */
+    public ApiStore getStoreDataByOpenId(String openId){
+        return apiStoreDao.queryByOpenId(openId);
+    }
+
+    /**
+     * 插入、如果存在即更新
+     * @param store
+     */
+    public void  saveOrUpdateStoreData(ApiStore store){
+        apiStoreDao.saveOrUpdate(store);
+    }
 
 }

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://192.168.0.104:8080/platform_framework/api/';
+const API_BASE_URL = 'http://192.168.0.103:8080/platform_framework/api/';
 module.exports = {
   IndexUrlNewGoods: API_BASE_URL + 'index/newGoods', //新品首发
   IndexUrlHotGoods: API_BASE_URL + 'index/hotGoods', //热卖商品
@@ -80,4 +80,5 @@ module.exports = {
   SaveForwardSalerId: API_BASE_URL + 'saveSalerId/saveForwardSalerId', //查看是否绑定salerId
   SaveOrUpdateStore: API_BASE_URL + 'store/saveOrUpdate', // 保存更新门店信息
   QueryStore: API_BASE_URL + 'store/query', // 通过openId查询店铺
+  QueryReferrer: API_BASE_URL + 'store/queryReferrer', // 通过openId查询推荐人
 };

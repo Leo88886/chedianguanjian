@@ -75,7 +75,7 @@
         </view>
       </view>
       <view class="ipt-wrap border-b">
-        <textarea name="" id="" class="textarea _w100 p-tb30 lh10" maxlength="50" placeholder="请输入详细地址，精确到门牌号" bindinput="getStoreLocation"></textarea>
+        <textarea name="" id="" class="textarea _w100 p-tb30 lh10" maxlength="50" placeholder="请输入详细地址，精确到门牌号" bindinput="getStoreLocationDetails"></textarea>
       </view>
       <view class="ipt-wrap border-b flex ai-center">
         <label for="" class="font14">营业执照编号</label>

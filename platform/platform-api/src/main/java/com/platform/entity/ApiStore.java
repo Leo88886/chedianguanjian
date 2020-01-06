@@ -40,6 +40,10 @@ public class ApiStore implements Serializable {
      */
     private String storeLocation;
     /**
+     * 门店位置
+     */
+    private String storeLocationDetails;
+    /**
      * 联系方式
      */
     private String phone;
@@ -104,5 +108,13 @@ public class ApiStore implements Serializable {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getStoreLocationDetails() {
+        return storeLocationDetails;
+    }
+
+    public void setStoreLocationDetails(String storeLocationDetails) {
+        this.storeLocationDetails = storeLocationDetails;
     }
 }

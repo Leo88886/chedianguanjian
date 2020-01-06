@@ -8,6 +8,7 @@
         T.open_id,
         T.store_name,
         T.store_location,
+        T.store_location_details,
         T.phone,
         T.business_license_no,
         T.shopkeeper_name
@@ -20,6 +21,7 @@
 			`open_id`,
 			`store_name`,
 			`store_location`,
+			`store_location_details`,
 			`phone`,
 			`business_license_no`,
 			`shopkeeper_name`)
@@ -27,6 +29,7 @@
 			#{store.openId},
 			#{store.storeName},
 			<![CDATA[ #{store.storeLocation} ]]>,
+			<![CDATA[ #{store.storeLocationDetails} ]]>,
 			#{store.phone},
 			#{store.businessLicenseNo},
 			#{store.shopkeeperName}

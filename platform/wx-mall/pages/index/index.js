@@ -14,7 +14,7 @@ Page({
     shopkeeperName: '',
     phone: '',
     businessLicenseNo: '',
-    storeLocation: '',
+    storeLocationDetails: '',
     region: ["省", "市", "区"],
     regionFlag: 1,
   },
@@ -63,20 +63,23 @@ Page({
     if (openId == "undefined" || openId == null || openId == "") {
       util.request(api.CartList).then(function(res) {});
     } else {
-      wx.request({
-        url: api.SaveForwardSalerId,
-        data: {
-          fromOpenId: formOpenId,
-          openId: wx.getStorageSync('openId'),
-        },
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        success: function(res) {
-          console.log(res.data);
-        }
-      });
+      if (formOpenId != "undefined" && formOpenId != null && formOpenId != ""){
+        wx.request({
+          url: api.SaveForwardSalerId,
+          data: {
+            fromOpenId: formOpenId,
+            openId: wx.getStorageSync('openId'),
+          },
+          method: 'POST',
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function (res) {
+            console.log(res.data);
+          }
+        });
+      }
+     
       //查询门店信息  如果没有弹出框添加，如果有 不弹出弹出框
       wx.request({
         url: api.QueryStore,
@@ -150,10 +153,10 @@ Page({
       regionFlag: 0
     });
   },
-  getStoreLocation: function(e) {
+  getStoreLocationDetails: function(e) {
     var that = this;
     that.setData({
-      storeLocation: e.detail.value
+      storeLocationDetails: e.detail.value
     });
   },
   getBusinessLicenseNo: function(e) {
@@ -164,11 +167,47 @@ Page({
   },
   saveStore: function() {
     var that = this;
-    console.log(that.data.storeName)
-    console.log(that.data.shopkeeperName)
-    console.log(that.data.phone)
-    console.log(that.data.businessLicenseNo)
-    console.log(that.data.region + "-----" + that.data.storeLocation)
+    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
+    wx.request({
+      url: api.SaveOrUpdateStore,
+      data: {
+        openId: openId,
+        storeName: that.data.storeName,
+        shopkeeperName: that.data.shopkeeperName,
+        phone: that.data.phone,
+        businessLicenseNo: that.data.businessLicenseNo,
+        storeLocation: that.data.region,
+        storeLocationDetails: that.data.storeLocationDetails
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        console.log(res.data)
+        if (res.data.errno == '0') {
+          wx.showToast({
+            title: '保存成功',
+            icon: 'success',
+            duration: 3000
+          })
+          that.setData({
+            showModalStatus: false
+          });
+        } else {
+          wx.showLoading
+          wx.showLoading({
+            title: '保存失败',
+          })
+          setTimeout(function () {
+            wx.hideLoading()
+          }, 3000)
+          that.setData({
+            showModalStatus: false
+          });
+        }
+      }
+    });
   },
   cancel: function() {
     var that = this;

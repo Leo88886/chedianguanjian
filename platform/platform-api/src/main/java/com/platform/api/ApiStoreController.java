@@ -69,6 +69,7 @@ public class ApiStoreController extends ApiBaseAction {
         String openId = jsonParam.getString("openId");
         String storeName = jsonParam.getString("storeName");
         String storeLocation = jsonParam.getString("storeLocation");
+        String storeLocationDetails = jsonParam.getString("storeLocationDetails");
         String phone = jsonParam.getString("phone");
         String businessLicenseNo = jsonParam.getString("businessLicenseNo");
         String shopkeeperName = jsonParam.getString("shopkeeperName");
@@ -77,6 +78,7 @@ public class ApiStoreController extends ApiBaseAction {
             store.setOpenId(openId);
             store.setStoreName(storeName);
             store.setStoreLocation(storeLocation);
+            store.setStoreLocationDetails(storeLocationDetails);
             store.setPhone(phone);
             store.setBusinessLicenseNo(businessLicenseNo);
             store.setShopkeeperName(shopkeeperName);

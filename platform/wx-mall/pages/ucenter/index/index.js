@@ -5,10 +5,30 @@ var app = getApp();
 Page({
   data: {
     userInfo: {},
-    hasMobile: ''
+    hasMobile: '',
+    user:'',
+    referrer:'',
   },
   onLoad: function(options) {
-
+    var that = this;
+    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
+    wx.request({
+      url: api.QueryReferrer,
+      data: {
+        openId: openId
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        console.log(res.data)
+        that.setData({
+          user: res.data.userName,
+          referrer: res.data.referrer
+        });
+      }
+    });
   },
   onReady: function() {
 

@@ -2,15 +2,15 @@
   <view class="bg-fff p-lr30 border-t">
     <view class="ipt-wrap border-b flex ai-center">
       <label for="" class="font14">门店名称</label>
-      <input type="text" class="ml40 flex1" placeholder="请输入门店名称" bindinput="getStoreName"></input>
+      <input type="text" class="ml40 flex1" placeholder="请输入门店名称" bindinput="getStoreName" value="{{storeName}}"></input>
     </view>
     <view class="ipt-wrap border-b flex ai-center">
       <label for="" class="font14">店主名称</label>
-      <input type="text" class="ml40 flex1" placeholder="请输入店主名称" bindinput="getShopkeeperName"></input>
+      <input type="text" class="ml40 flex1" placeholder="请输入店主名称" bindinput="getShopkeeperName" value="{{shopkeeperName}}"></input>
     </view>
     <view class="ipt-wrap border-b flex ai-center">
       <label for="" class="font14">联系电话</label>
-      <input type="text" class="ml40 flex1" maxlength="11" placeholder="请输入联系电话" bindinput="getPhone"></input>
+      <input type="text" class="ml40 flex1" maxlength="11" placeholder="请输入联系电话" bindinput="getPhone" value="{{phone}}"></input>
     </view>
     <view class="ipt-wrap border-b flex ai-center jc-sb">
       <view class="flex ai-center">
@@ -27,11 +27,11 @@
       </view>
     </view>
     <view class="ipt-wrap border-b">
-      <textarea name="" id="" class="textarea _w100 p-tb30 lh10" maxlength="50" placeholder="请输入详细地址，精确到门牌号" bindinput="getStoreLocation"></textarea>
+      <textarea name="" id="" class="textarea _w100 p-tb30 lh10" maxlength="50" placeholder="请输入详细地址，精确到门牌号" bindinput="getStoreLocationDetails" value="{{storeLocationDetails}}"></textarea>
     </view>
     <view class="ipt-wrap border-b flex ai-center">
       <label for="" class="font14">营业执照编号</label>
-      <input type="text" class="ml40 flex1" maxlength="11" placeholder="请输入营业执照编号" bindinput="getBusinessLicenseNo"></input>
+      <input type="text" class="ml40 flex1" maxlength="11" placeholder="请输入营业执照编号" bindinput="getBusinessLicenseNo" value="{{businessLicenseNo}}"></input>
     </view>
   </view>
 

@@ -176,8 +176,7 @@
     AND t4.pay_time <![CDATA[ > ]]> #{firstday}
     AND t4.pay_time <![CDATA[ < ]]> #{lastday}
     AND t1.saler_id = #{salerId}
-    GROUP BY
-        t1.saler_id
+
     </select>
 
     <select id="querySalesAllBySaler" resultType="String">
@@ -193,8 +192,6 @@
         t4.pay_status = 2
     AND t4.pay_time IS NOT NULL
     AND t1.saler_id = #{salerId}
-    GROUP BY
-        t1.saler_id
     </select>
 
 </mapper>

@@ -64,7 +64,7 @@ public class ApiPayController extends ApiBaseAction {
             return toResponsObject(400, "订单已取消", "");
         }
 
-        if (orderInfo.getPay_status() != 0) {
+        if (orderInfo.getPay_status() != 0 && orderInfo.getPay_status() != 1) {
             return toResponsObject(400, "订单已支付，请不要重复操作", "");
         }
 

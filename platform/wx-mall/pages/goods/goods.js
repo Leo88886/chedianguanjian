@@ -21,6 +21,7 @@ Page({
     number: 1,
     checkedSpecText: '请选择规格数量',
     openAttr: false,
+    retail_price:"",
     noCollectImage: "/static/images/icon_collect.png",
     hasCollectImage: "/static/images/icon_collect_checked.png",
     collectBackImage: "/static/images/icon_collect.png"
@@ -31,6 +32,7 @@ Page({
       if (res.errno === 0) {
         that.setData({
           goods: res.data.info,
+          retail_price: res.data.info.retail_price,
           gallery: res.data.gallery,
          // attribute: res.data.attribute,
           issueList: res.data.issue,
@@ -74,7 +76,15 @@ Page({
     let that = this;
     let specNameId = event.currentTarget.dataset.nameId;
     let specValueId = event.currentTarget.dataset.valueId;
+    for (var a = 0; a < this.data.productList.length; a++) {
+      if (this.data.productList[a].goods_specification_ids.indexOf(specValueId) >= 0) {
 
+        that.setData({
+          retail_price: this.data.productList[a].retail_price
+        });
+
+      }
+    }
     //判断是否可以点击
 
     //TODO 性能优化，可在wx:for中添加index，可以直接获取点击的属性名和属性值，不用循环

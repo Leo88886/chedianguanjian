@@ -15,7 +15,7 @@ Page({
     size: 10,
     loadmoreText: '正在加载更多数据',
     nomoreText: '全部加载完成',
-    nomore: false,
+    nomore: false, 
     totalPages: 1
   },
   onLoad: function (options) {

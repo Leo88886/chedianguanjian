@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://192.168.0.103:8080/platform_framework/api/';
+const API_BASE_URL = 'https://chechedianguanjia.com/platform-framework/api/';
 module.exports = {
   IndexUrlNewGoods: API_BASE_URL + 'index/newGoods', //新品首发
   IndexUrlHotGoods: API_BASE_URL + 'index/hotGoods', //热卖商品

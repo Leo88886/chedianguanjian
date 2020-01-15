@@ -155,6 +155,7 @@ Page({
   },
   getStoreLocationDetails: function(e) {
     var that = this;
+    console.log(e.detail.value)
     that.setData({
       storeLocationDetails: e.detail.value
     });

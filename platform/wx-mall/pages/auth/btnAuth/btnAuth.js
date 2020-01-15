@@ -66,6 +66,10 @@ Page({
               }
             });
           }
+          var page = getCurrentPages().pop();
+          console.log('page', page)
+          if (page == undefined || page == null) return;
+          page.onLoad(e);
           console.log(res.data.openId)
         } else {
           // util.showErrorToast(res.errmsg)

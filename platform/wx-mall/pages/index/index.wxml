@@ -27,7 +27,7 @@
         <view class="item {{iindex % 2 == 0 ? '' : 'item-b'}}">
           <navigator url="../goods/goods?id={{iitem.id}}" class="a">
             <image class="img" src="{{iitem.list_pic_url}}" background-size="cover"></image>
-            <text class="name">{{iitem.name}}</text>
+            <text class="name" style="heihght:42rpx">{{iitem.name}}</text>
             <text class="price">￥{{iitem.retail_price}}</text>
           </navigator>
         </view>

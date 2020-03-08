@@ -73,17 +73,18 @@ public class ProductServiceImpl implements ProductService {
         int result = 0;
         String goodsSpecificationIds = product.getGoodsSpecificationIds();
         if (!StringUtils.isNullOrEmpty(goodsSpecificationIds)) {
-            String[] goodsSpecificationIdArr = goodsSpecificationIds.split("_");
-            for (int i = 0; i < goodsSpecificationIdArr.length - 1; i++) {
+            String[] goodsSpecificationIdArr = goodsSpecificationIds.split("_",-1);
+            for (int i = 0; i < goodsSpecificationIdArr.length - 2; i++) {
                 String[] oneId = goodsSpecificationIdArr[i].split(",");
                 String[] twoId = goodsSpecificationIdArr[i + 1].split(",");
+                String[] threeId = goodsSpecificationIdArr[i + 2].split(",");
                 for (int j = 0; j < oneId.length; j++) {
                     for (int k = 0; k < twoId.length; k++) {
                         String strGoodsSpecificationIds = null;
-                        if (StringUtils.isNullOrEmpty(oneId[j]) || StringUtils.isNullOrEmpty(twoId[k])){
+                        if (StringUtils.isNullOrEmpty(oneId[j]) && StringUtils.isNullOrEmpty(twoId[k]) && StringUtils.isNullOrEmpty(threeId[k])){
                             continue;
                         }
-                        strGoodsSpecificationIds = oneId[j] + "_" + twoId[k];
+                        strGoodsSpecificationIds = oneId[j] + "_" + twoId[k] + "_" + threeId[k];
                         product.setGoodsSpecificationIds(strGoodsSpecificationIds);
                         ProductEntity entity = new ProductEntity();
                         BeanUtils.copyProperties(product, entity);

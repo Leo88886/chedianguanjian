@@ -17,8 +17,8 @@ public class ApiCusRelationService {
     @Autowired
     private ApiCusRelationDao cusRelationDao;
 
-    public void save(ApiCusRelationVo cusRelationVo) {
-        cusRelationDao.save(cusRelationVo);
+    public void saveOrUpdate(ApiCusRelationVo cusRelationVo) {
+        cusRelationDao.saveOrUpdate(cusRelationVo);
     }
 
     public List<ApiCusRelationVo> queryAll (@Param("params") Map<String, Object> params){
@@ -26,23 +26,13 @@ public class ApiCusRelationService {
         return list;
     }
 
-    public List<ApiCusRelationVo> getCusByToOpenid (String toOpenId,Integer salerId){
-        List<ApiCusRelationVo> list = cusRelationDao.getCusByToOpenid(toOpenId,salerId);
+    public List<ApiCusRelationVo> getCusByToOpenid (String toOpenId){
+        List<ApiCusRelationVo> list = cusRelationDao.getCusByToOpenid(toOpenId);
         return list;
     }
 
-    public List<ApiCusRelationVo> getRelation( String toOpenId) {
-        List<ApiCusRelationVo> list = cusRelationDao.getRelation(toOpenId);
-        return list;
-    }
-
-    public List<ApiCusRelationVo> getCusRelation(String toOpenId) {
-        List<ApiCusRelationVo> list = cusRelationDao.getCusRelation(toOpenId);
-        return list;
-    }
-
-    public List<ApiCusRelationVo> getCusByToOpenid2(String toOpenId, Integer salerId) {
-        List<ApiCusRelationVo> list = cusRelationDao.getCusByToOpenid2(toOpenId,salerId);
+    public List<ApiCusRelationVo> getCusByFromOpenId( String fromOpenId) {
+        List<ApiCusRelationVo> list = cusRelationDao.getCusByFromOpenId(fromOpenId);
         return list;
     }
 }

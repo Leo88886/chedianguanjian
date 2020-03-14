@@ -13,6 +13,7 @@ package com.platform.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.platform.entity.ApiCusRelationVo;
+import com.platform.entity.ApiStore;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -47,16 +48,24 @@ public interface ApiCusRelationDao extends BaseDao<ApiCusRelationVo> {
 
 
     /**
-     *
+     * 通过toOpenId查询关系表
      * @param toOpenId
-     * @param salerId
      * @return
      */
-    List<ApiCusRelationVo> getCusByToOpenid(@Param("toOpenId") String toOpenId, @Param("salerId") Integer salerId);
+    List<ApiCusRelationVo> getCusByToOpenid(@Param("toOpenId") String toOpenId);
 
-    List<ApiCusRelationVo> getRelation(@Param("toOpenId") String toOpenId);
+    /**
+     * 通过fromOpenId查询关系表
+     * @param fromOpenId
+     * @return
+     */
+    List<ApiCusRelationVo> getCusByFromOpenId(@Param("fromOpenId") String fromOpenId);
 
-    List<ApiCusRelationVo> getCusRelation(@Param("toOpenId") String toOpenId);
+    /**
+     * 插入、更新
+     * @param cusRelationVo
+     * @return
+     */
+    void saveOrUpdate(@Param("relation") ApiCusRelationVo cusRelationVo);
 
-    List<ApiCusRelationVo> getCusByToOpenid2(@Param("toOpenId") String toOpenId, @Param("salerId") Integer salerId);
 }

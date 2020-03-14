@@ -101,28 +101,13 @@ public class ApiStoreController extends ApiBaseAction {
         Map<String,Object> map = new HashMap<String,Object>();
         JSONObject jsonParam = this.getJsonRequest();
         String openId = jsonParam.getString("openId");
-        List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(openId,0);        //salerId !=0     销售
-        List<ApiCusRelationVo> list2 = cusRelationService.getCusByToOpenid2(openId,0);      //salerId = 0;    普通用户
-        //销售
+        List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(openId);
         if(null != list && list.size() > 0){
             UserVo user = userService.getUserByOpenId(list.get(0).getFromOpenId());
-            map.put("referrer",user.getNickname());             //推荐人  销售
+            map.put("referrer",user.getNickname());             //推荐人
         }else{
             map.put("referrer","暂未绑销售");
         }
-        //普通用户信息
-        if(null != list2 && list2.size() > 0 ){
-            String fromOpenId = list2.get(0).getFromOpenId();
-            ApiStore store = storeService.getStoreDataByOpenId(openId);       //查询推荐人的门店信息
-            if(null != store){
-                map.put("userName",store.getStoreName());           //门店信息
-            }else {
-                UserVo user = userService.getUserByOpenId(list2.get(0).getFromOpenId());
-                map.put("userName", user.getNickname());           //普通用户信息
-            }
-        }else{
-            map.put("userName", "暂无推荐人");
-        }
-        return map;
+         return map;
     }
 }

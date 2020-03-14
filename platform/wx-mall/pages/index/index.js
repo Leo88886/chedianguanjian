@@ -56,35 +56,33 @@ Page({
   },
   onLoad: function(options) {
     var that = this;
-    var formOpenId = decodeURIComponent(options.formOpenId);
-    wx.setStorageSync('formOpenId', formOpenId);
+    //var formOpenId = decodeURIComponent(options.formOpenId);
+    //wx.setStorageSync('formOpenId', formOpenId);
     var openId = wx.getStorageSync('openId');
-    //保存转发用户关系  session里没有opneId 提示授权登陆
+    //判断用户是否授权登陆
     if (openId == "undefined" || openId == null || openId == "") {
       util.request(api.CartList).then(function(res) {});
     } else {
-      if (formOpenId != "undefined" && formOpenId != null && formOpenId != ""){
-        wx.request({
-          url: api.SaveForwardSalerId,
-          data: {
-            fromOpenId: formOpenId,
-            openId: wx.getStorageSync('openId'),
-          },
-          method: 'POST',
-          header: {
-            'content-type': 'application/json'
-          },
-          success: function (res) {
-            console.log(res.data);
-          }
-        });
-      }
-     
-      //查询门店信息  如果没有弹出框添加，如果有 不弹出弹出框
+    //  if (formOpenId != "undefined" && formOpenId != null && formOpenId != ""){
+    //     wx.request({
+    //       url: api.SaveForwardSalerId,
+    //       data: {
+    //         fromOpenId: formOpenId,
+    //         openId: wx.getStorageSync('openId'),
+    //       },
+    //       method: 'POST',
+    //       header: {
+    //         'content-type': 'application/json'
+    //       },
+    //       success: function (res) {
+    //         console.log(res.data);
+    //       }
+    //     });
+    //   }
+      //查询用户门店信息，如果没有数据，则弹框
       wx.request({
         url: api.QueryStore,
         data: {
-          fromOpenId: formOpenId,
           openId: wx.getStorageSync('openId'),
         },
         method: 'POST',
@@ -102,7 +100,6 @@ Page({
       });
     }
     that.getIndexData();
-
     //console.log(options);
     console.log("formOpenId:" + decodeURIComponent(options.formOpenId));
   },

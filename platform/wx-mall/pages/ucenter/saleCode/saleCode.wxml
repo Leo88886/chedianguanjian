@@ -1,9 +1,11 @@
-<view class='all' wx:if="{{flag}}">
+<view class='all'>
   <view class='verCodeView'>
-    <text style='font-size:44rpx;color:#262626'>请填写分销码</text>
+    <text style='font-size:44rpx;color:#262626'>本月推广 {{saleMon}} 家店铺</text>
+    <text style='font-size:44rpx;color:#262626;margin-left:35px'>\n总计推广 {{saleAll}} 家店铺</text>
   </view>
   <view class='verCodeSendView'>
-    <text style='font-size:28rpx;color:#9b9b9b'>填写您想绑定销售的分销码</text>
+    <text style='font-size:28rpx;color:#9b9b9b'>绑定的分销码：</text>
+
   </view>
   <view class="code">
     <view class="input-content-wrap">
@@ -14,45 +16,7 @@
       </view>
     </view>
     <view style="width:97%;margin:auto;margin-top:20px">
-      <button bindtap="saveSalerId" style="border-radius:5px;">保存</button>
-    </view>
-  </view>
-</view>
-
-<view class='all' wx:if="{{flag2}}">
-  <view class='verCodeView'>
-    <text style='font-size:44rpx;color:#262626'>您的分销码为：</text>
-  </view>
-  <view class='verCodeSendView'>
-    <text style='font-size:28rpx;color:#9b9b9b'>您已绑定过销售,无需再次绑定</text>
-  </view>
-  <view class="code">
-    <view class="input-content-wrap">
-      <view catchtap="set_Focus" class="input-code-wrap">
-        <view class="input">
-          <text>{{text}}</text>
-        </view>
-      </view>
-    </view>
-  </view>
-</view>
-
-<view class='all' wx:if="{{flag3}}">
-  <view class='verCodeView'>
-    <text style='font-size:44rpx;color:#262626'>本月推广 {{saleMon}} 家店铺</text>
-    <text style='font-size:44rpx;color:#262626;margin-left:35px'>\n总计推广 {{saleAll}} 家店铺</text>
-  </view>
-  <view class='verCodeSendView'>
-    <text style='font-size:28rpx;color:#9b9b9b'>您的分销码为：</text>
-
-  </view>
-  <view class="code">
-    <view class="input-content-wrap">
-      <view catchtap="set_Focus" class="input-code-wrap">
-        <view class="input">
-          <text>{{text}}</text>
-        </view>
-      </view>
+      <button bindtap="SaveRelation" style="border-radius:5px;">保存</button>
     </view>
   </view>
 </view>

@@ -28,8 +28,8 @@
         </if>
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.ApiCusRelationVo" useGeneratedKeys="true" keyProperty="id">
-		insert into nideshop_cus_relation(
+    <insert id="saveOrUpdate" parameterType="com.platform.entity.ApiCusRelationVo" useGeneratedKeys="true" keyProperty="id">
+		replace into nideshop_cus_relation(
 			`id`,
 			`from_open_id`,
 			`to_open_id`,
@@ -47,23 +47,11 @@
     <select id="getCusByToOpenid" resultType="com.platform.entity.ApiCusRelationVo">
         <include refid="selectSql"/>
             AND T.to_open_id = #{toOpenId}
-            AND T.saler_id != #{salerId}
     </select>
 
-    <select id="getRelation" resultType="com.platform.entity.ApiCusRelationVo">
+    <select id="getCusByFromOpenId" resultType="com.platform.entity.ApiCusRelationVo">
         <include refid="selectSql"/>
-        AND T.to_open_id = #{toOpenId}
-        AND T.saler_id != 0
+        AND T.from_open_id = #{fromOpenId}
     </select>
 
-    <select id="getCusRelation" resultType="com.platform.entity.ApiCusRelationVo">
-        <include refid="selectSql"/>
-        AND T.from_open_id = #{toOpenId}
-    </select>
-
-    <select id="getCusByToOpenid2" resultType="com.platform.entity.ApiCusRelationVo">
-        <include refid="selectSql"/>
-        AND T.to_open_id = #{toOpenId}
-        AND T.saler_id = #{salerId}
-    </select>
 </mapper>

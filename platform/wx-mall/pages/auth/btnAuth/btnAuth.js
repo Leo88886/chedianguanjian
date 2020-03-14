@@ -49,28 +49,56 @@ Page({
           wx.setStorageSync('token', res.data.token);
           wx.setStorageSync('userId', res.data.userId);
           wx.setStorageSync('openId', res.data.openId);
-          var formOpenId = wx.getStorageSync('formOpenId');
-          if (formOpenId != "undefined" && formOpenId != null && formOpenId !="") {   //通过转发进入的页面
-            wx.request({
-              url: api.SaveForwardSalerId,
-              data: {
-                fromOpenId: formOpenId,
-                openId: wx.getStorageSync('openId'),
-              },
-              method: 'POST',
-              header: {
-                'content-type': 'application/json'
-              },
-              success: function (res) {
-                console.log(res.data);
-              }
-            });
-          }
+          //判断用户是否生成salerId
+          wx.request({
+            url: api.IsSaveSalerId,
+            data: {
+              openId: res.data.openId,
+            },
+            method: 'POST',
+            header: {
+              'content-type': 'application/json'
+            },
+            success: function(res) {
+              console.log(res.data);
+            }
+          });
+          //var formOpenId = wx.getStorageSync('formOpenId');
+          //if (formOpenId != "undefined" && formOpenId != null && formOpenId != "") { //通过转发进入的页面
+          // wx.request({
+          //   url: api.SaveForwardSalerId,
+          //   data: {
+          //     fromOpenId: formOpenId,
+          //     openId: wx.getStorageSync('openId'),
+          //   },
+          //   method: 'POST',
+          //   header: {
+          //     'content-type': 'application/json'
+          //   },
+          //   success: function(res) {
+          //     console.log(res.data);
+          //   }
+          // });
+          // }
           var page = getCurrentPages().pop();
           console.log('page', page)
           if (page == undefined || page == null) return;
           page.onLoad(e);
-          console.log(res.data.openId)
+          //保存用户salerId
+          // wx.request({
+          //   url: api.SaveForwardSalerId,
+          //   data: {
+          //     fromOpenId: formOpenId,
+          //     openId: wx.getStorageSync('openId'),
+          //   },
+          //   method: 'POST',
+          //   header: {
+          //     'content-type': 'application/json'
+          //   },
+          //   success: function(res) {
+          //     console.log(res.data);
+          //   }
+          // });
         } else {
           // util.showErrorToast(res.errmsg)
           wx.showModal({

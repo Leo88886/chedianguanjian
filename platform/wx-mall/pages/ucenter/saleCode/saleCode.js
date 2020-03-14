@@ -4,17 +4,14 @@ const user = require('../../../services/user.js');
 Page({
   data: {
     salerId: '',
-    flag: false,
-    flag2: false,
-    flag3: false,
     text: '',
-    saleMon:'',
-    saleAll:''
+    saleMon: '',
+    saleAll: ''
   },
   onLoad: function(options) {
     var that = this;
     wx.request({
-      url: api.IsSaveSalerId,
+      url: api.GetRelation,
       data: {
         openId: wx.getStorageSync('openId'), //当前登陆用户openId
       },
@@ -23,26 +20,11 @@ Page({
         'content-type': 'application/json'
       },
       success: function(res) {
-        console.log(res.data)
-        if (0 == res.data.saveSaleId) { //未绑定
-          that.setData({
-            flag: true
-          })
-        }
-        if (null != res.data.user && res.data.user != '') { //已绑定
-          that.setData({   // 不显示保存按钮
-            flag2: true, 
-            text: res.data.user
-          })
-        } 
-        if (null != res.data.saler && res.data.saler != '') { // 销售页面
-          that.setData({
-            flag3: true, 
-            saleMon: res.data.saleMon,
-            saleAll: res.data.saleAll,
-            text: res.data.saler
-          })
-        } 
+        that.setData({
+          salerId: res.data.salerId,
+          saleMon: res.data.saleMon,
+          saleAll: res.data.saleAll
+        })
       }
     });
   },
@@ -53,12 +35,11 @@ Page({
       salerId: e.detail.value
     })
   },
-  saveSalerId: function(e) {
+  SaveRelation: function(e) {
     var that = this;
-    console.log(api.SaveSalerId);
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
     wx.request({
-      url: api.SaveSalerId,
+      url: api.SaveRelation,
       data: {
         salerId: that.data.salerId,
         openId: openId
@@ -78,7 +59,6 @@ Page({
             delta: 1
           })
         } else {
-          wx.showLoading
           wx.showLoading({
             title: '暂无该识别码',
           })

@@ -24,7 +24,6 @@ Page({
       success: function (res) {
         console.log(res.data)
         that.setData({
-          user: res.data.userName,
           referrer: res.data.referrer
         });
       }

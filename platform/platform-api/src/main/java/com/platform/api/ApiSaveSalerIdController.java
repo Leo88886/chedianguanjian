@@ -136,32 +136,38 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
         JSONObject jsonParam = this.getJsonRequest();
         String openId = "";
         String salerId = "";
-        String fromOpenId = "";
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("openId"))) {
             openId = jsonParam.getString("openId");
         }
         if (!StringUtils.isNullOrEmpty(jsonParam.getString("salerId"))) {
             salerId = jsonParam.getString("salerId");
         }
-
         ApiSaleVo saleVo = saleService.getSalerIdBySalerId(salerId);     //通過salerId查询fromOpenId
-        if(null != saleVo){
-            fromOpenId = saleVo.getOpenId();
-            ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
-            cusRelationVo.setFromOpenId(fromOpenId);
-            cusRelationVo.setToOpenId(openId);
-            cusRelationVo.setSalerId(Integer.valueOf(salerId));
-            cusRelationVo.setId(null);
-            cusRelationVo.setCreateTime(new Date());
-            try {
-                cusRelationService.saveOrUpdate(cusRelationVo);
-                return "1";         //  保存成功
-            }catch (Exception e){
-                logger.error("关系表更新失败！", e);
-                return "fail";     //保存失败
+        if(!saleVo.getOpenId().equals(openId)){         //不能绑定自己
+            if(null != saleVo){
+                ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
+                cusRelationVo.setFromOpenId( saleVo.getOpenId());
+                cusRelationVo.setToOpenId(openId);
+                cusRelationVo.setSalerId(Integer.valueOf(salerId));
+                cusRelationVo.setCreateTime(new Date());
+                List<ApiCusRelationVo> list = cusRelationService.getCusByFromOpenId( saleVo.getOpenId());
+                try {
+                    if(null != list && list.size() > 0 ){
+                        cusRelationService.update(cusRelationVo);
+                    }else{
+                        cusRelationVo.setId(null);
+                        cusRelationService.save(cusRelationVo);
+                    }
+                    return "1";         //  保存,更新成功
+                }catch (Exception e){
+                    logger.error("关系表更新失败！", e);
+                    return "fail";     //保存失败
+                }
+            }else{
+                return "2";        // 不存在销售码
             }
         }else{
-            return "2";        // 不存在销售码
+            return "3";        // 不能绑定自己salerId
         }
     }
 }

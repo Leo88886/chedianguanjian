@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiSaleDao">
+<mapper namespace="com.platform.dao.ApiSaleMapper">
 
     <sql id="selectSql">
         SELECT
@@ -11,10 +11,6 @@
         WHERE 1=1
 
     </sql>
-
-    <select id="selectSalePage" resultType="com.platform.entity.ApiSaleVo">
-        <include refid="selectSql"/>
-    </select>
 
     <select id="queryAll" resultType="com.platform.entity.ApiSaleVo">
         <include refid="selectSql"/>

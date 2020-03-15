@@ -1,7 +1,7 @@
 package com.platform.service;
 
 
-import com.platform.dao.ApiSaleDao;
+import com.platform.dao.ApiSaleMapper;
 import com.platform.entity.ApiSaleVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 public class ApiSaleService {
     @Autowired
-    private ApiSaleDao saleDao;
+    private ApiSaleMapper saleDao;
 
     /**
      * 保存用户salerId

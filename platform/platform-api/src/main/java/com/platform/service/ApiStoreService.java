@@ -1,8 +1,7 @@
 
 package com.platform.service;
 
-
-import com.platform.dao.ApiStoreDao;
+import com.platform.dao.ApiStoreMapper;
 import com.platform.entity.ApiCusRelationVo;
 import com.platform.entity.ApiStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import java.util.List;
 public class ApiStoreService {
 
     @Autowired
-    ApiStoreDao apiStoreDao;
+    private ApiStoreMapper apiStoreDao;
 
     /**
      * 查询

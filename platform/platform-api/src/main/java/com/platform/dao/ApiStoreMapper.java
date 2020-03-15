@@ -12,14 +12,11 @@ package com.platform.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.platform.entity.ApiCusRelationVo;
 import com.platform.entity.ApiStore;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Dao
@@ -27,8 +24,7 @@ import java.util.Map;
  * @author gaojian
  * @date 2020-01-01 17:19:20
  */
-@Mapper
-public interface ApiStoreDao extends BaseMapper<ApiStore> {
+public interface ApiStoreMapper extends BaseMapper<ApiStore> {
 
     /**
      * 根据openid查询

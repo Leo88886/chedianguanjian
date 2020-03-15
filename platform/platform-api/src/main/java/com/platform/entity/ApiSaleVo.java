@@ -22,8 +22,6 @@ import java.io.Serializable;
  * @author heguoqiang
  * @date 2019-12-23 22:05:23
  */
-@Data
-@TableName("nideshop_sale")
 public class ApiSaleVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -36,15 +34,6 @@ public class ApiSaleVo implements Serializable {
      * openId
      */
     private String openId;
-
-    public ApiSaleVo() {
-
-    }
-
-    public ApiSaleVo(Integer salerId, String openId) {
-        this.salerId = salerId;
-        this.openId = openId;
-    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

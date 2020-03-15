@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.platform.dao.ApiCusRelationDao">
+<mapper namespace="com.platform.dao.ApiCusRelationMapper">
 
     <sql id="selectSql">
         SELECT
@@ -28,7 +28,7 @@
         </if>
     </select>
 
-    <insert id="saveOrUpdate" parameterType="com.platform.entity.ApiCusRelationVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" parameterType="com.platform.entity.ApiCusRelationVo" >
 		replace into nideshop_cus_relation(
 			`id`,
 			`from_open_id`,
@@ -43,6 +43,20 @@
 			#{createTime}
 			)
 	</insert>
+
+    <update id="update" parameterType="com.platform.entity.ApiCusRelationVo" >
+		replace into nideshop_cus_relation(
+			`from_open_id`,
+			`to_open_id`,
+			`saler_id`,
+			`create_time`)
+		values(
+			#{fromOpenId},
+			#{toOpenId},
+			#{salerId},
+			#{createTime}
+			)
+	</update>
 
     <select id="getCusByToOpenid" resultType="com.platform.entity.ApiCusRelationVo">
         <include refid="selectSql"/>

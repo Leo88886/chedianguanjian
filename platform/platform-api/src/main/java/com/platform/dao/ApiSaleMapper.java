@@ -12,8 +12,6 @@ package com.platform.dao;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.platform.entity.ApiSaleVo;
-import com.platform.entity.ApiStore;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,8 +23,8 @@ import java.util.Map;
  * @author heguoqiang
  * @date 2019-12-23 22:05:23
  */
-@Mapper
-public interface ApiSaleDao extends BaseDao<ApiSaleVo> {
+public interface ApiSaleMapper extends BaseDao<ApiSaleVo> {
+
 
     /**
      * 查询所有列表
@@ -35,17 +33,6 @@ public interface ApiSaleDao extends BaseDao<ApiSaleVo> {
      * @return List
      */
     List<ApiSaleVo> queryAll(@Param("params") Map<String, Object> params);
-
-    /**
-     * 自定义分页查询
-     *
-     * @param page   分页参数
-     * @param params 查询参数
-     * @return List
-     */
-    List<ApiSaleVo> selectSalePage(IPage page, @Param("params") Map<String, Object> params);
-
-    ApiSaleVo getSalerId(@Param("params") Map<String, Object> params);
 
     ApiSaleVo getSalerIdByOpenId(@Param("openId") String openId);
 

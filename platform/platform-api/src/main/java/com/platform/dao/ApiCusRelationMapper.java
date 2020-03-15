@@ -27,25 +27,7 @@ import java.util.Map;
  * @date 2019-12-22 22:21:10
  */
 @Mapper
-public interface ApiCusRelationDao extends BaseDao<ApiCusRelationVo> {
-
-    /**
-     * 查询所有列表
-     *
-     * @param params 查询参数
-     * @return List
-     */
-    List<ApiCusRelationVo> queryAll(@Param("params") Map<String, Object> params);
-
-    /**
-     * 自定义分页查询
-     *
-     * @param page   分页参数
-     * @param params 查询参数
-     * @return List
-     */
-    List<ApiCusRelationVo> selectCusRelationPage(IPage page, @Param("params") Map<String, Object> params);
-
+public interface ApiCusRelationMapper extends BaseDao<ApiCusRelationVo> {
 
     /**
      * 通过toOpenId查询关系表
@@ -60,12 +42,5 @@ public interface ApiCusRelationDao extends BaseDao<ApiCusRelationVo> {
      * @return
      */
     List<ApiCusRelationVo> getCusByFromOpenId(@Param("fromOpenId") String fromOpenId);
-
-    /**
-     * 插入、更新
-     * @param cusRelationVo
-     * @return
-     */
-    void saveOrUpdate(@Param("relation") ApiCusRelationVo cusRelationVo);
 
 }

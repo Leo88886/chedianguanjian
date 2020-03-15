@@ -21,8 +21,6 @@ import java.io.Serializable;
  * @author gaojian
  * @date 2020-01-01 17:19:20
  */
-@Data
-@TableName("nideshop_store")
 public class ApiStore implements Serializable {
     private static final long serialVersionUID = 1L;
 

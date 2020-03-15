@@ -58,9 +58,16 @@ Page({
           wx.navigateBack({
             delta: 1
           })
+        } else if (res.data == '3') {
+          wx.showLoading({
+            title: '不能绑定自己！',
+          })
+          setTimeout(function() {
+            wx.hideLoading()
+          }, 2000)
         } else {
           wx.showLoading({
-            title: '暂无该识别码',
+            title: '暂无该销售码！',
           })
           setTimeout(function() {
             wx.hideLoading()

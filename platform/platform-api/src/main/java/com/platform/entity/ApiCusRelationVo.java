@@ -23,8 +23,6 @@ import java.util.Date;
  * @author heguoqiang
  * @date 2019-12-22 22:21:10
  */
-@Data
-@TableName("nideshop_cus_relation")
 public class ApiCusRelationVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -49,22 +47,6 @@ public class ApiCusRelationVo implements Serializable {
      * 销售码
      */
     private Integer salerId;
-
-    public ApiCusRelationVo() {
-
-    }
-
-    public ApiCusRelationVo(Integer id, String fromOpenId, String toOpenId, Date createTime, Integer salerId) {
-        this.id = id;
-        this.fromOpenId = fromOpenId;
-        this.toOpenId = toOpenId;
-        this.createTime = createTime;
-        this.salerId = salerId;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public Integer getId() {
         return id;
@@ -105,4 +87,19 @@ public class ApiCusRelationVo implements Serializable {
     public void setSalerId(Integer salerId) {
         this.salerId = salerId;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

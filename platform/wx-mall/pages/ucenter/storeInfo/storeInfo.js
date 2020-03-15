@@ -15,7 +15,7 @@ Page({
     addressStatus: 0,
     userID: 0,
   },
-  onLoad: function () {
+  onLoad: function() {
     var that = this;
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
     wx.request({
@@ -27,7 +27,7 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function (res) {
+      success: function(res) {
         if (null != res.data.data.storeLocation || "" != res.data.data.storeLocation) {
           that.setData({
             regionFlag: 0
@@ -45,43 +45,43 @@ Page({
     });
   },
 
-  getStoreName: function (e) {
+  getStoreName: function(e) {
     var that = this;
     that.setData({
       storeName: e.detail.value
     });
   },
-  getShopkeeperName: function (e) {
+  getShopkeeperName: function(e) {
     var that = this;
     that.setData({
       shopkeeperName: e.detail.value
     });
   },
-  getPhone: function (e) {
+  getPhone: function(e) {
     this.setData({
       phone: e.detail.value
     });
   },
-  bindRegionChange: function (e) {
+  bindRegionChange: function(e) {
     var that = this;
     that.setData({
       region: e.detail.value,
       regionFlag: 0
     });
   },
-  getStoreLocationDetails: function (e) {
+  getStoreLocationDetails: function(e) {
     var that = this;
     that.setData({
       storeLocationDetails: e.detail.value
     });
   },
-  getBusinessLicenseNo: function (e) {
+  getBusinessLicenseNo: function(e) {
     var that = this;
     that.setData({
       businessLicenseNo: e.detail.value
     });
   },
-  saveStore: function () {
+  saveStore: function() {
     var that = this;
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
     console.log(location)
@@ -100,7 +100,7 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res.data)
         if (res.data.errno == '0') {
           wx.showToast({
@@ -108,17 +108,16 @@ Page({
             icon: 'success',
             duration: 3000
           })
-          wx.navigateBack({
-            delta: 1
-          })
+          setTimeout(function() {
+            wx.navigateBack({
+              delta: 1
+            })
+          }, 3000)
+
         } else {
-          wx.showLoading
           wx.showLoading({
             title: '保存失败',
           })
-          setTimeout(function () {
-            wx.hideLoading()
-          }, 3000)
         }
       }
     });

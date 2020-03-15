@@ -59,15 +59,19 @@ Page({
             delta: 1
           })
         } else if (res.data == '3') {
-          wx.showLoading({
-            title: '不能绑定自己！',
+          wx.showToast({
+            title: '不能绑定自己的销售码',
+            icon: 'none',
+            duration: 2000
           })
           setTimeout(function() {
             wx.hideLoading()
           }, 2000)
         } else {
-          wx.showLoading({
-            title: '暂无该销售码！',
+          wx.showToast({
+            title: '暂无该销售码',
+            icon: 'none',
+            duration: 2000
           })
           setTimeout(function() {
             wx.hideLoading()

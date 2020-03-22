@@ -202,4 +202,9 @@ public class GoodsServiceImpl implements GoodsService {
         goodsEntity.setUpdateTime(new Date());
         return goodsDao.update(goodsEntity);
     }
+
+    @Override
+    public List<GoodsEntity> queryReturnCcash(Integer id) {
+        return goodsDao.queryReturnCcash(id);
+    }
 }

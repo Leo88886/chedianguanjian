@@ -36,6 +36,8 @@
         <result property="isLimited" column="is_limited"/>
         <result property="isHot" column="is_hot"/>
         <result property="marketPrice" column="market_price"/>
+        <result property="cashBack" column="cash_back"/>
+        <result property="couponBack" column="coupon_back"/>
         <result property="createUserId" column="create_user_id"/>
         <result property="createUserDeptId" column="create_user_dept_id"/>
         <result property="updateUserId" column="update_user_id"/>
@@ -82,6 +84,8 @@
         nideshop_goods.create_user_id,
         nideshop_goods.create_user_dept_id,
         nideshop_goods.update_user_id,
+        nideshop_goods.cash_back,
+        CONCAT('满',REPLACE(nideshop_goods.coupon_back ,'_','减')) as coupon_back,
         nideshop_category.name category_name,
         nideshop_attribute_category.name attribute_category_name,
         nideshop_brand.name brand_name
@@ -120,6 +124,13 @@
         AND nideshop_goods.is_Delete = #{isDelete}
     </select>
 
+    <select id="queryReturnCcash" resultType="com.platform.entity.GoodsEntity">
+		select
+            nideshop_goods.cash_back,
+            nideshop_goods.coupon_back
+         from nideshop_goods where id = #{id}
+	</select>
+
     <insert id="save" parameterType="com.platform.entity.GoodsEntity">
         insert into nideshop_goods
         (
@@ -157,7 +168,9 @@
         `market_price`,
         `create_user_id`,
         `create_user_dept_id`,
-        `update_user_id`
+        `update_user_id`,
+        `cash_back`,
+        `coupon_back`
         )
         values
         (
@@ -195,7 +208,9 @@
         #{marketPrice},
         #{createUserId},
         #{createUserDeptId},
-        #{updateUserId}
+        #{updateUserId},
+        #{cashBack},
+        #{couponBack}
         )
     </insert>
 
@@ -236,6 +251,8 @@
             <if test="createUserId != null">`create_user_id` = #{createUserId},</if>
             <if test="createUserId != null">`create_user_dept_id` = #{createUserDeptId},</if>
             <if test="updateUserId != null">`update_user_id` = #{updateUserId},</if>
+            <if test="cashBack != null">`cash_back` = #{cashBack},</if>
+            <if test="couponBack != null">`coupon_back` = #{couponBack},</if>
         </set>
         where id = #{id}
     </update>

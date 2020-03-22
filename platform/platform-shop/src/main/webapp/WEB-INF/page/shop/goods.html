@@ -127,6 +127,13 @@
                         <Input-number :min="0" :step="1" v-model="goods.marketPrice" placeholder="市场价"
                                       style="width: 188px;"/>
                     </Form-item>
+                    <Form-item label="返现" prop="cashBack">
+                        <Input-number :min="0" :step="1" v-model="goods.cashBack" placeholder="返现"
+                                      style="width: 188px;"/>
+                    </Form-item>
+                    <Form-item label="返卷" prop="couponBack">
+                        <i-input v-model="goods.couponBack" placeholder="返卷" style="width:188px"/>
+                    </Form-item>
                     <!--<Form-item label="专柜价格" prop="counterPrice">-->
                     <!--<Input-number :min="0" :step="1" v-model="goods.counterPrice" placeholder="专柜价格"-->
                     <!--style="width: 188px;"/>-->

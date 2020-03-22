@@ -79,6 +79,10 @@ public class GoodsEntity implements Serializable {
     private Integer isHot;
     //市场价
     private BigDecimal marketPrice;
+    //返现
+    private BigDecimal cashBack;
+    //返卷
+    private String couponBack;
     /**
      * 用户ID
      */
@@ -603,5 +607,21 @@ public class GoodsEntity implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public BigDecimal getCashBack() {
+        return cashBack;
+    }
+
+    public void setCashBack(BigDecimal cashBack) {
+        this.cashBack = cashBack;
+    }
+
+    public String getCouponBack() {
+        return couponBack;
+    }
+
+    public void setCouponBack(String couponBack) {
+        this.couponBack = couponBack;
     }
 }

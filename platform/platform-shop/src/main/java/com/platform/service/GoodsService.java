@@ -93,4 +93,11 @@ public interface GoodsService {
      * @return
      */
     int unSale(Integer id);
+
+    /**
+     * 通过商品Id查询返现金额
+     * @param id
+     * @return
+     */
+    List<GoodsEntity> queryReturnCcash(Integer id);
 }

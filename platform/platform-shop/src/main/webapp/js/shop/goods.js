@@ -26,7 +26,10 @@ $(function () {
                 label: '热销', name: 'isHot', index: 'is_hot', width: 80, formatter: function (value) {
                     return transIsNot(value);
                 }
-            }]
+            },
+            {label: '返现', name: 'cashBack', index: 'cash_back', width: 80},
+            {label: '返卷', name: 'couponBack', index: 'coupon_back', width: 80}
+            ]
     });
     $('#goodsDesc').editable({
         inlineMode: false,

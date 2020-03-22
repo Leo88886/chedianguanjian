@@ -9,9 +9,9 @@
   </view>
   <view class="code">
     <view class="input-content-wrap">
-      <view catchtap="set_Focus" class="input-code-wrap"  style="line-height:50rpx;">
+      <view catchtap="set_Focus" class="input-code-wrap" style="line-height:50rpx;">
         <view class="input">
-          <input type="text" bindinput="salerId" value="{{salerId}}" style="text-align: center;"/>
+          <input type="text" bindinput="salerId" value="{{salerId}}" style="text-align: center;" />
         </view>
       </view>
     </view>

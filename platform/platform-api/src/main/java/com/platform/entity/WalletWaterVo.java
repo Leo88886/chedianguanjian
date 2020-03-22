@@ -6,6 +6,8 @@ import java.util.Date;
 
 public class WalletWaterVo implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private String openId; //用户openId
     private Date time; //操作时间
     private Integer type; //余额操作类型:1充值2返现3余额购买4提现

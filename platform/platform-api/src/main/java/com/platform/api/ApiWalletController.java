@@ -1,18 +1,19 @@
 package com.platform.api;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.cache.J2CacheUtils;
-import com.platform.dao.ApiUserMapper;
 import com.platform.dao.ApiWalletMapper;
-import com.platform.entity.*;
+import com.platform.dao.ApiWalletWaterMapper;
+import com.platform.entity.UserVo;
+import com.platform.entity.WalletVo;
+import com.platform.entity.WalletWaterVo;
+import com.platform.service.ApiWalletService;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.CommonUtil;
 import com.platform.util.wechat.WechatUtil;
 import com.platform.utils.*;
-import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,35 +22,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Api(tags = "钱包以及流水相关")
 @RestController
 @RequestMapping("/api/wallet")
-public class ApiWalletController  extends ApiBaseAction {
+public class ApiWalletController extends ApiBaseAction {
 
     @Autowired
     private ApiWalletMapper apiWalletMapper;
-
+    @Autowired
+    private ApiWalletService apiWalletService;
+    @Autowired
+    private ApiWalletWaterMapper apiWalletWaterMapper;
 
     @IgnoreAuth
     @PostMapping("balance")
     @ApiOperation(value = "余额查询")
-    public void queryBalance(){
-//        JSONObject jsonParam = this.getJsonRequest();
-//        String openId = "";
-//        if (!StringUtils.isNullOrEmpty(jsonParam.getString("openId"))) {
-//            openId = jsonParam.getString("openId");
-//        }
-        WalletVo walletVo = apiWalletMapper.queryUserWallet("qwe");
-        System.out.println(walletVo);
+    public Object queryBalance(String openId) {
+        WalletVo walletVo = null;
+        try {
+            walletVo = apiWalletMapper.queryUserWallet(openId);
+        } catch (Exception e) {
+            return toResponsFail("查询余额失败");
+        }
+        if (walletVo == null) {
+            WalletVo wo = new WalletVo();
+            wo.setBalance(new BigDecimal(0));
+            return wo;
+        }
+
+        return walletVo;
 
     }
 
     @IgnoreAuth
     @PostMapping("buybalance")
     @ApiOperation(value = "余额充值")
-    public Object buyBalance(@LoginUser UserVo loginUser,Integer balance){
+    public Object buyBalance(@LoginUser UserVo loginUser, Integer balance) {
 
         if (null == loginUser) {
             return toResponsObject(400, "用户信息为空", "");
@@ -69,9 +81,8 @@ public class ApiWalletController  extends ApiBaseAction {
             // 随机字符串
             parame.put("nonce_str", randomStr);
             // 商户订单编号
-            parame.put("out_trade_no", CommonUtil.generateOrderNumber());
-            Map orderGoodsParam = new HashMap();
-            orderGoodsParam.put("order_id", 999999);
+            String orderId = CommonUtil.generateOrderNumber();
+            parame.put("out_trade_no", orderId);
             // 商品描述
             parame.put("body", "余额充值");
             //支付金额
@@ -111,7 +122,8 @@ public class ApiWalletController  extends ApiBaseAction {
                     resultObj.put("signType", "MD5");
                     String paySign = WechatUtil.arraySign(resultObj, ResourceUtil.getConfigByName("wx.paySignKey"));
                     resultObj.put("paySign", paySign);
-
+                    resultObj.put("balance", balance);
+                    resultObj.put("orderId", orderId);
                     return toResponsObject(0, "微信统一订单下单成功", resultObj);
                 }
             }
@@ -127,9 +139,13 @@ public class ApiWalletController  extends ApiBaseAction {
     @IgnoreAuth
     @PostMapping("buybanlanceresult")
     @ApiOperation(value = "余额充值结果")
-    public Object buyBanlanceResult(@LoginUser UserVo loginUser,String orderCode){
-        if(orderCode == null){
+    public Object buyBanlanceResult(@LoginUser UserVo loginUser, String orderId, Integer balance) {
+        if (orderId == null) {
             return toResponsFail("未传入支付编号");
+        }
+
+        if (balance == null) {
+            return toResponsFail("未传入充值金额");
         }
 
         if (loginUser == null) {
@@ -144,7 +160,7 @@ public class ApiWalletController  extends ApiBaseAction {
         // 随机字符串
         parame.put("nonce_str", randomStr);
         // 商户订单编号
-        parame.put("out_trade_no", orderCode);
+        parame.put("out_trade_no", orderId);
 
         String sign = WechatUtil.arraySign(parame, ResourceUtil.getConfigByName("wx.paySignKey"));
         // 数字签证
@@ -169,21 +185,34 @@ public class ApiWalletController  extends ApiBaseAction {
 
         String trade_state = MapUtils.getString("trade_state", resultUn);
         if ("SUCCESS".equals(trade_state)) {
-            // 业务处理
-            // todo 增加余额
-            // todo 维护余额流水
+
+            String weixin_openid = loginUser.getWeixin_openid();
+            // 增加余额
+            BigDecimal bigDecimal = new BigDecimal(balance);
+            apiWalletService.addBalance(bigDecimal, weixin_openid);
+
+            //维护流水
+            WalletWaterVo wwo = new WalletWaterVo();
+            wwo.setOpenId(weixin_openid);
+            wwo.setDealNum(bigDecimal);
+            wwo.setTime(new Date());
+            wwo.setType(1);
+            apiWalletWaterMapper.saveWalletWater(wwo);
+
             return toResponsMsgSuccess("支付成功");
         } else if ("USERPAYING".equals(trade_state)) {
             // 重新查询 正在支付中
-//            if (num == null) {
-//                J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "", 1);
-//                this.buyBanlanceResult(loginUser, orderId);
-//            } else if (num <= 3) {
-//                J2CacheUtils.remove(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId);
-//                this.orderQuery(loginUser, orderId);
-//            } else {
-//                return toResponsFail("查询失败,error=" + trade_state);
-//            }
+            Integer num = (Integer) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "");
+            // 重新查询 正在支付中
+            if (num == null) {
+                J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "", 1);
+                this.buyBanlanceResult(loginUser, orderId, balance);
+            } else if (num <= 3) {
+                J2CacheUtils.remove(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId);
+                this.buyBanlanceResult(loginUser, orderId, balance);
+            } else {
+                return toResponsFail("查询失败,error=" + trade_state);
+            }
 
         } else {
             // 失败

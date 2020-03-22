@@ -10,4 +10,6 @@ public interface ApiWalletMapper extends BaseDao<WalletVo>  {
 
     WalletVo queryUserWallet(@Param("openId") String openId);
 
+    void updateWalletBalance(@Param("walletVo") WalletVo walletVo);
+
 }

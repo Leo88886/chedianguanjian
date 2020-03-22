@@ -35,9 +35,19 @@ Page({
     let that = this;
     var data = new Object();
 
+    util.request(api.IndexUrlHotGoods).then(function(res) {
+      console.log(res.errno);
+      if (res.errno === 0) {
+        data.hotGoods = res.data.hotGoodsList
+        console.log("1111111111111111111111111111");
+        that.setData(data);
+      }
+    });
+
     util.request(api.IndexUrlCategory).then(function(res) {
       if (res.errno === 0) {
         data.floorGoods = res.data.categoryList
+        console.log(data);
         that.setData(data);
       }
     });
@@ -63,22 +73,22 @@ Page({
     if (openId == "undefined" || openId == null || openId == "") {
       util.request(api.CartList).then(function(res) {});
     } else {
-    //  if (formOpenId != "undefined" && formOpenId != null && formOpenId != ""){
-    //     wx.request({
-    //       url: api.SaveForwardSalerId,
-    //       data: {
-    //         fromOpenId: formOpenId,
-    //         openId: wx.getStorageSync('openId'),
-    //       },
-    //       method: 'POST',
-    //       header: {
-    //         'content-type': 'application/json'
-    //       },
-    //       success: function (res) {
-    //         console.log(res.data);
-    //       }
-    //     });
-    //   }
+      //  if (formOpenId != "undefined" && formOpenId != null && formOpenId != ""){
+      //     wx.request({
+      //       url: api.SaveForwardSalerId,
+      //       data: {
+      //         fromOpenId: formOpenId,
+      //         openId: wx.getStorageSync('openId'),
+      //       },
+      //       method: 'POST',
+      //       header: {
+      //         'content-type': 'application/json'
+      //       },
+      //       success: function (res) {
+      //         console.log(res.data);
+      //       }
+      //     });
+      //   }
       //查询用户门店信息，如果没有数据，则弹框
       wx.request({
         url: api.QueryStore,
@@ -101,7 +111,6 @@ Page({
     }
     that.getIndexData();
     //console.log(options);
-    console.log("formOpenId:" + decodeURIComponent(options.formOpenId));
   },
   onReady: function() {
     // 页面渲染完成
@@ -181,7 +190,7 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res.data)
         if (res.data.errno == '0') {
           wx.showToast({
@@ -197,7 +206,7 @@ Page({
           wx.showLoading({
             title: '保存失败',
           })
-          setTimeout(function () {
+          setTimeout(function() {
             wx.hideLoading()
           }, 3000)
           that.setData({

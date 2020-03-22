@@ -37,6 +37,8 @@
         <result property="is_limited" column="is_limited"/>
         <result property="is_hot" column="is_hot"/>
         <result property="product_id" column="product_id"/>
+        <result property="cash_back" column="cash_back"/>
+        <result property="coupon_back" column="coupon_back"/>
     </resultMap>
 
     <select id="queryObject" resultMap="goodsMap">
@@ -49,7 +51,43 @@
             ${fields}
         </if>
         <if test="fields == null or fields == ''">
-            *
+            id,
+            category_id,
+            goods_sn,
+            name,
+            brand_id,
+            goods_number,
+            keywords,
+            goods_brief,
+            goods_desc,
+            is_on_sale,
+            add_time,
+            sort_order,
+            is_delete,
+            attribute_category,
+            counter_price,
+            extra_price,
+            is_new,
+            goods_unit,
+            primary_pic_url,
+            list_pic_url,
+            retail_price,
+            sell_volume,
+            primary_product_id,
+            unit_price,
+            promotion_desc,
+            promotion_tag,
+            app_exclusive_price,
+            is_app_exclusive,
+            is_limited,
+            is_hot,
+            market_price,
+            create_user_id,
+            update_user_id,
+            update_time,
+            create_user_dept_id,
+            cash_back,
+            substring_index( a.coupon_back,"_",-1) as coupon_back
         </if>
         from nideshop_goods
         where 1 = 1
@@ -100,7 +138,45 @@
     </select>
 
     <select id="queryHotGoodsList" resultMap="goodsMap">
-        select a.*,b.id as product_id
+        select
+        a.id,
+        a.category_id,
+        a.goods_sn,
+        a.name,
+        a.brand_id,
+        a.goods_number,
+        a.keywords,
+        a.goods_brief,
+        a.goods_desc,
+        a.is_on_sale,
+        a.add_time,
+        a.sort_order,
+        a.is_delete,
+        a.attribute_category,
+        a.counter_price,
+        a.extra_price,
+        a.is_new,
+        a.goods_unit,
+        a.primary_pic_url,
+        a.list_pic_url,
+        a.retail_price,
+        a.sell_volume,
+        a.primary_product_id,
+        a.unit_price,
+        a.promotion_desc,
+        a.promotion_tag,
+        a.app_exclusive_price,
+        a.is_app_exclusive,
+        a.is_limited,
+        a.is_hot,
+        a.market_price,
+        a.create_user_id,
+        a.update_user_id,
+        a.update_time,
+        a.create_user_dept_id,
+        a.cash_back,
+        substring_index( a.coupon_back,"_",-1) as coupon_back,
+        b.id as product_id
         from nideshop_goods a
         left join nideshop_product b on a.id = b.goods_id
         left join nideshop_product c on a.id = c.goods_id and c.retail_price > b.retail_price and b.id != c.id

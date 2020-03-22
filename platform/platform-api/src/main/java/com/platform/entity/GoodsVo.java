@@ -80,6 +80,10 @@ public class GoodsVo implements Serializable {
     // 冗余
     // 产品Id
     private Integer product_id;
+    //返现
+    private BigDecimal cash_back;
+    //返卷
+    private String coupon_back;
 
     public Integer getId() {
         return id;
@@ -343,5 +347,21 @@ public class GoodsVo implements Serializable {
 
     public void setMarket_price(BigDecimal market_price) {
         this.market_price = market_price;
+    }
+
+    public BigDecimal getCash_back() {
+        return cash_back;
+    }
+
+    public void setCash_back(BigDecimal cash_back) {
+        this.cash_back = cash_back;
+    }
+
+    public String getCoupon_back() {
+        return coupon_back;
+    }
+
+    public void setCoupon_back(String coupon_back) {
+        this.coupon_back = coupon_back;
     }
 }

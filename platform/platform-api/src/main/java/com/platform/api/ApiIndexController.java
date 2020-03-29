@@ -296,4 +296,38 @@ public class ApiIndexController extends ApiBaseAction {
 
         return toResponsSuccess(resultObj);
     }
+
+    @ApiOperation(value = "高返利商品信息")
+    @IgnoreAuth
+    @PostMapping(value = "highReturnGoods")
+    public Object highReturnGoods() {
+        Map<String, Object> resultObj = new HashMap<String, Object>();
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("is_high_return", "1");
+        param.put("sidx","cash_back");
+        param.put("order","desc");
+        param.put("is_delete", 0);
+        param.put("limit", "10");
+        PageHelper.startPage(0, 3, false);
+        List<GoodsVo> highReturnGoods = goodsService.queryList(param);
+        resultObj.put("highReturnGoods", highReturnGoods);
+        return toResponsSuccess(resultObj);
+    }
+
+    @ApiOperation(value = "高返卷商品信息")
+    @IgnoreAuth
+    @PostMapping(value = "highCouponReturnGoods")
+    public Object highCouponReturnGoods() {
+        Map<String, Object> resultObj = new HashMap<String, Object>();
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("is_high_coupon_return", "1");
+        param.put("is_delete", 0);
+        param.put("sidx","substring_index(coupon_back,\"_\",-1)");
+        param.put("order","desc");
+        param.put("limit", "10");
+        PageHelper.startPage(0, 3, false);
+        List<GoodsVo> highCouponReturnGoods = goodsService.queryList(param);
+        resultObj.put("highCouponReturnGoods", highCouponReturnGoods);
+        return toResponsSuccess(resultObj);
+    }
 }

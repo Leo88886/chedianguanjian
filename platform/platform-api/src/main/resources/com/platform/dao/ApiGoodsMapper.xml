@@ -87,7 +87,7 @@
             update_time,
             create_user_dept_id,
             cash_back,
-            substring_index( a.coupon_back,"_",-1) as coupon_back
+            substring_index(coupon_back,"_",-1) as coupon_back
         </if>
         from nideshop_goods
         where 1 = 1
@@ -126,6 +126,12 @@
             <foreach item="item" collection="goods_ids" open="(" separator="," close=")">
                 #{item}
             </foreach>
+        </if>
+        <if test="is_high_return != null and is_high_return != ''">
+            and (cash_back is not null or cash_back != '')
+        </if>
+        <if test="is_high_coupon_return != null and is_high_coupon_return != ''">
+            and (coupon_back is not null or coupon_back != '')
         </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">

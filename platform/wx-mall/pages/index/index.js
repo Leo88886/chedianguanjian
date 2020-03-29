@@ -34,20 +34,39 @@ Page({
   getIndexData: function() {
     let that = this;
     var data = new Object();
-
+    //热销
     util.request(api.IndexUrlHotGoods).then(function(res) {
       console.log(res.errno);
       if (res.errno === 0) {
         data.hotGoods = res.data.hotGoodsList
-        console.log("1111111111111111111111111111");
         that.setData(data);
       }
     });
-
+    //高返利商品
+    util.request(api.IndexUrlHighReturn).then(function(res) {
+      console.log(res.errno);
+      if (res.errno === 0) {
+        //res.data.highCouponReturnGoods[0].cash_back 返现金额
+        console.log(res.data.highReturnGoods[0].cash_back);
+        data.highReturnGoods = res.data.highReturnGoods
+        that.setData(data);
+      }
+    });
+    //高返卷商品
+    util.request(api.IndexUrlHighCouponReturn).then(function(res) {
+      console.log(res.errno);
+      if (res.errno === 0) {
+        //res.data.highCouponReturnGoods[0].coupon_back 返卷金额
+        data.highCouponReturnGoods = res.data.highCouponReturnGoods
+        that.setData(data);
+      }
+    });
+    //商品列表
     util.request(api.IndexUrlCategory).then(function(res) {
       if (res.errno === 0) {
+        //cash_back 返现金额
+        //coupon_back 返卷金额
         data.floorGoods = res.data.categoryList
-        console.log(data);
         that.setData(data);
       }
     });
@@ -161,7 +180,6 @@ Page({
   },
   getStoreLocationDetails: function(e) {
     var that = this;
-    console.log(e.detail.value)
     that.setData({
       storeLocationDetails: e.detail.value
     });
@@ -191,7 +209,6 @@ Page({
         'content-type': 'application/json'
       },
       success: function(res) {
-        console.log(res.data)
         if (res.data.errno == '0') {
           wx.showToast({
             title: '保存成功',

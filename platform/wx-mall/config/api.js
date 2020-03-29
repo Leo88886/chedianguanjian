@@ -81,4 +81,8 @@ module.exports = {
   SaveOrUpdateStore: API_BASE_URL + 'store/saveOrUpdate', // 保存更新门店信息
   QueryStore: API_BASE_URL + 'store/query', // 通过openId查询店铺
   QueryReferrer: API_BASE_URL + 'store/queryReferrer', // 通过openId查询推荐人
+  GetRelation: API_BASE_URL + 'saveSalerId/getRelation', //   获取绑定salerId
+  SaveRelation: API_BASE_URL + 'saveSalerId/saveRelation', // 保存绑定salerId
+  IndexUrlHighReturn: API_BASE_URL + 'index/highReturnGoods', //高反利商品
+  IndexUrlHighCouponReturn: API_BASE_URL + 'index/highCouponReturnGoods', //高返卷商品
 };

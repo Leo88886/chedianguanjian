@@ -178,6 +178,12 @@ Page({
       regionFlag: 0
     });
   },
+  test: function (e) {
+    console.log("111111111111")
+    wx.redirectTo({
+      url: '/pages/test/test',
+    })
+  },
   getStoreLocationDetails: function(e) {
     var that = this;
     that.setData({

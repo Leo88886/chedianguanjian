@@ -38,7 +38,8 @@
     "pages/shopping/selCoupon/selCoupon",
     "pages/ucenter/help/help",
     "pages/ucenter/helpInfo/helpInfo",
-    "pages/auth/btnAuth/btnAuth"
+    "pages/auth/btnAuth/btnAuth",
+    "pages/test/test"
   ],
   "window": {
     "backgroundTextStyle": "dark",

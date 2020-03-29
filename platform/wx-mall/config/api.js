@@ -85,4 +85,9 @@ module.exports = {
   SaveRelation: API_BASE_URL + 'saveSalerId/saveRelation', // 保存绑定salerId
   IndexUrlHighReturn: API_BASE_URL + 'index/highReturnGoods', //高反利商品
   IndexUrlHighCouponReturn: API_BASE_URL + 'index/highCouponReturnGoods', //高返卷商品
+
+
+  TESTURL: API_BASE_URL + 'wallet/buybalance', //test
+
+  TESTURL2: API_BASE_URL + 'wallet/buybanlanceresult', //test2
 };

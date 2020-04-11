@@ -1,58 +1,160 @@
 <view class="container">
   <button class="userinfo" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">
-    <image wx:if="{{userInfo && userInfo.avatarUrl}}" class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
-    <text class="userinfo-nickname">{{ userInfo.nickName }}</text>
-    <!-- <text style="color:#fff;margin-top:5rpx">推荐者 : {{user}} </text> -->
-    <text style="color:#fff;margin-top:5rpx">推荐者 : {{referrer}}</text>
+    <view style="display:flex;">
+      <image wx:if="{{userInfo && userInfo.avatarUrl}}" class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
+      <view style="display:flex;flex-direction: column;justify-content:center;">
+        <view class="userinfo-nickname">{{userInfo.nickName}}</view>
+      </view>
+    </view>
+    <view>
+      <text class="userinfo-xs">{{referrer}}推荐</text>
+    </view>
   </button>
-  <view style="height:20rpx;background: #eee;width:100%;"></view>
-  <view class="my-item" style='background:none;display:flex;flex-direction:column;height:auto;'></view>
+  <view class="usermoney">
+    <view class="usermoney-item">
+      <view class="item-up">¥10</view>
+      <view class="item-down">余额</view>
+    </view>
+    <view class="usermoney-item" data-action="0" bindtap="showChargeModal">
+      <view class="item-up">
+        <image src="../../../static/images/ic_userinfo_recharge.png"></image>
+      </view>
+      <view class="item-down">充值</view>
+    </view>
+    <view class="usermoney-item" data-action="1" bindtap="showChargeModal">
+      <view class="item-up">
+        <image src="../../../static/images/ic_userinfo_cash.png"></image>
+      </view>
+      <view class="item-down">提现</view>
+    </view>
+    <navigator url="/pages/ucenter/coupon/coupon" class="a">
+      <view class="usermoney-item">
+        <view class="item-up">0</view>
+        <view class="item-down">优惠券</view>
+      </view>
+    </navigator>
+    <view class="usermoney-item">
+      <image src="../../../static/images/ic_userinfo_code.png"></image>
+    </view>
+  </view>
 
-  <view class="user-menu">
-    <view class="item">
-      <navigator url="/pages/ucenter/order/order" class="a">
-        <text class="icon order"></text>
-        <text class="txt">我的订单</text>
-      </navigator>
-    </view>
-    <view class="item">
-      <navigator url="/pages/ucenter/coupon/coupon" class="a">
-        <text class="icon coupon"></text>
-        <text class="txt">优惠券</text>
-      </navigator>
-    </view>
-    <view class="item">
-      <navigator url="/pages/ucenter/collect/collect" class="a">
-        <text class="icon address"></text>
-        <text class="txt">我的收藏</text>
-      </navigator>
-    </view>
-    <view class="item">
-      <navigator url="/pages/ucenter/footprint/footprint" class="a">
-        <text class="icon security"></text>
-        <text class="txt">我的足迹</text>
-      </navigator>
-    </view>
-    <view class="item">
-      <navigator url="../address/address" class="a">
-        <text class="icon address"></text>
-        <text class="txt">地址管理</text>
-      </navigator>
-    </view>
-    <view class="item">
-      <navigator url="../saleCode/saleCode" class="a">
-        <text class="icon feedback"></text>
-        <text class="txt">销售信息</text>
-      </navigator>
-    </view>
-    <view class="item">
-      <navigator url="../storeInfo/storeInfo" class="a">
-        <text class="icon feedback"></text>
-        <text class="txt">门店信息</text>
-      </navigator>
-    </view>
+  <view class="menuinfo">
+    <navigator url="/pages/ucenter/order/order" class="menuinfo-item">
+      <image src="../../../static/images/ic_userinfo_order.png"></image>
+      <view class="item-down">我的订单</view>
+    </navigator>
+    <navigator url="../storeInfo/storeInfo" class="menuinfo-item">
+      <image src="../../../static/images/ic_userinfo_shop.png"></image>
+      <view class="item-down">门店信息</view>
+    </navigator>
+    <navigator url="../saleCode/saleCode" class="menuinfo-item">
+      <image src="../../../static/images/ic_userinfo_sellinfo.png"></image>
+      <view class="item-down">销售信息</view>
+    </navigator>
+    <navigator url="../address/address" class="menuinfo-item">
+      <image src="../../../static/images/ic_userinfo_address.png"></image>
+      <view class="item-down">地址管理</view>
+    </navigator>
+  </view>
 
-    <!-- <button class='service' open-type="contact">
+  <view class="menuinfo">
+    <navigator url="/pages/ucenter/help/help" class="menuinfo-item">
+      <image src="../../../static/images/ic_userinfo_service.png"></image>
+      <view class="item-down">客服管家</view>
+    </navigator>
+    <navigator url="/pages/ucenter/collect/collect" class="menuinfo-item">
+      <image src="../../../static/images/ic_userinfo_star.png"></image>
+      <view class="item-down">我的收藏</view>
+    </navigator>
+    <navigator url="/pages/ucenter/footprint/footprint" class="menuinfo-item">
+      <image src="../../../static/images/ic_userinfo_foot.png"></image>
+      <view class="item-down">我的足迹</view>
+    </navigator>
+    <navigator url="" class="menuinfo-item">
+      <!-- <image src="../../../static/images/ic_userinfo_foot.png"></image>
+			<view class="item-down">我的足迹</view> -->
+    </navigator>
+  </view>
+
+  <view class="charge_modal" wx:if="{{chargeModalShow}}">
+    <view class="mask" catchtouchmove="preventTouchMove" catchtap="hideChargeModal"></view>
+    <view class="charge_modalDlg">
+      <text class="charge_title">{{action == 0? '充值金额' : '提现金额'}}</text>
+      <view class="charge_input">
+        <text>¥</text>
+        <input focus type="digit" bindinput="bindChargeInput"></input>
+      </view>
+      <button class="charge_button" bindtap="charge">{{action == 0? '充值' : '提现'}}</button>
+    </view>
+  </view>
+
+  <view class="chargeSuccess_modal" wx:if="{{chargeSuccessModalShow}}">
+    <view class="mask" catchtouchmove="preventTouchMove" catchtap="hideChargeModal"></view>
+    <view class="charge_modalDlg">
+      <image src="../../../static/images/ic_charge_success.png"></image>
+      <text class="charge_title">{{action == 0? '充值成功' : '提现成功'}}</text>
+      <view class="charge_input">
+        <text>¥</text>
+        <text>{{chargePrice}}</text>
+      </view>
+      <button class="charge_button" bindtap="hideChargeModal">完成</button>
+    </view>
+  </view>
+
+  <view class="chargeFail_modal" wx:if="{{chargeFailModalShow}}">
+    <view class="mask" catchtouchmove="preventTouchMove" catchtap="hideChargeModal"></view>
+    <view class="charge_modalDlg">
+      <image src="../../../static/images/ic_charge_fail.png"></image>
+      <text class="charge_title">{{action == 0? '充值失败' : '提现失败'}}</text>
+      <button class="charge_button" bindtap="hideChargeModal">返回</button>
+    </view>
+  </view>
+
+  <!-- <view class="user-menu">
+		<view class="item">
+			<navigator url="/pages/ucenter/order/order" class="a">
+				<text class="icon order"></text>
+				<text class="txt">我的订单</text>
+			</navigator>
+		</view>
+		<view class="item">
+			<navigator url="/pages/ucenter/coupon/coupon" class="a">
+				<text class="icon coupon"></text>
+				<text class="txt">优惠券</text>
+			</navigator>
+		</view>
+		<view class="item">
+			<navigator url="/pages/ucenter/collect/collect" class="a">
+				<text class="icon address"></text>
+				<text class="txt">我的收藏</text>
+			</navigator>
+		</view>
+		<view class="item">
+			<navigator url="/pages/ucenter/footprint/footprint" class="a">
+				<text class="icon security"></text>
+				<text class="txt">我的足迹</text>
+			</navigator>
+		</view>
+		<view class="item">
+			<navigator url="../address/address" class="a">
+				<text class="icon address"></text>
+				<text class="txt">地址管理</text>
+			</navigator>
+		</view>
+		<view class="item">
+			<navigator url="../saleCode/saleCode" class="a">
+				<text class="icon feedback"></text>
+				<text class="txt">销售信息</text>
+			</navigator>
+		</view>
+		<view class="item">
+			<navigator url="../storeInfo/storeInfo" class="a">
+				<text class="icon feedback"></text>
+				<text class="txt">门店信息</text>
+			</navigator>
+		</view> -->
+
+  <!-- <button class='service' open-type="contact">
       <view class="item no-border">
         <navigator url="url" class="a">
           <text class="icon kefu"></text>
@@ -78,7 +180,7 @@
         <text class="txt">绑定手机</text>
       </navigator>
     </view>-->
-  </view>
+  <!-- </view> -->
   <!--<view class='company'>安徽微同科技有限公司提供技术支持 © fly2you.cn</view>
   <view class="logout" bindtap="exitLogin">退出登录</view>-->
 </view>

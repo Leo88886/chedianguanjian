@@ -38,8 +38,7 @@
     "pages/shopping/selCoupon/selCoupon",
     "pages/ucenter/help/help",
     "pages/ucenter/helpInfo/helpInfo",
-    "pages/auth/btnAuth/btnAuth",
-    "pages/test/test"
+    "pages/auth/btnAuth/btnAuth"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -51,7 +50,7 @@
   "tabBar": {
     "backgroundColor": "#fafafa",
     "borderStyle": "white",
-    "selectedColor": "#b4282d",
+    "selectedColor": "#fe863c",
     "color": "#666",
     "list": [
       {

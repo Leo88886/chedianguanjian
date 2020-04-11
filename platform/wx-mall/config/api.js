@@ -1,4 +1,5 @@
 const API_BASE_URL = 'https://chechedianguanjia.com/platform-framework/api/';
+//const API_BASE_URL = 'http://localhost:8080/platform/api/';
 module.exports = {
   IndexUrlNewGoods: API_BASE_URL + 'index/newGoods', //新品首发
   IndexUrlHotGoods: API_BASE_URL + 'index/hotGoods', //热卖商品
@@ -86,8 +87,4 @@ module.exports = {
   IndexUrlHighReturn: API_BASE_URL + 'index/highReturnGoods', //高反利商品
   IndexUrlHighCouponReturn: API_BASE_URL + 'index/highCouponReturnGoods', //高返卷商品
 
-
-  TESTURL: API_BASE_URL + 'wallet/buybalance', //test
-
-  TESTURL2: API_BASE_URL + 'wallet/buybanlanceresult', //test2
 };

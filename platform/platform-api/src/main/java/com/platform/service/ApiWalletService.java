@@ -67,4 +67,18 @@ public class ApiWalletService {
         }
     }
 
+    /**
+     * 查询余额
+     * @param openId
+     */
+    @Transactional
+    public Integer queryBalance(String openId) {
+        int balance = 0;
+        WalletVo walletVo = apiWalletMapper.queryUserWallet(openId);
+        if(null != walletVo){
+            balance = walletVo.getBalance().intValue();
+        }
+        return balance;
+    }
+
 }

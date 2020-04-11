@@ -17,13 +17,14 @@ Page({
     storeLocationDetails: '',
     region: ["省", "市", "区"],
     regionFlag: 1,
+    active: 0,
   },
 
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
     return {
       title: '车车店管家',
       path: '/pages/index/index?formOpenId=' + wx.getStorageSync('openId'), //当前登陆用户openId,
-      success: function(res) {}
+      success: function (res) {}
     }
   },
   onPullDownRefresh() {
@@ -31,11 +32,11 @@ Page({
     var self = this;
     this.getIndexData();
   },
-  getIndexData: function() {
+  getIndexData: function () {
     let that = this;
     var data = new Object();
     //热销
-    util.request(api.IndexUrlHotGoods).then(function(res) {
+    util.request(api.IndexUrlHotGoods).then(function (res) {
       console.log(res.errno);
       if (res.errno === 0) {
         data.hotGoods = res.data.hotGoodsList
@@ -43,7 +44,7 @@ Page({
       }
     });
     //高返利商品
-    util.request(api.IndexUrlHighReturn).then(function(res) {
+    util.request(api.IndexUrlHighReturn).then(function (res) {
       console.log(res.errno);
       if (res.errno === 0) {
         //res.data.highCouponReturnGoods[0].cash_back 返现金额
@@ -53,7 +54,7 @@ Page({
       }
     });
     //高返卷商品
-    util.request(api.IndexUrlHighCouponReturn).then(function(res) {
+    util.request(api.IndexUrlHighCouponReturn).then(function (res) {
       console.log(res.errno);
       if (res.errno === 0) {
         //res.data.highCouponReturnGoods[0].coupon_back 返卷金额
@@ -62,7 +63,7 @@ Page({
       }
     });
     //商品列表
-    util.request(api.IndexUrlCategory).then(function(res) {
+    util.request(api.IndexUrlCategory).then(function (res) {
       if (res.errno === 0) {
         //cash_back 返现金额
         //coupon_back 返卷金额
@@ -70,27 +71,27 @@ Page({
         that.setData(data);
       }
     });
-    util.request(api.IndexUrlBanner).then(function(res) {
+    util.request(api.IndexUrlBanner).then(function (res) {
       if (res.errno === 0) {
         data.banner = res.data.banner
         that.setData(data);
       }
     });
-    util.request(api.IndexUrlChannel).then(function(res) {
+    util.request(api.IndexUrlChannel).then(function (res) {
       if (res.errno === 0) {
         data.channel = res.data.channel
         that.setData(data);
       }
     });
   },
-  onLoad: function(options) {
+  onLoad: function (options) {
     var that = this;
     //var formOpenId = decodeURIComponent(options.formOpenId);
     //wx.setStorageSync('formOpenId', formOpenId);
     var openId = wx.getStorageSync('openId');
     //判断用户是否授权登陆
     if (openId == "undefined" || openId == null || openId == "") {
-      util.request(api.CartList).then(function(res) {});
+      util.request(api.CartList).then(function (res) {});
     } else {
       //  if (formOpenId != "undefined" && formOpenId != null && formOpenId != ""){
       //     wx.request({
@@ -118,7 +119,7 @@ Page({
         header: {
           'content-type': 'application/json'
         },
-        success: function(res) {
+        success: function (res) {
           if (res.data.errno == "1") {
             //加判断
             that.setData({
@@ -131,20 +132,20 @@ Page({
     that.getIndexData();
     //console.log(options);
   },
-  onReady: function() {
+  onReady: function () {
     // 页面渲染完成
   },
-  onShow: function() {
+  onShow: function () {
     // 页面显示
   },
-  onHide: function() {
+  onHide: function () {
     // 页面隐藏
   },
-  onUnload: function() {
+  onUnload: function () {
     // 页面关闭
   },
   //解析链接方法
-  getQueryString: function(url, name) {
+  getQueryString: function (url, name) {
     var reg = new RegExp('(^|&|/?)' + name + '=([^&|/?]*)(&|/?|$)', 'i');
     var r = url.substr(1).match(reg);
     if (r != null) {
@@ -154,49 +155,43 @@ Page({
     }
     return null;
   },
-  getStoreName: function(e) {
+  getStoreName: function (e) {
     var that = this;
     that.setData({
       storeName: e.detail.value
     });
   },
-  getShopkeeperName: function(e) {
+  getShopkeeperName: function (e) {
     var that = this;
     that.setData({
       shopkeeperName: e.detail.value
     });
   },
-  getPhone: function(e) {
+  getPhone: function (e) {
     this.setData({
       phone: e.detail.value
     });
   },
-  bindRegionChange: function(e) {
+  bindRegionChange: function (e) {
     var that = this;
     that.setData({
       region: e.detail.value,
       regionFlag: 0
     });
   },
-  test: function (e) {
-    console.log("111111111111")
-    wx.redirectTo({
-      url: '/pages/test/test',
-    })
-  },
-  getStoreLocationDetails: function(e) {
+  getStoreLocationDetails: function (e) {
     var that = this;
     that.setData({
       storeLocationDetails: e.detail.value
     });
   },
-  getBusinessLicenseNo: function(e) {
+  getBusinessLicenseNo: function (e) {
     var that = this;
     that.setData({
       businessLicenseNo: e.detail.value
     });
   },
-  saveStore: function() {
+  saveStore: function () {
     var that = this;
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
     wx.request({
@@ -214,7 +209,7 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function(res) {
+      success: function (res) {
         if (res.data.errno == '0') {
           wx.showToast({
             title: '保存成功',
@@ -229,7 +224,7 @@ Page({
           wx.showLoading({
             title: '保存失败',
           })
-          setTimeout(function() {
+          setTimeout(function () {
             wx.hideLoading()
           }, 3000)
           that.setData({
@@ -239,10 +234,17 @@ Page({
       }
     });
   },
-  cancel: function() {
+  cancel: function () {
     var that = this;
     that.setData({
       showModalStatus: false
     });
+  },
+
+  toggle: function (e) {
+    this.setData({
+      //设置active的值为用户点击按钮的索引值
+      active: e.currentTarget.dataset.index,
+    })
   }
 })

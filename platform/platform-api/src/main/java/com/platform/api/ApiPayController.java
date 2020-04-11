@@ -3,11 +3,8 @@ package com.platform.api;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.cache.J2CacheUtils;
-import com.platform.entity.OrderGoodsVo;
-import com.platform.entity.OrderVo;
-import com.platform.entity.UserVo;
-import com.platform.service.ApiOrderGoodsService;
-import com.platform.service.ApiOrderService;
+import com.platform.entity.*;
+import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.platform.util.wechat.WechatRefundApiResult;
 import com.platform.util.wechat.WechatUtil;
@@ -41,7 +38,14 @@ public class ApiPayController extends ApiBaseAction {
     private ApiOrderService orderService;
     @Autowired
     private ApiOrderGoodsService orderGoodsService;
-
+    @Autowired
+    private ApiWalletService walletService;     //钱包接口
+    @Autowired
+    private ApiGoodsService goodsService;       //商品接口
+    @Autowired
+    private ApiSaleService saleService;
+    @Autowired
+    private ApiCusRelationService cusRelationService;
     /**
      */
     @ApiOperation(value = "跳转")
@@ -57,6 +61,9 @@ public class ApiPayController extends ApiBaseAction {
     @ApiOperation(value = "获取支付的请求参数")
     @PostMapping("prepay")
     public Object payPrepay(@LoginUser UserVo loginUser, Integer orderId) {
+
+        //通过openId获取用户钱包的余额
+        int balance = walletService.queryBalance(loginUser.getWeixin_openid());
         //
         OrderVo orderInfo = orderService.queryObject(orderId);
 
@@ -100,6 +107,7 @@ public class ApiPayController extends ApiBaseAction {
                 // 商品描述
                 parame.put("body", body);
             }
+
             //支付金额
             parame.put("total_fee", orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue());
             // 回调地址
@@ -142,6 +150,34 @@ public class ApiPayController extends ApiBaseAction {
                     // 付款中
                     orderInfo.setPay_status(1);
                     orderService.update(orderInfo);
+
+
+                    //如果余额大于订单金额，先使用余额金额
+                    if(balance >= orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue()){
+                        walletService.reduceBalance(new BigDecimal(orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue()),loginUser.getWeixin_openid());
+                    }
+                    //查询推荐人
+                    List<ApiCusRelationVo> cusRelationVo = cusRelationService.getCusByToOpenid(loginUser.getWeixin_openid());
+                    if (null != orderGoods) {
+                        for (OrderGoodsVo orderGoodsVo : orderGoods) {
+                            GoodsVo goodsInfo = goodsService.queryObject(orderGoodsVo.getGoods_id());       //查询订单中的商品
+                            if (null != goodsInfo) {
+                                //返现
+                                if (null != goodsInfo.getCash_back() && goodsInfo.getCash_back().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
+                                    if(null != cusRelationVo && cusRelationVo.size() > 0){
+                                        //给推荐人返现（因为用户的推荐人只有一个，所有这里的list直接获取0位就可以）
+                                        walletService.addBalance(goodsInfo.getCash_back(), cusRelationVo.get(0).getFromOpenId());
+                                    }
+                                }
+                                //返卷
+                                if (null != goodsInfo.getCoupon_back() && !goodsInfo.getCoupon_back().equals("")) {
+
+
+                                }
+                            }
+                        }
+                    }
+
                     return toResponsObject(0, "微信统一订单下单成功", resultObj);
                 }
             }

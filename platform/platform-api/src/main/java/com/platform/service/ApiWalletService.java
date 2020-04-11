@@ -28,6 +28,7 @@ public class ApiWalletService {
         if (walletVo == null) {
             wo.setOpenId(openId);
             wo.setBalance(addNum);
+            // todo 改为insert
             apiWalletMapper.updateWalletBalance(wo);
         } else {
             wo.setOpenId(openId);
@@ -36,6 +37,7 @@ public class ApiWalletService {
             wo.setBalance(afterAddNum);
             apiWalletMapper.updateWalletBalance(wo);
         }
+        // todo 流水维护
     }
 
     /**
@@ -71,7 +73,6 @@ public class ApiWalletService {
      * 查询余额
      * @param openId
      */
-    @Transactional
     public Integer queryBalance(String openId) {
         int balance = 0;
         WalletVo walletVo = apiWalletMapper.queryUserWallet(openId);

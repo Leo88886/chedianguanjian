@@ -62,8 +62,10 @@ public class ApiPayController extends ApiBaseAction {
     @PostMapping("prepay")
     public Object payPrepay(@LoginUser UserVo loginUser, Integer orderId) {
 
-        //通过openId获取用户钱包的余额
-        int balance = walletService.queryBalance(loginUser.getWeixin_openid());
+        if(loginUser.getWeixin_openid()==null||orderId==null){
+            return toResponsObject(400, "支付接口异常", "");
+        }
+
         //
         OrderVo orderInfo = orderService.queryObject(orderId);
 
@@ -153,9 +155,9 @@ public class ApiPayController extends ApiBaseAction {
 
 
                     //如果余额大于订单金额，先使用余额金额
-                    if(balance >= orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue()){
-                        walletService.reduceBalance(new BigDecimal(orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue()),loginUser.getWeixin_openid());
-                    }
+//                    if(balance >= orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue()){
+//                        walletService.reduceBalance(new BigDecimal(orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue()),loginUser.getWeixin_openid());
+//                    }
                     //查询推荐人
                     List<ApiCusRelationVo> cusRelationVo = cusRelationService.getCusByToOpenid(loginUser.getWeixin_openid());
                     if (null != orderGoods) {

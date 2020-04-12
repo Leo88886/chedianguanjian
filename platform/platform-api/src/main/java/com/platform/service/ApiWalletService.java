@@ -29,7 +29,7 @@ public class ApiWalletService {
             wo.setOpenId(openId);
             wo.setBalance(addNum);
             // todo 改为insert
-            apiWalletMapper.updateWalletBalance(wo);
+            apiWalletMapper.insertWalletBalance(wo);
         } else {
             wo.setOpenId(openId);
             BigDecimal balance = walletVo.getBalance();
@@ -38,6 +38,7 @@ public class ApiWalletService {
             apiWalletMapper.updateWalletBalance(wo);
         }
         // todo 流水维护
+
     }
 
     /**

@@ -92,7 +92,8 @@ var vm = new Vue({
         },
         brands: [],//品牌
         macros: [],//商品单位
-        attributeCategories: []//属性类别
+        attributeCategories: [],//属性类别
+        coupons: []//返优惠卷
     },
     methods: {
         query: function () {
@@ -118,10 +119,13 @@ var vm = new Vue({
             vm.brands = [];
             vm.macros = [];
             vm.attributeCategories = [];
+            vm.coupons = [];
             // vm.attribute = [];
             vm.getBrands();
             vm.getMacro();
             vm.getAttributeCategories();
+            vm.getCoupons();
+
             // vm.getAttributes('');
         },
         update: function (event) {
@@ -136,6 +140,7 @@ var vm = new Vue({
             vm.getBrands();
             vm.getMacro();
             vm.getAttributeCategories();
+            vm.getCoupons();
             vm.getGoodsGallery(id);
         },
         /**
@@ -147,6 +152,18 @@ var vm = new Vue({
                 async: true,
                 successCallback: function (r) {
                     vm.brands = r.list;
+                }
+            });
+        },
+        /**
+         * 获取优惠卷
+         */
+        getCoupons: function () {
+            Ajax.request({
+                url: "../coupon/queryAll",
+                async: true,
+                successCallback: function (r) {
+                    vm.coupons = r.list;
                 }
             });
         },

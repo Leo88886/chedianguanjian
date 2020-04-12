@@ -85,11 +85,12 @@
         nideshop_goods.create_user_dept_id,
         nideshop_goods.update_user_id,
         nideshop_goods.cash_back,
-        CONCAT('满',REPLACE(nideshop_goods.coupon_back ,'_','减')) as coupon_back,
+        nideshop_coupon.name as coupon_back,
         nideshop_category.name category_name,
         nideshop_attribute_category.name attribute_category_name,
         nideshop_brand.name brand_name
         from nideshop_goods
+        LEFT JOIN nideshop_coupon  ON nideshop_goods.coupon_back = nideshop_coupon.id
         LEFT JOIN nideshop_category
         ON nideshop_goods.category_id = nideshop_category.id
         LEFT JOIN nideshop_attribute_category ON nideshop_goods.attribute_category = nideshop_attribute_category.id

@@ -43,9 +43,9 @@ public class ApiPayController extends ApiBaseAction {
     @Autowired
     private ApiGoodsService goodsService;       //商品接口
     @Autowired
-    private ApiSaleService saleService;
-    @Autowired
     private ApiCusRelationService cusRelationService;
+     @Autowired
+     private ApiCouponService couponService;
     /**
      */
     @ApiOperation(value = "跳转")
@@ -153,30 +153,27 @@ public class ApiPayController extends ApiBaseAction {
                     orderInfo.setPay_status(1);
                     orderService.update(orderInfo);
 
-
-                    //如果余额大于订单金额，先使用余额金额
-//                    if(balance >= orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue()){
-//                        walletService.reduceBalance(new BigDecimal(orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue()),loginUser.getWeixin_openid());
-//                    }
                     //查询推荐人
                     List<ApiCusRelationVo> cusRelationVo = cusRelationService.getCusByToOpenid(loginUser.getWeixin_openid());
+                    BigDecimal cashBackSum = new BigDecimal(0);
                     if (null != orderGoods) {
                         for (OrderGoodsVo orderGoodsVo : orderGoods) {
                             GoodsVo goodsInfo = goodsService.queryObject(orderGoodsVo.getGoods_id());       //查询订单中的商品
                             if (null != goodsInfo) {
-                                //返现
+                                //计算返现金额
                                 if (null != goodsInfo.getCash_back() && goodsInfo.getCash_back().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
                                     if(null != cusRelationVo && cusRelationVo.size() > 0){
-                                        //给推荐人返现（因为用户的推荐人只有一个，所有这里的list直接获取0位就可以）
-                                        walletService.addBalance(goodsInfo.getCash_back(), cusRelationVo.get(0).getFromOpenId());
+                                        cashBackSum = cashBackSum.add(goodsInfo.getCash_back());
                                     }
                                 }
                                 //返卷
                                 if (null != goodsInfo.getCoupon_back() && !goodsInfo.getCoupon_back().equals("")) {
 
-
                                 }
                             }
+                        }
+                        if(null != cusRelationVo && cusRelationVo.size() > 0 && cashBackSum.compareTo(new BigDecimal(0)) > 0){      //返现
+                            walletService.addBalance(cashBackSum, cusRelationVo.get(0).getFromOpenId());
                         }
                     }
 

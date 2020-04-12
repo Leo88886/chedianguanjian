@@ -12,4 +12,5 @@ public interface ApiWalletMapper extends BaseDao<WalletVo>  {
 
     void updateWalletBalance(@Param("walletVo") WalletVo walletVo);
 
+    void insertWalletBalance(@Param("walletVo") WalletVo walletVo);
 }

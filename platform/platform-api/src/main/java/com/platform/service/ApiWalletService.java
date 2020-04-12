@@ -2,18 +2,23 @@ package com.platform.service;
 
 
 import com.platform.dao.ApiWalletMapper;
+import com.platform.dao.ApiWalletWaterMapper;
 import com.platform.entity.WalletVo;
+import com.platform.entity.WalletWaterVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Service
 public class ApiWalletService {
 
     @Autowired
     private ApiWalletMapper apiWalletMapper;
+    @Autowired
+    private ApiWalletWaterMapper walletWaterMapper;
 
     /**
      * 增加余额
@@ -21,7 +26,7 @@ public class ApiWalletService {
      * @param openId
      */
     @Transactional
-    public void addBalance(BigDecimal addNum, String openId) {
+    public void addBalance(BigDecimal addNum, String openId,Integer type) {
         WalletVo walletVo = apiWalletMapper.queryUserWallet(openId);
         WalletVo wo = new WalletVo();
         //第一次增加余额
@@ -38,7 +43,12 @@ public class ApiWalletService {
             apiWalletMapper.updateWalletBalance(wo);
         }
         // todo 流水维护
-
+        WalletWaterVo walletWaterVo = new WalletWaterVo();
+        walletWaterVo.setOpenId(openId);
+        walletWaterVo.setTime(new Date());
+        walletWaterVo.setDealNum(addNum);
+        walletWaterVo.setType(type);
+        walletWaterMapper.saveWalletWater(walletWaterVo);
     }
 
     /**

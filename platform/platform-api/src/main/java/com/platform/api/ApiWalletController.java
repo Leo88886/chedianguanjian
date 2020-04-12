@@ -58,10 +58,9 @@ public class ApiWalletController extends ApiBaseAction {
 
     }
 
-    @IgnoreAuth
     @PostMapping("buybalance")
     @ApiOperation(value = "余额充值")
-    public Object buyBalance(@LoginUser UserVo loginUser, Integer balance) {
+    public Object buyBalance(@LoginUser UserVo loginUser, BigDecimal balance) {
 
         if (null == loginUser) {
             return toResponsObject(400, "用户信息为空", "");
@@ -84,9 +83,9 @@ public class ApiWalletController extends ApiBaseAction {
             String orderId = CommonUtil.generateOrderNumber();
             parame.put("out_trade_no", orderId);
             // 商品描述
-            parame.put("body", "余额充值");
+            parame.put("body", "chongzhi");
             //支付金额
-            parame.put("total_fee", balance.intValue());
+            parame.put("total_fee", balance.multiply(new BigDecimal(100)).intValue());
             // 回调地址
             parame.put("notify_url", ResourceUtil.getConfigByName("wx.notifyUrl"));
             // 交易类型APP
@@ -135,11 +134,9 @@ public class ApiWalletController extends ApiBaseAction {
 
     }
 
-
-    @IgnoreAuth
     @PostMapping("buybanlanceresult")
     @ApiOperation(value = "余额充值结果")
-    public Object buyBanlanceResult(@LoginUser UserVo loginUser, String orderId, Integer balance) {
+    public Object buyBanlanceResult(@LoginUser UserVo loginUser, String orderId, BigDecimal balance) {
         if (orderId == null) {
             return toResponsFail("未传入支付编号");
         }
@@ -188,13 +185,12 @@ public class ApiWalletController extends ApiBaseAction {
 
             String weixin_openid = loginUser.getWeixin_openid();
             // 增加余额
-            BigDecimal bigDecimal = new BigDecimal(balance);
-            apiWalletService.addBalance(bigDecimal, weixin_openid);
+            apiWalletService.addBalance(balance, weixin_openid,2);
 
             //维护流水
             WalletWaterVo wwo = new WalletWaterVo();
             wwo.setOpenId(weixin_openid);
-            wwo.setDealNum(bigDecimal);
+            wwo.setDealNum(balance);
             wwo.setTime(new Date());
             wwo.setType(1);
             apiWalletWaterMapper.saveWalletWater(wwo);

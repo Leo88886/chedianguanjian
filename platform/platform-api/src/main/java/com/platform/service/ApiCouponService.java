@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.platform.dao.ApiCouponMapper;
 import com.platform.entity.CouponVo;
+import com.platform.utils.RRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +74,20 @@ public class ApiCouponService {
 
     public List<CouponVo> queryUserCouponList(Map<String, Object> map) {
         return apiCouponMapper.queryUserCouponList(map);
+    }
+
+    public Integer saveCouponList(List<CouponVo> couponList) {
+        int result = 0;
+        try{
+            result = apiCouponMapper.saveCouponList(couponList);
+        }catch (Exception e){
+            result = -1;
+            throw new RRException("优惠卷保存失败！", e);
+        }
+        return result;
+    }
+
+    public List<CouponVo> findCouponList(List<String> uuidList) {
+        return apiCouponMapper.findCouponList(uuidList);
     }
 }

@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.platform.dao.ApiUserCouponMapper;
 import com.platform.entity.UserCouponVo;
+import com.platform.utils.RRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,4 +53,14 @@ public class ApiUserCouponService {
         userCouponDao.deleteBatch(ids);
     }
 
+    public int saveUserCouponList(List<UserCouponVo> userCouponList) {
+        int result = 0;
+        try{
+            userCouponDao.saveUserCouponList(userCouponList);
+        }catch (Exception e){
+            result = -1;
+            throw new RRException("优惠卷关系保存失败！", e);
+        }
+        return result;
+    }
 }

@@ -3,6 +3,8 @@ package com.platform.dao;
 import com.platform.entity.UserCouponVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @author lipengjun
  * @email 939961241@qq.com
@@ -11,4 +13,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ApiUserCouponMapper extends BaseDao<UserCouponVo> {
     UserCouponVo queryByCouponNumber(@Param("coupon_number") String coupon_number);
+
+    void saveUserCouponList(List<UserCouponVo> userCouponList);
 }

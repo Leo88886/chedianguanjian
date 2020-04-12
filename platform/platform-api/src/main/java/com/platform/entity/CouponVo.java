@@ -201,4 +201,5 @@ public class CouponVo implements Serializable {
     public void setMin_transmit_num(Integer min_transmit_num) {
         this.min_transmit_num = min_transmit_num;
     }
+
 }

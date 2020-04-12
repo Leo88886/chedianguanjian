@@ -194,4 +194,46 @@
         and b.id = #{id}
     </select>
 
+    <select id="findCouponList" resultMap="couponMap">
+        select * from nideshop_coupon a
+        where 1 = 1
+        and a.name in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+        order by a.id asc
+    </select>
+
+    <insert id="saveCouponList" parameterType="com.platform.entity.CouponVo" useGeneratedKeys="true" keyProperty="id">
+		insert into nideshop_coupon
+		(
+			`name`,
+			`type_money`,
+			`send_type`,
+			`min_amount`,
+			`max_amount`,
+			`send_start_date`,
+			`send_end_date`,
+			`use_start_date`,
+			`use_end_date`,
+			`min_goods_amount`
+		)
+        values
+        <foreach collection="list" item="coupon" index="index" separator=",">
+		(
+			#{coupon.name},
+			#{coupon.type_money},
+			#{coupon.send_type},
+			#{coupon.min_amount},
+			#{coupon.max_amount},
+			#{coupon.send_start_date},
+			#{coupon.send_end_date},
+			#{coupon.use_start_date},
+			#{coupon.use_end_date},
+			#{coupon.min_goods_amount}
+		)
+        </foreach>
+	</insert>
+
 </mapper>

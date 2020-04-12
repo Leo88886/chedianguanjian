@@ -11,10 +11,10 @@ Page({
     checkedCoupon: [],
     couponList: [],
     goodsTotalPrice: 0.00, //商品总价
-    freightPrice: 0.00,    //快递费
-    couponPrice: 0.00,     //优惠券的价格
-    orderTotalPrice: 0.00,  //订单总价
-    actualPrice: 0.00,     //实际需要支付的总价
+    freightPrice: 0.00, //快递费
+    couponPrice: 0.00, //优惠券的价格
+    orderTotalPrice: 0.00, //订单总价
+    actualPrice: 0.00, //实际需要支付的总价
     addressId: 0,
     couponId: 0,
     isBuy: false,
@@ -22,23 +22,27 @@ Page({
     couponCode: '',
     buyType: ''
   },
-  onLoad: function (options) {
+  onLoad: function(options) {
 
     // 页面初始化 options为页面跳转所带来的参数
-    if (options.isBuy!=null) {
+    if (options.isBuy != null) {
       this.data.isBuy = options.isBuy
     }
-    this.data.buyType = this.data.isBuy?'buy':'cart'
+    this.data.buyType = this.data.isBuy ? 'buy' : 'cart'
     //每次重新加载界面，清空数据
     app.globalData.userCoupon = 'NO_USE_COUPON'
     app.globalData.courseCouponCode = {}
   },
-  
-  getCheckoutInfo: function () {
+
+  getCheckoutInfo: function() {
     let that = this;
     var url = api.CartCheckout
     let buyType = this.data.isBuy ? 'buy' : 'cart'
-    util.request(url, { addressId: that.data.addressId, couponId: that.data.couponId, type: buyType }).then(function (res) {
+    util.request(url, {
+      addressId: that.data.addressId,
+      couponId: that.data.couponId,
+      type: buyType
+    }).then(function(res) {
       if (res.errno === 0) {
         that.setData({
           checkedGoodsList: res.data.checkedGoodsList,
@@ -52,21 +56,23 @@ Page({
           orderTotalPrice: res.data.orderTotalPrice
         });
         //设置默认收获地址
-        if (that.data.checkedAddress.id){
-            let addressId = that.data.checkedAddress.id;
-            if (addressId) {
-                that.setData({ addressId: addressId });
+        if (that.data.checkedAddress.id) {
+          let addressId = that.data.checkedAddress.id;
+          if (addressId) {
+            that.setData({
+              addressId: addressId
+            });
+          }
+        } else {
+          wx.showModal({
+            title: '',
+            content: '请添加默认收货地址!',
+            success: function(res) {
+              if (res.confirm) {
+                that.selectAddress();
+              }
             }
-        }else{
-            wx.showModal({
-                title: '',
-                content: '请添加默认收货地址!',
-                success: function (res) {
-                    if (res.confirm) {
-                        that.selectAddress();
-                    }
-                }
-            })
+          })
         }
       }
       wx.hideLoading();
@@ -82,18 +88,18 @@ Page({
       url: '/pages/shopping/addressAdd/addressAdd',
     })
   },
-  onReady: function () {
+  onReady: function() {
     // 页面渲染完成
 
   },
-  onShow: function () {
+  onShow: function() {
     this.getCouponData()
     // 页面显示
     wx.showLoading({
       title: '加载中...',
     })
     this.getCheckoutInfo();
-    
+
     try {
       var addressId = wx.getStorageSync('addressId');
       if (addressId) {
@@ -109,7 +115,7 @@ Page({
   /**
    * 获取优惠券
    */
-  getCouponData: function () {
+  getCouponData: function() {
     if (app.globalData.userCoupon == 'USE_COUPON') {
       this.setData({
         couponDesc: app.globalData.courseCouponCode.name,
@@ -123,11 +129,11 @@ Page({
     }
   },
 
-  onHide: function () {
+  onHide: function() {
     // 页面隐藏
 
   },
-  onUnload: function () {
+  onUnload: function() {
     // 页面关闭
 
   },
@@ -135,20 +141,43 @@ Page({
   /**
    * 选择可用优惠券
    */
-  tapCoupon: function () {
+  tapCoupon: function() {
     let that = this
-  
-      wx.navigateTo({
-        url: '../selCoupon/selCoupon?buyType=' + that.data.buyType,
-      })
+
+    wx.navigateTo({
+      url: '../selCoupon/selCoupon?buyType=' + that.data.buyType,
+    })
   },
 
-  submitOrder: function () {
+  submitOrder: function() {
     if (this.data.addressId <= 0) {
       util.showErrorToast('请选择收货地址');
       return false;
     }
-    util.request(api.OrderSubmit, { addressId: this.data.addressId, couponId: this.data.couponId, type: this.data.buyType }, 'POST', 'application/json').then(res => {
+    console.log(this.data)
+    if (this.data.checkedAddress.provinceName.indexOf('海南') > -1 || this.data.checkedAddress.provinceName.indexOf('新疆') > -1 || this.data.checkedAddress.provinceName.indexOf('西藏') > -1) {
+      wx.showModal({
+        title: '以下地区暂未开通服务',
+        content: '四川（甘孜市、攀枝花市），海南，黑龙江（大兴安岭），新疆，西藏',
+        success: function(res) {}
+      })
+      return false;
+    }
+    if (this.data.checkedAddress.provinceName.indexOf('四川') > -1 || this.data.checkedAddress.provinceName.indexOf('黑龙江') > -1) {
+      if (this.data.checkedAddress.cityName.indexOf('甘孜') > -1 || this.data.checkedAddress.cityName.indexOf('攀枝花') > -1 || this.data.checkedAddress.cityName.indexOf('大兴安岭') > -1) {
+        wx.showModal({
+          title: '以下地区暂未开通服务',
+          content: '四川（甘孜市、攀枝花市），海南，黑龙江（大兴安岭），新疆，西藏',
+          success: function(res) {}
+        })
+        return false;
+      }
+    }
+    util.request(api.OrderSubmit, {
+      addressId: this.data.addressId,
+      couponId: this.data.couponId,
+      type: this.data.buyType
+    }, 'POST', 'application/json').then(res => {
       if (res.errno === 0) {
         const orderId = res.data.orderInfo.id;
         pay.payOrder(parseInt(orderId)).then(res => {

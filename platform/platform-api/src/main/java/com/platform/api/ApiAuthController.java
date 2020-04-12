@@ -9,9 +9,9 @@ import com.alipay.api.request.AlipayUserInfoShareRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.FullUserInfo;
-import com.platform.entity.UserInfo;
-import com.platform.entity.UserVo;
+import com.platform.entity.*;
+import com.platform.service.ApiCouponService;
+import com.platform.service.ApiUserCouponService;
 import com.platform.service.ApiUserService;
 import com.platform.service.TokenService;
 import com.platform.util.ApiBaseAction;
@@ -31,9 +31,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * API登录授权
@@ -52,6 +51,10 @@ public class ApiAuthController extends ApiBaseAction {
     private ApiUserService userService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private ApiUserCouponService userCouponService;
+    @Autowired
+    private ApiCouponService couponService;
 
     /**
      * 登录
@@ -125,6 +128,57 @@ public class ApiAuthController extends ApiBaseAction {
             userVo.setGender(userInfo.getGender());
             userVo.setNickname(userInfo.getNickName());
             userService.save(userVo);
+
+            Date date = new Date();
+            Calendar cl = Calendar.getInstance();
+            cl.setTime(date);
+            cl.add(Calendar.DATE, 15); // 有效期15天
+            date = cl.getTime();//获取到相加后的时间
+            List<CouponVo> CouponList = new ArrayList<>();
+            List<String> uuidList = new ArrayList<>();
+            for(int i=0;i<2;i++){
+                CouponVo couponVo = new CouponVo();
+                String uuid = UUID.randomUUID().toString();
+                couponVo.setName(uuid);
+                couponVo.setSend_type(1);
+                if(i == 0){
+                    couponVo.setType_money(new BigDecimal(5));
+                    couponVo.setMin_amount(new BigDecimal(5));
+                    couponVo.setMax_amount(new BigDecimal(100000));
+                }
+                if(i == 1){
+                    couponVo.setType_money(new BigDecimal(10));
+                    couponVo.setMin_amount(new BigDecimal(10));
+                    couponVo.setMax_amount(new BigDecimal(100000));
+                }
+                couponVo.setSend_start_date(new Date());
+                couponVo.setSend_end_date(date);
+                couponVo.setUse_start_date(new Date());
+                couponVo.setUse_end_date(date);
+                couponVo.setMin_goods_amount(new BigDecimal(1));
+                couponVo.setMin_transmit_num(null);
+                uuidList.add(uuid);
+                CouponList.add(couponVo);
+            }
+
+            couponService.saveCouponList(CouponList);   //插入2条优惠卷
+            List<CouponVo> couponInfoList = couponService.findCouponList(uuidList);     //查询插入的2条数据
+            //建立用户和优惠卷的关系
+            List<UserCouponVo> userCouponList = new ArrayList<>();
+            UserVo user = userService.getUserByOpenId(sessionData.getString("openid"));
+            if(null != couponInfoList && couponInfoList.size() > 0){
+                for(CouponVo couponVo : couponInfoList){
+                    UserCouponVo userCouponVo = new UserCouponVo();
+                    userCouponVo.setCoupon_id(couponVo.getId());
+                    userCouponVo.setCoupon_number("1");
+                    userCouponVo.setUser_id(user.getUserId());
+                    userCouponVo.setAdd_time(new Date());
+                    userCouponList.add(userCouponVo);
+                }
+                userCouponService.saveUserCouponList(userCouponList);
+            }
+
+
         } else {
             userVo.setLast_login_ip(this.getClientIp());
             userVo.setLast_login_time(nowTime);

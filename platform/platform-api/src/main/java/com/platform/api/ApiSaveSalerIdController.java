@@ -2,11 +2,8 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.ApiCusRelationVo;
-import com.platform.entity.ApiSaleVo;
-import com.platform.service.ApiCusRelationService;
-import com.platform.service.ApiSaleService;
-import com.platform.service.ApiUserService;
+import com.platform.entity.*;
+import com.platform.service.*;
 import com.platform.util.ApiBaseAction;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -40,6 +38,12 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
 
     @Autowired
     private ApiUserService userService;
+
+    @Autowired
+    private ApiUserCouponService userCouponService;
+
+    @Autowired
+    private ApiCouponService couponService;
     /**
      * 保存salerId
      */
@@ -154,9 +158,73 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
                 try {
                     if(null != list && list.size() > 0 ){
                         cusRelationService.update(cusRelationVo);
-                    }else{
+                    }else{  //第一次绑定发送优惠卷
                         cusRelationVo.setId(null);
                         cusRelationService.save(cusRelationVo);
+
+                        Date date = new Date();
+                        Calendar cl = Calendar.getInstance();
+                        cl.setTime(date);
+                        cl.add(Calendar.MONTH, 3);//这里就是月份的相加
+                        date = cl.getTime();//获取到相加后的时间
+                        List<CouponVo> CouponList = new ArrayList<>();
+                        List<String> uuidList = new ArrayList<>();
+                        for(int i=0;i<5;i++){
+                            CouponVo couponVo = new CouponVo();
+                            String uuid = UUID.randomUUID().toString();
+                            couponVo.setName(uuid);
+                            couponVo.setSend_type(1);
+                            if(i == 0){
+                                couponVo.setType_money(new BigDecimal(10));
+                                couponVo.setMin_amount(new BigDecimal(200));
+                                couponVo.setMax_amount(new BigDecimal(100000));
+                            }
+                            if(i == 1){
+                                couponVo.setType_money(new BigDecimal(30));
+                                couponVo.setMin_amount(new BigDecimal(500));
+                                couponVo.setMax_amount(new BigDecimal(100000));
+                            }
+                            if(i == 2){
+                                couponVo.setType_money(new BigDecimal(55));
+                                couponVo.setMin_amount(new BigDecimal(800));
+                                couponVo.setMax_amount(new BigDecimal(100000));
+                            }
+                            if(i == 3){
+                                couponVo.setType_money(new BigDecimal(80));
+                                couponVo.setMin_amount(new BigDecimal(1000));
+                                couponVo.setMax_amount(new BigDecimal(100000));
+                            }
+                            if(i == 4){
+                                couponVo.setType_money(new BigDecimal(150));
+                                couponVo.setMin_amount(new BigDecimal(1500));
+                                couponVo.setMax_amount(new BigDecimal(100000));
+                            }
+                            couponVo.setSend_start_date(new Date());
+                            couponVo.setSend_end_date(date);
+                            couponVo.setUse_start_date(new Date());
+                            couponVo.setUse_end_date(date);
+                            couponVo.setMin_goods_amount(new BigDecimal(1));
+                            couponVo.setMin_transmit_num(null);
+                            uuidList.add(uuid);
+                            CouponList.add(couponVo);
+                        }
+
+                        couponService.saveCouponList(CouponList);   //插入5条优惠卷
+                        List<CouponVo> couponInfoList = couponService.findCouponList(uuidList);     //查询插入的5条数据
+                        //建立用户和优惠卷的关系
+                        List<UserCouponVo> userCouponList = new ArrayList<>();
+                        UserVo user = userService.getUserByOpenId(openId);
+                        if(null != couponInfoList && couponInfoList.size() > 0){
+                            for(CouponVo couponVo : couponInfoList){
+                                UserCouponVo userCouponVo = new UserCouponVo();
+                                userCouponVo.setCoupon_id(couponVo.getId());
+                                userCouponVo.setCoupon_number("1");
+                                userCouponVo.setUser_id(user.getUserId());
+                                userCouponVo.setAdd_time(new Date());
+                                userCouponList.add(userCouponVo);
+                            }
+                            userCouponService.saveUserCouponList(userCouponList);
+                        }
                     }
                     return "1";         //  保存,更新成功
                 }catch (Exception e){

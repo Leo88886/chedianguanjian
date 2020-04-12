@@ -85,6 +85,33 @@
 		)
 	</insert>
 
+    <insert id="save" parameterType="com.platform.entity.UserCouponVo" useGeneratedKeys="true" keyProperty="id">
+		insert into nideshop_user_coupon
+		(
+			`coupon_id`,
+			`coupon_number`,
+			`user_id`,
+			`used_time`,
+			`order_id`,
+			`add_time`,
+			`source_key`,
+			`referrer`
+		)
+        values
+        <foreach collection="list" item="userCoupon" index="index" separator=",">
+            (
+                #{userCoupon.coupon_id},
+                #{userCoupon.coupon_number},
+                #{userCoupon.user_id},
+                #{userCoupon.used_time},
+                #{userCoupon.order_id},
+                #{userCoupon.add_time},
+                #{userCoupon.source_key},
+                #{userCoupon.referrer}
+            )
+        </foreach>
+	</insert>
+
     <update id="update" parameterType="com.platform.entity.UserCouponVo">
         update nideshop_user_coupon
         <set>
@@ -110,4 +137,5 @@
             #{id}
         </foreach>
     </delete>
+
 </mapper>

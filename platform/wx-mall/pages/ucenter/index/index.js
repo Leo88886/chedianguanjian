@@ -4,6 +4,7 @@ var user = require('../../../services/user.js');
 var app = getApp();
 Page({
   data: {
+    balance: 0 ,
     userInfo: {},
     hasMobile: '',
     user: '',
@@ -13,26 +14,12 @@ Page({
     action: 0, //0 充值弹框 1 提现弹框
     chargeSuccessModalShow: false, //充值（提现）成功弹框
     chargeFailModalShow: false, //充值（提现）失败弹框
+    balanceOrderId: '', //充值订单id
+    buyBalance: 0 ,//最近一次充值金额
+    buyResult: false
   },
   onLoad: function (options) {
-    var that = this;
-    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
-    wx.request({
-      url: api.QueryReferrer,
-      data: {
-        openId: openId
-      },
-      method: 'POST',
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        console.log(res.data)
-        that.setData({
-          referrer: res.data.referrer
-        });
-      }
-    });
+    
   },
   onReady: function () {
 
@@ -56,6 +43,45 @@ Page({
 
     this.setData({
       userInfo: app.globalData.userInfo,
+    });
+
+    //查推荐人
+    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
+    wx.request({
+      url: api.QueryReferrer,
+      data: {
+        openId: openId
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        console.log(res.data)
+        that.setData({
+          referrer: res.data.referrer
+        });
+      }
+    });
+
+
+    //查询余额
+    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
+    var that = this;
+    wx.request({
+      url: api.QueryBanlance,
+      data: {
+      openId: openId
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        that.setData({
+          balance: res.data.balance
+        });
+      }
     });
 
   },
@@ -158,18 +184,70 @@ Page({
     })
   },
 
-  //充值（提现）
+  //充值\提现
   charge: function () {
-    if (parseFloat(this.data.chargePrice) && this.data.chargePrice > 0) {
+    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
+    if (parseFloat(this.data.chargePrice) && this.data.chargePrice > 0
+      && openId != null && openId!='') {
       // action 0表示当前操作是充值操作，1表示当前操作是提现操作
       if (this.data.action == 0) { //充值操作
         //请调用充值接口，返回成功时候调用这个方法显示成功界面
         //this.charge_success();
-        
-        //返回失败时候调用这个方法失败界面
-        //this.charge_fail();
+       const balance = this.data.chargePrice
+      //  const that = this;
+        wx.request({
+          url: api.BuyBanlance,
+          data: {
+            openId: openId,
+            balance: balance
+          },
+          method: 'POST',
+          header: {
+            'content-type': 'application/json'
+          },
+          success: function (res) {
 
-      } else { //提现操作
+          },
+        });
+
+      //  return new Promise(function (resolve, reject) {
+      //     util.request(api.BuyBanlance, {
+      //       openId: openId,
+      //       balance: balance
+      //     }).then((res) => {
+      //       if (res.errno === 0) {
+      //         const payParam = res.data;
+      //         const orderId = payParam.orderId;
+      //         const balance = payParam.balance;
+      //         wx.requestPayment({
+      //           'timeStamp': payParam.timeStamp,
+      //           'nonceStr': payParam.nonceStr,
+      //           'package': payParam.package,
+      //           'signType': payParam.signType,
+      //           'paySign': payParam.paySign,
+      //           'success': function (res) {
+      //             that.data.balanceOrderId = orderId
+      //             that.data.buyBalance = balance 
+      //             that.data.buyResult = true
+      //             resolve(res);
+      //           },
+      //           'fail': function (res) {
+      //             // that.charge_fail();
+      //             reject(res);
+      //           },
+      //           'complete': function (res) {
+      //             reject(res);
+      //           }
+      //         });
+      //       } else {
+      //         reject(res);
+      //       }
+      //     });
+      //   });
+
+      } 
+      
+      else { //提现操作
         //请调用提现接口，返回成功时候调用这个方法显示成功界面
         //this.charge_success();
 
@@ -196,6 +274,27 @@ Page({
     wx.hideTabBar({
       animation: false,
     })
+    //获取当前充值金额以及orderId
+    const openId = wx.getStorageSync('openId'); //当前登陆用户openId
+    const balance = this.data.buyBalance
+    const orderId = this.data.balanceOrderId
+
+    wx.request({
+      url: api.BuyBanlanceResult,
+      data: {
+        openId: openId,
+        balance: balance,
+        orderId: orderId
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+       
+      }
+    });
+
   },
 
   // 充值（提现）失败

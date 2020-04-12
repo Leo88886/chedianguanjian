@@ -1,6 +1,7 @@
 package com.platform.api;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.cache.J2CacheUtils;
@@ -41,7 +42,9 @@ public class ApiWalletController extends ApiBaseAction {
     @IgnoreAuth
     @PostMapping("balance")
     @ApiOperation(value = "余额查询")
-    public Object queryBalance(String openId) {
+    public Object queryBalance() {
+        JSONObject jsonParam = this.getJsonRequest();
+        String openId = jsonParam.getString("openId");
         WalletVo walletVo = null;
         try {
             walletVo = apiWalletMapper.queryUserWallet(openId);
@@ -58,14 +61,18 @@ public class ApiWalletController extends ApiBaseAction {
 
     }
 
+    @IgnoreAuth
     @PostMapping("buybalance")
     @ApiOperation(value = "余额充值")
-    public Object buyBalance(@LoginUser UserVo loginUser, BigDecimal balance) {
+    public Object buyBalance() {
 
-        if (null == loginUser) {
-            return toResponsObject(400, "用户信息为空", "");
-        }
-
+//        if (loginUser==null) {
+//            return toResponsObject(400, "用户信息为空", "");
+//        }
+        JSONObject jsonParam = this.getJsonRequest();
+        String openId = jsonParam.getString("openId");
+        String balanceStr = jsonParam.getString("balance");
+        BigDecimal balance = new BigDecimal(balanceStr);
         String nonceStr = CharUtil.getRandomString(32);
 
         //https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=3
@@ -91,7 +98,7 @@ public class ApiWalletController extends ApiBaseAction {
             // 交易类型APP
             parame.put("trade_type", ResourceUtil.getConfigByName("wx.tradeType"));
             parame.put("spbill_create_ip", getClientIp());
-            parame.put("openid", loginUser.getWeixin_openid());
+            parame.put("openid", openId);
             String sign = WechatUtil.arraySign(parame, ResourceUtil.getConfigByName("wx.paySignKey"));
             // 数字签证
             parame.put("sign", sign);
@@ -136,7 +143,12 @@ public class ApiWalletController extends ApiBaseAction {
 
     @PostMapping("buybanlanceresult")
     @ApiOperation(value = "余额充值结果")
-    public Object buyBanlanceResult(@LoginUser UserVo loginUser, String orderId, BigDecimal balance) {
+    public Object buyBanlanceResult() {
+        JSONObject jsonParam = this.getJsonRequest();
+        String openId = jsonParam.getString("openId");
+        String balanceStr = jsonParam.getString("balance");
+        String orderId = jsonParam.getString("orderId");
+        BigDecimal balance = new BigDecimal(balanceStr);
         if (orderId == null) {
             return toResponsFail("未传入支付编号");
         }
@@ -145,7 +157,7 @@ public class ApiWalletController extends ApiBaseAction {
             return toResponsFail("未传入充值金额");
         }
 
-        if (loginUser == null) {
+        if (StringUtils.isNullOrEmpty(openId)) {
             return toResponsFail("用户不存在或者未登录");
         }
 
@@ -183,7 +195,7 @@ public class ApiWalletController extends ApiBaseAction {
         String trade_state = MapUtils.getString("trade_state", resultUn);
         if ("SUCCESS".equals(trade_state)) {
 
-            String weixin_openid = loginUser.getWeixin_openid();
+            String weixin_openid = openId;
             // 增加余额
             apiWalletService.addBalance(balance, weixin_openid,2);
 
@@ -202,10 +214,10 @@ public class ApiWalletController extends ApiBaseAction {
             // 重新查询 正在支付中
             if (num == null) {
                 J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "", 1);
-                this.buyBanlanceResult(loginUser, orderId, balance);
+                this.buyBanlanceResult();
             } else if (num <= 3) {
                 J2CacheUtils.remove(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId);
-                this.buyBanlanceResult(loginUser, orderId, balance);
+                this.buyBanlanceResult();
             } else {
                 return toResponsFail("查询失败,error=" + trade_state);
             }

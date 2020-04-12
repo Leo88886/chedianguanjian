@@ -92,53 +92,53 @@
         from nideshop_goods a left join nideshop_coupon b on a.coupon_back = b.id
         where 1 = 1
         <if test="is_new != null and is_new != ''">
-            and is_new = #{is_new}
+            and a.is_new = #{is_new}
         </if>
         <if test="is_hot != null and is_hot != ''">
-            and is_hot = #{is_hot}
+            and a.is_hot = #{is_hot}
         </if>
         <if test="brand_id != null and brand_id != ''">
-            and brand_id = #{brand_id}
+            and a.brand_id = #{brand_id}
         </if>
         <if test="name != null and name != ''">
-            and name like concat('%',#{name},'%')
+            and a.name like concat('%',#{name},'%')
         </if>
         <if test="category_id != null and category_id != ''">
-            and category_id = #{category_id}
+            and a.category_id = #{category_id}
         </if>
         <if test="keyword != null">
-            and keywords like concat('%',#{keyword},'%')
+            and a.keywords like concat('%',#{keyword},'%')
         </if>
         <if test="is_delete != null">
-            and is_delete = #{is_delete}
+            and a.is_delete = #{is_delete}
         </if>
         <if test="is_on_sale != null and is_on_sale != ''">
-            and is_on_sale = #{is_on_sale}
+            and a.is_on_sale = #{is_on_sale}
         </if>
         <if test="categoryIds != null">
-            and category_id in
+            and a.category_id in
             <foreach item="item" collection="categoryIds" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
         <if test="goods_ids != null">
-            and id in
+            and a.id in
             <foreach item="item" collection="goods_ids" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
         <if test="is_high_return != null and is_high_return != ''">
-            and (cash_back is not null or cash_back != '')
+            and (a.cash_back is not null or a.cash_back != '')
         </if>
         <if test="is_high_coupon_return != null and is_high_coupon_return != ''">
-            and (coupon_back is not null or coupon_back != '')
+            and (a.coupon_back is not null or a.coupon_back != '')
         </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
             <otherwise>
-                order by id desc
+                order by a.id desc
             </otherwise>
         </choose>
     </select>
@@ -181,9 +181,9 @@
         a.update_time,
         a.create_user_dept_id,
         a.cash_back,
-        substring_index( a.coupon_back,"_",-1) as coupon_back,
-        b.id as product_id
+        d.type_money as coupon_back
         from nideshop_goods a
+        left join nideshop_coupon d on a.coupon_back = d.id
         left join nideshop_product b on a.id = b.goods_id
         left join nideshop_product c on a.id = c.goods_id and c.retail_price > b.retail_price and b.id != c.id
         where 1 = 1 and b.id is not null and c.id is null and a.is_delete != 1

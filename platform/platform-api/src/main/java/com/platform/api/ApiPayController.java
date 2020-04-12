@@ -45,7 +45,9 @@ public class ApiPayController extends ApiBaseAction {
     @Autowired
     private ApiCusRelationService cusRelationService;
      @Autowired
-     private ApiCouponService couponService;
+     private ApiUserService userService;
+     @Autowired
+     private ApiUserCouponService userCouponService;
     /**
      */
     @ApiOperation(value = "跳转")
@@ -168,7 +170,14 @@ public class ApiPayController extends ApiBaseAction {
                                 }
                                 //返卷
                                 if (null != goodsInfo.getCoupon_back() && !goodsInfo.getCoupon_back().equals("")) {
-
+                                    UserVo user = userService.getUserByOpenId(loginUser.getWeixin_openid());
+                                    UserCouponVo userCouponVo = new UserCouponVo();
+                                    userCouponVo.setId(null);
+                                    userCouponVo.setCoupon_id(Integer.valueOf(goodsInfo.getCoupon_back()));
+                                    userCouponVo.setCoupon_number("1");
+                                    userCouponVo.setUser_id(user.getUserId());
+                                    userCouponVo.setAdd_time(new Date());
+                                    userCouponService.save(userCouponVo);
                                 }
                             }
                         }

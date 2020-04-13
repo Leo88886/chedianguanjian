@@ -85,7 +85,7 @@
 		)
 	</insert>
 
-    <insert id="save" parameterType="com.platform.entity.UserCouponVo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveUserCouponList" parameterType="com.platform.entity.UserCouponVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_user_coupon
 		(
 			`coupon_id`,

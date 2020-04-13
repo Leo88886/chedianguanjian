@@ -22,6 +22,7 @@
         <result property="min_transmit_num" column="min_transmit_num"/>
         <result property="user_coupon_id" column="user_coupon_id"/>
         <result property="coupon_status" column="coupon_status"/>
+        <result property="remark" column="remark"/>
     </resultMap>
 
     <select id="queryObject" resultMap="couponMap">
@@ -197,7 +198,7 @@
     <select id="findCouponList" resultMap="couponMap">
         select * from nideshop_coupon a
         where 1 = 1
-        and a.name in
+        and a.remark in
         <foreach item="item" collection="list" open="(" separator="," close=")">
             #{item}
         </foreach>
@@ -217,7 +218,8 @@
 			`send_end_date`,
 			`use_start_date`,
 			`use_end_date`,
-			`min_goods_amount`
+			`min_goods_amount`,
+            `remark`
 		)
         values
         <foreach collection="list" item="coupon" index="index" separator=",">
@@ -231,7 +233,8 @@
 			#{coupon.send_end_date},
 			#{coupon.use_start_date},
 			#{coupon.use_end_date},
-			#{coupon.min_goods_amount}
+			#{coupon.min_goods_amount},
+            #{coupon.remark}
 		)
         </foreach>
 	</insert>

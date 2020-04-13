@@ -6,7 +6,8 @@ Page({
     salerId: '',
     text: '',
     saleMon: '',
-    saleAll: ''
+    saleAll: '',
+    mySalerId:''
   },
   onLoad: function(options) {
     var that = this;
@@ -23,7 +24,8 @@ Page({
         that.setData({
           salerId: res.data.salerId,
           saleMon: res.data.saleMon,
-          saleAll: res.data.saleAll
+          saleAll: res.data.saleAll,
+          mySalerId: res.data.mySalerId
         })
       }
     });

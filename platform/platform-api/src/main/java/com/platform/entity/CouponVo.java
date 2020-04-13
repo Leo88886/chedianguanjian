@@ -58,6 +58,8 @@ public class CouponVo implements Serializable {
     //优惠券状态 1 可用 2 已用 3 过期
     private Integer coupon_status = 1;
 
+    private String remark;
+
     public Integer getUser_coupon_id() {
         return user_coupon_id;
     }
@@ -202,4 +204,11 @@ public class CouponVo implements Serializable {
         this.min_transmit_num = min_transmit_num;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

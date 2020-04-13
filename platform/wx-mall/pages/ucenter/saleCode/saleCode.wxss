@@ -1,123 +1,412 @@
-page{
-	background: #fff;
-  color: #000;
-  font-size: 30rpx;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+page {
+    height: 100%;
+    width: 100%;
+    background: #f4f4f4;
 }
-.verCodeView{
-	padding: 164rpx 40rpx 32rpx 40rpx;
+
+.container {
+    background: #f4f4f4;
+    height: auto;
+    overflow: hidden;
+    width: 100%;
 }
-.verCodeSendView{
-	padding: 0 40rpx 74rpx 40rpx;
+
+.userinfo {
+    display: flex;
+    padding: 90rpx 32rpx 48rpx 32rpx;
+    justify-content: space-between;
+    background: linear-gradient(to right, #f98555, #eb4033);
+    width: 750rpx;
+    border-radius: 0 0 40rpx 40rpx;
 }
-.sendTime{
-	text-align: center;
-	padding-top: 54rpx;
+
+.userinfo-avatar {
+    width: 160rpx;
+    height: 160rpx;
+    margin-right: 50rpx;
+    border-radius: 50%;
 }
-.verCodeInputView{
-	display: -webkit-flex;
-	padding: 0 40rpx 0 40rpx;
+
+.userinfo-nickname {
+    font-size: 32rpx;
+    color: #FFF;
 }
-.verCodeInput{
-  margin: 0 58rpx 0 0;
-	height: 150rpx;
-  width: 124rpx;
-	background-color: #fff;
-	border:#DFDFDF solid 1rpx;
-	font-size: 60rpx;
-	text-align: center;
-  justify-content: space-between;
+
+.userinfo-tuijian {
+    font-size: 30rpx;
+    color: #FFF;
 }
- 
- 
-/* 新验证码输入框样式 */
-page .code .input-content-wrap .input-code-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center1;
-  height: 150rpx;
+
+.userinfo-xs {
+    font-size: 26rpx;
+    color: #FFF;
+    background-color: gray;
+    padding: 10rpx 20rpx;
+    border-radius: 40rpx;
 }
-page .code .input-content-wrap .input-code-wrap .code_dot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #000;
-  background-color: #fff;
-  box-sizing: border-box;
-  width: 124rpx;
-  height: 150rpx;
-  border: #dfdfdf solid 1rpx;
-  border-left: none 0;
-  font-size: 60rpx;
+
+.usermoney,
+.menuinfo {
+    background: white;
+    margin: 15rpx 30rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20rpx;
 }
-page .code .input-content-wrap .input-code-wrap .code_dot:nth-child(1) {
-  border-left: 2rpx solid #ddd;
+
+.usermoney {
+    margin-top: 30rpx;
+    padding: 40rpx;
 }
-page .code .input-content-wrap .input-code-wrap .code_dot i {
-  /* background: #000; */
-  border-radius: 50%;
-  width: 20rpx;
-  height: 20rpx;
-  display: flex;
-  align-items: center;
+
+.menuinfo {
+    padding: 25rpx 50rpx;
 }
-page .code .input-content {
-  position: absolute;
-  opacity: 0;
-  left: -100%;
-  top: 600rpx;
-  background: #f56;
-  z-index: -999;
-  text-align: center;
+
+.usermoney-item,
+.menuinfo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 20%;
 }
-page .code .input-content.active {
-  z-index: -99;
+
+.usermoney-item image {
+    width: 60rpx;
+    height: 60rpx;
 }
-.input {
-  height: 100rpx;
-  width: 50rpx;
-	flex: 1;
-  background-color: #fff;
-  color: #262626;
-  font-size: 44rpx;
-	margin: 0 15rpx 0 15rpx;
-	border: 1rpx #000 solid;
-	position: relative;
+
+.menuinfo-item image {
+    width: 90rpx;
+    height: 90rpx;
 }
-.input_none{
-  height: 100rpx;
-  width: 50rpx;
-	flex: 1;
-  background-color: #fff;
-  color: #262626;
-  font-size: 44rpx;
-	margin: 0 15rpx 0 15rpx;
-	border: 1rpx #dfdfdf solid;
-	position: relative;
+
+.item-up {
+    width: 58rpx;
+    height: 58rpx;
+    font-size: 32rpx;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }
-.input text {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	align-content: center;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+
+.item-up image {
+    width: 58rpx;
+    height: 58rpx;
 }
-.input_none text {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	align-content: center;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
+
+.item-down {
+    font-size: 28rpx;
+    color: #666666;
+    white-space: nowrap;
+}
+
+.profile-info {
+    width: 100%;
+    height: 280rpx;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 30.25rpx;
+    background: #333;
+}
+
+.profile-info .avatar {
+    height: 148rpx;
+    width: 148rpx;
+    border-radius: 50%;
+}
+
+.profile-info .info {
+    flex: 1;
+    height: 85rpx;
+    padding-left: 31.25rpx;
+}
+
+.profile-info .name {
+    display: block;
+    height: 45rpx;
+    line-height: 45rpx;
+    color: #fff;
+    font-size: 37.5rpx;
+    margin-bottom: 10rpx;
+}
+
+.profile-info .level {
+    display: block;
+    height: 30rpx;
+    line-height: 30rpx;
+    margin-bottom: 10rpx;
+    color: #7f7f7f;
+    font-size: 30rpx;
+}
+
+.user-menu {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    background: #fff;
+}
+
+.user-menu .item {
+    float: left;
+    width: 33.33333%;
+    height: 187.5rpx;
+    border-right: 1px solid rgba(0, 0, 0, .15);
+    border-bottom: 1px solid rgba(0, 0, 0, .15);
+    text-align: center;
+}
+
+.user-menu .item .a {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-menu .item.no-border {
+    border-right: 0;
+}
+
+.user-menu .item.item-bottom {
+    border-bottom: none;
+}
+
+.user-menu .icon {
+    margin: 0 auto;
+    display: block;
+    height: 52.803rpx;
+    width: 52.803rpx;
+    margin-bottom: 16rpx;
+}
+
+.user-menu .icon.order {
+    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/sprites/ucenter-sdf6a55ee56-f2c2b9c2f0.png) 0 -437.5rpx no-repeat;
+    background-size: 52.803rpx;
+}
+
+.user-menu .icon.coupon {
+    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/sprites/ucenter-sdf6a55ee56-f2c2b9c2f0.png) 0 -62.4997rpx no-repeat;
+    background-size: 52.803rpx;
+}
+
+.user-menu .icon.gift {
+    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/sprites/ucenter-sdf6a55ee56-f2c2b9c2f0.png) 0 -187.5rpx no-repeat;
+    background-size: 52.803rpx;
+}
+
+.user-menu .icon.address {
+    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/sprites/ucenter-sdf6a55ee56-f2c2b9c2f0.png) 0 0 no-repeat;
+    background-size: 52.803rpx;
+}
+
+.user-menu .icon.security {
+    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/sprites/ucenter-sdf6a55ee56-f2c2b9c2f0.png) 0 -500rpx no-repeat;
+    background-size: 52.803rpx;
+}
+
+.user-menu .icon.kefu {
+    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/sprites/ucenter-sdf6a55ee56-f2c2b9c2f0.png) 0 -312.5rpx no-repeat;
+    background-size: 52.803rpx;
+}
+
+.user-menu .icon.help {
+    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/sprites/ucenter-sdf6a55ee56-f2c2b9c2f0.png) 0 -250rpx no-repeat;
+    background-size: 52.803rpx;
+}
+
+.user-menu .icon.feedback {
+    background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/sprites/ucenter-sdf6a55ee56-f2c2b9c2f0.png) 0 -125rpx no-repeat;
+    background-size: 52.803rpx;
+}
+
+.user-menu .icon.phone {
+    background: url(https://platform-wxmall.oss-cn-beijing.aliyuncs.com/upload/20180727/15011540ebe21.png) no-repeat;
+    background-size: 52.803rpx;
+}
+
+
+.user-menu .txt {
+    display: block;
+    height: 24rpx;
+    width: 100%;
+    font-size: 24rpx;
+    color: #333;
+}
+
+.logout {
+    margin-top: 50rpx;
+    height: 101rpx;
+    width: 100%;
+    line-height: 101rpx;
+    text-align: center;
+    background: #fff;
+    color: #333;
+    font-size: 30rpx;
+}
+
+.service {
+    position: static;
+    background-color: transparent;
+    color: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+    text-align: left;
+    line-height: normal;
+    display: inline;
+}
+
+.company {
+    font-size: 20rpx;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.mask {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    z-index: 9000;
+    opacity: 0.7;
+}
+
+.charge_modalDlg {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    z-index: 9999;
+    background-color: #fff;
+    border-radius: 36rpx;
+}
+
+.charge_modal .charge_modalDlg {
+    height: 488rpx;
+    top: 10%;
+    padding: 65rpx 60rpx 60rpx;
+}
+
+.charge_modal .charge_modalDlg .charge_title {
+    font-size: 32rpx;
+    font-weight: bold;
+    margin-bottom: 40rpx;
+    display: block;
+}
+
+.charge_modal .charge_modalDlg .charge_input {
+    display: flex;
+    align-items: center;
+}
+
+.charge_modal .charge_modalDlg .charge_input text {
+    font-size: 60rpx;
+    font-weight: bold;
+    display: block;
+    margin-right: 35rpx;
+}
+
+.charge_modal .charge_modalDlg .charge_input input {
+    color: orange;
+    font-size: 70rpx;
+    height: 70rpx;
+    min-height: 70rpx;
+}
+
+.charge_modal .charge_modalDlg .charge_button {
+    width: 400rpx;
+    background-color: #d9d9d9;
+    color: orange;
+    margin: 0 auto;
+    position: absolute;
+    bottom: 74rpx;
+    left: 175rpx;
+    border-radius: 20rpx;
+}
+
+.chargeSuccess_modal .charge_modalDlg,
+.chargeFail_modal .charge_modalDlg {
+    height: 700rpx;
+    bottom: 0;
+    padding-top: 150rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chargeSuccess_modal .charge_modalDlg image,
+.chargeFail_modal .charge_modalDlg image {
+    width: 94rpx;
+    height: 94rpx;
+    margin-bottom: 60rpx;
+}
+
+.chargeSuccess_modal .charge_modalDlg .charge_title,
+.chargeFail_modal .charge_modalDlg .charge_title {
+    font-size: 28rpx;
+    color: #333333;
+    margin-bottom: 40rpx;
+}
+
+.chargeSuccess_modal .charge_modalDlg .charge_input {
+    margin-bottom: 200rpx;
+    display: flex;
+    align-items: center;
+}
+
+.chargeSuccess_modal .charge_modalDlg .charge_input text:first-child {
+    font-size: 60rpx;
+    font-weight: bold;
+    margin-right: 30rpx;
+}
+
+.chargeSuccess_modal .charge_modalDlg .charge_input text:last-child {
+    font-size: 80rpx;
+    font-weight: bold;
+}
+
+.chargeSuccess_modal .charge_modalDlg .charge_button,
+.chargeFail_modal .charge_modalDlg .charge_button {
+    width: 400rpx;
+    background-color: #d9d9d9;
+    color: orange;
+    margin: 0 auto;
+    position: absolute;
+    bottom: 74rpx;
+    left: 175rpx;
+    border-radius: 20rpx;
+}
+
+.chargeFail_modal .charge_modalDlg .charge_title {
+    font-size: 32rpx;
+    margin-bottom: 250rpx;
+}
+/* pages/index/Component/TextInput/TextInput.wxss */
+.section{
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 50px;
+  border: 2px solid #FF7F00;
+  border-radius: 25px;
+}
+.input{
+ padding-left: 10px;
+ height: 44px; 
+}
+.section__title{
+    margin-top: 10px;
+}
+.section1{
+    margin-top: 10px;
 }

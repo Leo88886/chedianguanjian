@@ -139,23 +139,24 @@ public class ApiAuthController extends ApiBaseAction {
             for(int i=0;i<2;i++){
                 CouponVo couponVo = new CouponVo();
                 String uuid = UUID.randomUUID().toString();
-                couponVo.setName(uuid);
+                couponVo.setName("用户红包");
+                couponVo.setRemark(uuid);
                 couponVo.setSend_type(1);
                 if(i == 0){
                     couponVo.setType_money(new BigDecimal(5));
-                    couponVo.setMin_amount(new BigDecimal(5));
                     couponVo.setMax_amount(new BigDecimal(100000));
+                    couponVo.setMin_goods_amount(new BigDecimal(5));
                 }
                 if(i == 1){
                     couponVo.setType_money(new BigDecimal(10));
-                    couponVo.setMin_amount(new BigDecimal(10));
+                    couponVo.setMin_goods_amount(new BigDecimal(10));
                     couponVo.setMax_amount(new BigDecimal(100000));
                 }
                 couponVo.setSend_start_date(new Date());
                 couponVo.setSend_end_date(date);
                 couponVo.setUse_start_date(new Date());
                 couponVo.setUse_end_date(date);
-                couponVo.setMin_goods_amount(new BigDecimal(1));
+                couponVo.setMin_amount(new BigDecimal(10));
                 couponVo.setMin_transmit_num(null);
                 uuidList.add(uuid);
                 CouponList.add(couponVo);
@@ -169,6 +170,7 @@ public class ApiAuthController extends ApiBaseAction {
             if(null != couponInfoList && couponInfoList.size() > 0){
                 for(CouponVo couponVo : couponInfoList){
                     UserCouponVo userCouponVo = new UserCouponVo();
+                    userCouponVo.setId(null);
                     userCouponVo.setCoupon_id(couponVo.getId());
                     userCouponVo.setCoupon_number("1");
                     userCouponVo.setUser_id(user.getUserId());

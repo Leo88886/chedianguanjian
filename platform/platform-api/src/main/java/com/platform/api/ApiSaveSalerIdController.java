@@ -99,6 +99,7 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
         String salerId = "";
         String saleMon = "0";
         String saleAll = "0";
+        String mySalerId = "";
         Map<String,Object> map = new HashMap();
         List<ApiCusRelationVo> relationList = cusRelationService.getCusByToOpenid(openId);   //获取绑定的销售码,空则未绑定
         if(null != relationList && relationList.size() > 0){
@@ -123,10 +124,12 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
             lastday = format.format(cale.getTime());
             saleAll = userService.querySalesAllBySaler(saleVo.getSalerId());          //查询销售全部推广人数
             saleMon = userService.querySalesMonBySaler(firstday, lastday, saleVo.getSalerId());       //销售本月推广人数
+            mySalerId = saleVo.getSalerId().toString();
         }
         map.put("salerId", salerId);
         map.put("saleMon", saleMon);
         map.put("saleAll", saleAll);
+        map.put("mySalerId", mySalerId);
         return map;
     }
 
@@ -172,38 +175,39 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
                         for(int i=0;i<5;i++){
                             CouponVo couponVo = new CouponVo();
                             String uuid = UUID.randomUUID().toString();
-                            couponVo.setName(uuid);
+                            couponVo.setName("用户红包");
+                            couponVo.setRemark(uuid);
                             couponVo.setSend_type(1);
                             if(i == 0){
                                 couponVo.setType_money(new BigDecimal(10));
-                                couponVo.setMin_amount(new BigDecimal(200));
+                                couponVo.setMin_goods_amount(new BigDecimal(200));
                                 couponVo.setMax_amount(new BigDecimal(100000));
                             }
                             if(i == 1){
                                 couponVo.setType_money(new BigDecimal(30));
-                                couponVo.setMin_amount(new BigDecimal(500));
+                                couponVo.setMin_goods_amount(new BigDecimal(500));
                                 couponVo.setMax_amount(new BigDecimal(100000));
                             }
                             if(i == 2){
                                 couponVo.setType_money(new BigDecimal(55));
-                                couponVo.setMin_amount(new BigDecimal(800));
+                                couponVo.setMin_goods_amount(new BigDecimal(800));
                                 couponVo.setMax_amount(new BigDecimal(100000));
                             }
                             if(i == 3){
                                 couponVo.setType_money(new BigDecimal(80));
-                                couponVo.setMin_amount(new BigDecimal(1000));
+                                couponVo.setMin_goods_amount(new BigDecimal(1000));
                                 couponVo.setMax_amount(new BigDecimal(100000));
                             }
                             if(i == 4){
                                 couponVo.setType_money(new BigDecimal(150));
-                                couponVo.setMin_amount(new BigDecimal(1500));
+                                couponVo.setMin_goods_amount(new BigDecimal(1500));
                                 couponVo.setMax_amount(new BigDecimal(100000));
                             }
+                            couponVo.setMin_amount(new BigDecimal(10));
                             couponVo.setSend_start_date(new Date());
                             couponVo.setSend_end_date(date);
                             couponVo.setUse_start_date(new Date());
                             couponVo.setUse_end_date(date);
-                            couponVo.setMin_goods_amount(new BigDecimal(1));
                             couponVo.setMin_transmit_num(null);
                             uuidList.add(uuid);
                             CouponList.add(couponVo);
@@ -217,6 +221,7 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
                         if(null != couponInfoList && couponInfoList.size() > 0){
                             for(CouponVo couponVo : couponInfoList){
                                 UserCouponVo userCouponVo = new UserCouponVo();
+                                userCouponVo.setId(null);
                                 userCouponVo.setCoupon_id(couponVo.getId());
                                 userCouponVo.setCoupon_number("1");
                                 userCouponVo.setUser_id(user.getUserId());

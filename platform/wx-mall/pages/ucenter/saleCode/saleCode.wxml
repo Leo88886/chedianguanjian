@@ -1,22 +1,35 @@
-<view class='all'>
-  <view class='verCodeView'>
-    <text style='font-size:44rpx;color:#262626'>本月推广 {{saleMon}} 家店铺</text>
-    <text style='font-size:44rpx;color:#262626;margin-left:35px'>\n总计推广 {{saleAll}} 家店铺</text>
-  </view>
-  <view class='verCodeSendView'>
-    <text style='font-size:28rpx;color:#9b9b9b'>绑定的分销码：</text>
-
-  </view>
-  <view class="code">
-    <view class="input-content-wrap">
-      <view catchtap="set_Focus" class="input-code-wrap" style="line-height:50rpx;">
-        <view class="input">
-          <input type="text" bindinput="salerId" value="{{salerId}}" style="text-align: center;" />
+<view class="container">
+  <button class="userinfo">
+    <view style="display:flex;magin:auto">
+      <view style="display:flex;flex-direction: column;justify-content:center;">
+        <view style='font-size:50rpx;color:#262626;'>我的销售码 :
+          <text style='font-size:40rpx;color:#262626'>{{mySalerId}}</text>
         </view>
       </view>
     </view>
+  </button>
+
+
+  <view class="menuinfo">
+    <view class='all'>
+      <view class='verCodeView' style="margin-top:5px">
+        <text style='font-size:44rpx;color:#262626'>本月推广 {{saleMon}}人</text>
+        <text style='font-size:44rpx;color:#262626;margin-left:35px'>\n总计推广 {{saleAll}} 人</text>
+      </view>
+    </view>
+  </view>
+
+  <view style="background: white;margin: 15rpx 30rpx;padding: 25rpx 50rpx;justify-content: space-between;align-items:center;border-radius: 20rpx;">
+    <view class='verCodeSendView' style="margin-top:25px">
+      <text style='font-size:35rpx;color:#9b9b9b；background-color:red'>绑定分销码：</text>
+    </view>
+
+    <view class="section">
+      <input class="input" bindinput="salerId" value='{{salerId}}' />
+    </view>
+
     <view style="width:97%;margin:auto;margin-top:20px">
-      <button bindtap="SaveRelation" style="border-radius:5px;">保存</button>
+      <button bindtap="SaveRelation" style="border-radius:5px;background:#FF7F00">保存</button>
     </view>
   </view>
 </view>

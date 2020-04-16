@@ -1,5 +1,6 @@
 package com.platform.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.annotation.LoginUser;
 import com.platform.cache.J2CacheUtils;
@@ -59,29 +60,152 @@ public class ApiPayController extends ApiBaseAction {
      */
     @ApiOperation(value = "获取支付的请求参数")
     @PostMapping("prepay")
-    public Object payPrepay(@LoginUser UserVo loginUser, Integer orderId) {
-
-        if(loginUser.getWeixin_openid()==null||orderId==null){
-            return toResponsObject(400, "支付接口异常", "");
-        }
-
-        //
-        OrderVo orderInfo = orderService.queryObject(orderId);
-
+    public Object payPrepay(@LoginUser UserVo loginUser, Integer orderId,String flag) {
+         OrderVo orderInfo = orderService.queryObject(orderId);
         if (null == orderInfo) {
             return toResponsObject(400, "订单已取消", "");
+        }
+        if(loginUser.getWeixin_openid()==null||orderId==null){
+            return toResponsObject(400, "支付接口异常", "");
         }
 
         if (orderInfo.getPay_status() != 0 && orderInfo.getPay_status() != 1) {
             return toResponsObject(400, "订单已支付，请不要重复操作", "");
         }
+        if(flag.equals("1")){   //用钱包支付
+            BigDecimal balance = walletService.queryBalance(loginUser.getWeixin_openid());      //查询用户余额
+            if(balance.compareTo(orderInfo.getOrder_price()) == 0 ||        //余额大于等于订单金额
+                    balance.compareTo(orderInfo.getOrder_price()) == 1 ){
+                this.orderQuery(loginUser,orderId,flag);     //修改订单状态
+                return toResponsObject(0, "支付成功", "");
+            }else {
+                return toResponsObject(400, "余额不足！请使用其他支付方式！", "");
+            }
 
-        String nonceStr = CharUtil.getRandomString(32);
+        }else{      //正常微信支付
 
-        //https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=3
-        Map<Object, Object> resultObj = new TreeMap();
+            String nonceStr = CharUtil.getRandomString(32);
 
-        try {
+            //https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=3
+            Map<Object, Object> resultObj = new TreeMap();
+
+            try {
+                Map<Object, Object> parame = new TreeMap<Object, Object>();
+                parame.put("appid", ResourceUtil.getConfigByName("wx.appId"));
+                // 商家账号。
+                parame.put("mch_id", ResourceUtil.getConfigByName("wx.mchId"));
+                String randomStr = CharUtil.getRandomNum(18).toUpperCase();
+                // 随机字符串
+                parame.put("nonce_str", randomStr);
+                // 商户订单编号
+                parame.put("out_trade_no", orderInfo.getOrder_sn());
+                Map orderGoodsParam = new HashMap();
+                orderGoodsParam.put("order_id", orderId);
+                // 商品描述
+                parame.put("body", "chechedianguanjia");
+                //订单的商品
+                List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
+                if (null != orderGoods) {
+                    String body = "cheche-";
+                    for (OrderGoodsVo goodsVo : orderGoods) {
+                        body = body + goodsVo.getGoods_name() + "、";
+                    }
+                    if (body.length() > 0) {
+                        body = body.substring(0, body.length() - 1);
+                    }
+                    // 商品描述
+                    parame.put("body", body);
+                }
+
+                //支付金额
+                parame.put("total_fee", orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue());
+                // 回调地址
+                parame.put("notify_url", ResourceUtil.getConfigByName("wx.notifyUrl"));
+                // 交易类型APP
+                parame.put("trade_type", ResourceUtil.getConfigByName("wx.tradeType"));
+                parame.put("spbill_create_ip", getClientIp());
+                parame.put("openid", loginUser.getWeixin_openid());
+                String sign = WechatUtil.arraySign(parame, ResourceUtil.getConfigByName("wx.paySignKey"));
+                // 数字签证
+                parame.put("sign", sign);
+
+                String xml = MapUtils.convertMap2Xml(parame);
+                logger.info("xml:" + xml);
+                Map<String, Object> resultUn = XmlUtil.xmlStrToMap(WechatUtil.requestOnce(ResourceUtil.getConfigByName("wx.uniformorder"), xml));
+                // 响应报文
+                String return_code = MapUtils.getString("return_code", resultUn);
+                String return_msg = MapUtils.getString("return_msg", resultUn);
+                //
+                if (return_code.equalsIgnoreCase("FAIL")) {
+                    return toResponsFail("支付失败," + return_msg);
+                } else if (return_code.equalsIgnoreCase("SUCCESS")) {
+                    // 返回数据
+                    String result_code = MapUtils.getString("result_code", resultUn);
+                    String err_code_des = MapUtils.getString("err_code_des", resultUn);
+                    if (result_code.equalsIgnoreCase("FAIL")) {
+                        return toResponsFail("支付失败," + err_code_des);
+                    } else if (result_code.equalsIgnoreCase("SUCCESS")) {
+                        String prepay_id = MapUtils.getString("prepay_id", resultUn);
+                        // 先生成paySign 参考https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=5
+                        resultObj.put("appId", ResourceUtil.getConfigByName("wx.appId"));
+                        resultObj.put("timeStamp", DateUtils.timeToStr(System.currentTimeMillis() / 1000, DateUtils.DATE_TIME_PATTERN));
+                        resultObj.put("nonceStr", nonceStr);
+                        resultObj.put("package", "prepay_id=" + prepay_id);
+                        resultObj.put("signType", "MD5");
+                        String paySign = WechatUtil.arraySign(resultObj, ResourceUtil.getConfigByName("wx.paySignKey"));
+                        resultObj.put("paySign", paySign);
+                        // 业务处理
+                        orderInfo.setPay_id(prepay_id);
+                        // 付款中
+                        orderInfo.setPay_status(1);
+                        orderService.update(orderInfo);
+
+
+                        return toResponsObject(0, "微信统一订单下单成功", resultObj);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return toResponsFail("下单失败,error=" + e.getMessage());
+            }
+            return toResponsFail("下单失败");
+        }
+
+    }
+
+    /**
+     * 微信查询订单状态
+     */
+    @ApiOperation(value = "查询订单状态")
+    @PostMapping("query")
+    public Object orderQuery(@LoginUser UserVo loginUser, Integer orderId,String flag) {
+        if (orderId == null) {
+            return toResponsFail("订单不存在");
+        }
+        OrderVo orderDetail = orderService.queryObject(orderId);
+        if(flag.equals("1")){       //余额支付
+            if(loginUser.getWeixin_openid()==null||orderId==null){
+                return toResponsObject(400, "支付接口异常", "");
+            }
+            int result = walletService.reduceBalance(orderDetail.getOrder_price(),loginUser.getWeixin_openid());
+            if(result == 1){
+                // 更改订单状态
+                // 业务处理
+                OrderVo orderInfo = new OrderVo();
+                orderInfo.setId(orderId);
+                orderInfo.setPay_status(2);
+                orderInfo.setOrder_status(201);
+                orderInfo.setShipping_status(0);
+                orderInfo.setPay_time(new Date());
+                orderService.update(orderInfo);
+
+                return toResponsObject(0, "支付成功", "");
+            }else {
+                return toResponsObject(400, "支付失败", "");
+
+            }
+        }else{      //微信支付
+
             Map<Object, Object> parame = new TreeMap<Object, Object>();
             parame.put("appid", ResourceUtil.getConfigByName("wx.appId"));
             // 商家账号。
@@ -90,150 +214,58 @@ public class ApiPayController extends ApiBaseAction {
             // 随机字符串
             parame.put("nonce_str", randomStr);
             // 商户订单编号
-            parame.put("out_trade_no", orderInfo.getOrder_sn());
-            Map orderGoodsParam = new HashMap();
-            orderGoodsParam.put("order_id", orderId);
-            // 商品描述
-            parame.put("body", "chechedianguanjia");
-            //订单的商品
-            List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
-            if (null != orderGoods) {
-                String body = "cheche-";
-                for (OrderGoodsVo goodsVo : orderGoods) {
-                    body = body + goodsVo.getGoods_name() + "、";
-                }
-                if (body.length() > 0) {
-                    body = body.substring(0, body.length() - 1);
-                }
-                // 商品描述
-                parame.put("body", body);
-            }
+            parame.put("out_trade_no", orderDetail.getOrder_sn());
 
-            //支付金额
-            parame.put("total_fee", orderInfo.getActual_price().multiply(new BigDecimal(100)).intValue());
-            // 回调地址
-            parame.put("notify_url", ResourceUtil.getConfigByName("wx.notifyUrl"));
-            // 交易类型APP
-            parame.put("trade_type", ResourceUtil.getConfigByName("wx.tradeType"));
-            parame.put("spbill_create_ip", getClientIp());
-            parame.put("openid", loginUser.getWeixin_openid());
             String sign = WechatUtil.arraySign(parame, ResourceUtil.getConfigByName("wx.paySignKey"));
             // 数字签证
             parame.put("sign", sign);
 
             String xml = MapUtils.convertMap2Xml(parame);
             logger.info("xml:" + xml);
-            Map<String, Object> resultUn = XmlUtil.xmlStrToMap(WechatUtil.requestOnce(ResourceUtil.getConfigByName("wx.uniformorder"), xml));
+            Map<String, Object> resultUn = null;
+            try {
+                resultUn = XmlUtil.xmlStrToMap(WechatUtil.requestOnce(ResourceUtil.getConfigByName("wx.orderquery"), xml));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return toResponsFail("查询失败,error=" + e.getMessage());
+            }
             // 响应报文
             String return_code = MapUtils.getString("return_code", resultUn);
             String return_msg = MapUtils.getString("return_msg", resultUn);
-            //
-            if (return_code.equalsIgnoreCase("FAIL")) {
-                return toResponsFail("支付失败," + return_msg);
-            } else if (return_code.equalsIgnoreCase("SUCCESS")) {
-                // 返回数据
-                String result_code = MapUtils.getString("result_code", resultUn);
-                String err_code_des = MapUtils.getString("err_code_des", resultUn);
-                if (result_code.equalsIgnoreCase("FAIL")) {
-                    return toResponsFail("支付失败," + err_code_des);
-                } else if (result_code.equalsIgnoreCase("SUCCESS")) {
-                    String prepay_id = MapUtils.getString("prepay_id", resultUn);
-                    // 先生成paySign 参考https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=5
-                    resultObj.put("appId", ResourceUtil.getConfigByName("wx.appId"));
-                    resultObj.put("timeStamp", DateUtils.timeToStr(System.currentTimeMillis() / 1000, DateUtils.DATE_TIME_PATTERN));
-                    resultObj.put("nonceStr", nonceStr);
-                    resultObj.put("package", "prepay_id=" + prepay_id);
-                    resultObj.put("signType", "MD5");
-                    String paySign = WechatUtil.arraySign(resultObj, ResourceUtil.getConfigByName("wx.paySignKey"));
-                    resultObj.put("paySign", paySign);
-                    // 业务处理
-                    orderInfo.setPay_id(prepay_id);
-                    // 付款中
-                    orderInfo.setPay_status(1);
-                    orderService.update(orderInfo);
 
-
-                    return toResponsObject(0, "微信统一订单下单成功", resultObj);
-                }
+            if (!"SUCCESS".equals(return_code)) {
+                return toResponsFail("查询失败,error=" + return_msg);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return toResponsFail("下单失败,error=" + e.getMessage());
-        }
-        return toResponsFail("下单失败");
-    }
 
-    /**
-     * 微信查询订单状态
-     */
-    @ApiOperation(value = "查询订单状态")
-    @PostMapping("query")
-    public Object orderQuery(@LoginUser UserVo loginUser, Integer orderId) {
-        if (orderId == null) {
-            return toResponsFail("订单不存在");
-        }
+            String trade_state = MapUtils.getString("trade_state", resultUn);
+            if ("SUCCESS".equals(trade_state)) {
+                // 更改订单状态
+                // 业务处理
+                OrderVo orderInfo = new OrderVo();
+                orderInfo.setId(orderId);
+                orderInfo.setPay_status(2);
+                orderInfo.setOrder_status(201);
+                orderInfo.setShipping_status(0);
+                orderInfo.setPay_time(new Date());
+                orderService.update(orderInfo);
 
-        OrderVo orderDetail = orderService.queryObject(orderId);
-        Map<Object, Object> parame = new TreeMap<Object, Object>();
-        parame.put("appid", ResourceUtil.getConfigByName("wx.appId"));
-        // 商家账号。
-        parame.put("mch_id", ResourceUtil.getConfigByName("wx.mchId"));
-        String randomStr = CharUtil.getRandomNum(18).toUpperCase();
-        // 随机字符串
-        parame.put("nonce_str", randomStr);
-        // 商户订单编号
-        parame.put("out_trade_no", orderDetail.getOrder_sn());
-
-        String sign = WechatUtil.arraySign(parame, ResourceUtil.getConfigByName("wx.paySignKey"));
-        // 数字签证
-        parame.put("sign", sign);
-
-        String xml = MapUtils.convertMap2Xml(parame);
-        logger.info("xml:" + xml);
-        Map<String, Object> resultUn = null;
-        try {
-            resultUn = XmlUtil.xmlStrToMap(WechatUtil.requestOnce(ResourceUtil.getConfigByName("wx.orderquery"), xml));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return toResponsFail("查询失败,error=" + e.getMessage());
-        }
-        // 响应报文
-        String return_code = MapUtils.getString("return_code", resultUn);
-        String return_msg = MapUtils.getString("return_msg", resultUn);
-
-        if (!"SUCCESS".equals(return_code)) {
-            return toResponsFail("查询失败,error=" + return_msg);
-        }
-
-        String trade_state = MapUtils.getString("trade_state", resultUn);
-        if ("SUCCESS".equals(trade_state)) {
-            // 更改订单状态
-            // 业务处理
-            OrderVo orderInfo = new OrderVo();
-            orderInfo.setId(orderId);
-            orderInfo.setPay_status(2);
-            orderInfo.setOrder_status(201);
-            orderInfo.setShipping_status(0);
-            orderInfo.setPay_time(new Date());
-            orderService.update(orderInfo);
-
-            Map orderGoodsParam = new HashMap();
-            orderGoodsParam.put("order_id", orderId);
-            //订单的商品
-            List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
-            //查询推荐人
-            List<ApiCusRelationVo> cusRelationVo = cusRelationService.getCusByToOpenid(loginUser.getWeixin_openid());
-            BigDecimal cashBackSum = new BigDecimal(0);
-            if (null != orderGoods) {
-                for (OrderGoodsVo orderGoodsVo : orderGoods) {
-                    GoodsVo goodsInfo = goodsService.queryObject(orderGoodsVo.getGoods_id());       //查询订单中的商品
-                    if (null != goodsInfo) {
-                        //计算返现金额
-                        if (null != goodsInfo.getCash_back() && goodsInfo.getCash_back().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
-                            if(null != cusRelationVo && cusRelationVo.size() > 0){
-                                cashBackSum = cashBackSum.add(goodsInfo.getCash_back());
+                Map orderGoodsParam = new HashMap();
+                orderGoodsParam.put("order_id", orderId);
+                //订单的商品
+                List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
+                //查询推荐人
+                List<ApiCusRelationVo> cusRelationVo = cusRelationService.getCusByToOpenid(loginUser.getWeixin_openid());
+                BigDecimal cashBackSum = new BigDecimal(0);
+                if (null != orderGoods) {
+                    for (OrderGoodsVo orderGoodsVo : orderGoods) {
+                        GoodsVo goodsInfo = goodsService.queryObject(orderGoodsVo.getGoods_id());       //查询订单中的商品
+                        if (null != goodsInfo) {
+                            //计算返现金额
+                            if (null != goodsInfo.getCash_back() && goodsInfo.getCash_back().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
+                                if(null != cusRelationVo && cusRelationVo.size() > 0){
+                                    cashBackSum = cashBackSum.add(goodsInfo.getCash_back());
+                                }
                             }
-                        }
                         /*//返卷
                         if (null != goodsInfo.getCoupon_back() && !goodsInfo.getCoupon_back().equals("")) {
                             UserVo user = userService.getUserByOpenId(loginUser.getWeixin_openid());
@@ -245,32 +277,34 @@ public class ApiPayController extends ApiBaseAction {
                             userCouponVo.setAdd_time(new Date());
                             userCouponService.save(userCouponVo);
                         }*/
+                        }
+                    }
+                    if(null != cusRelationVo && cusRelationVo.size() > 0 && cashBackSum.compareTo(new BigDecimal(0)) > 0){      //返现
+                        walletService.addBalance(cashBackSum, cusRelationVo.get(0).getFromOpenId(),1);
                     }
                 }
-                if(null != cusRelationVo && cusRelationVo.size() > 0 && cashBackSum.compareTo(new BigDecimal(0)) > 0){      //返现
-                    walletService.addBalance(cashBackSum, cusRelationVo.get(0).getFromOpenId(),1);
+                return toResponsMsgSuccess("支付成功");
+            } else if ("USERPAYING".equals(trade_state)) {
+                // 重新查询 正在支付中
+                Integer num = (Integer) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "");
+                if (num == null) {
+                    J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "", 1);
+                    this.orderQuery(loginUser, orderId,"");
+                } else if (num <= 3) {
+                    J2CacheUtils.remove(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId);
+                    this.orderQuery(loginUser, orderId,"");
+                } else {
+                    return toResponsFail("查询失败,error=" + trade_state);
                 }
-            }
-            return toResponsMsgSuccess("支付成功");
-        } else if ("USERPAYING".equals(trade_state)) {
-            // 重新查询 正在支付中
-            Integer num = (Integer) J2CacheUtils.get(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "");
-            if (num == null) {
-                J2CacheUtils.put(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId + "", 1);
-                this.orderQuery(loginUser, orderId);
-            } else if (num <= 3) {
-                J2CacheUtils.remove(J2CacheUtils.SHOP_CACHE_NAME, "queryRepeatNum" + orderId);
-                this.orderQuery(loginUser, orderId);
+
             } else {
+                // 失败
                 return toResponsFail("查询失败,error=" + trade_state);
             }
 
-        } else {
-            // 失败
-            return toResponsFail("查询失败,error=" + trade_state);
+            return toResponsFail("查询失败，未知错误");
         }
 
-        return toResponsFail("查询失败，未知错误");
     }
 
     /**

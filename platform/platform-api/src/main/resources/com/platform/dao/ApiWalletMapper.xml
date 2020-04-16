@@ -15,11 +15,11 @@
 	</select>
 
 	<update id="updateWalletBalance" parameterType="com.platform.entity.WalletVo" >
-		update  nideshop_wallet_water
+		update  nideshop_wallet
 		set
-	(
+
 		`balance` = #{walletVo.balance}
-	)
+
 	 where open_id = #{walletVo.openId}
 	</update>
 

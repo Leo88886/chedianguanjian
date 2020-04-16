@@ -206,7 +206,7 @@ Page({
             'content-type': 'application/json'
           },
           success: function (res) {
-
+              console.log(res)
           },
         });
 
@@ -263,7 +263,7 @@ Page({
       })
     }
   },
-
+ 
   // 充值（提现）成功
   charge_success: function (msg) {
     this.setData({

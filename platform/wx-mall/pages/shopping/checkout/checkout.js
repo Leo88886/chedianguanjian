@@ -148,13 +148,63 @@ Page({
       url: '../selCoupon/selCoupon?buyType=' + that.data.buyType,
     })
   },
-
+  balancePay: function() {
+    var that = this;
+    util.request(api.OrderSubmit, {
+      addressId: that.data.addressId,
+      couponId: that.data.couponId,
+      type: that.data.buyType
+    }, 'POST', 'application/json').then(res => {
+      if (res.errno === 0) {
+        const orderId = res.data.orderInfo.id;
+        util.request(api.PayPrepayId, {
+          orderId: orderId,
+          flag: 1
+        }).then(function(res) {
+          console.log(res.errno);
+          if (res.errno === 0) {
+            wx.redirectTo({
+              url: '/pages/payResult/payResult?status=1&orderId=' + orderId
+            });
+          } else {
+            wx.redirectTo({
+              url: '/pages/payResult/payResult?status=0&orderId=' + orderId
+            });
+          }
+        });
+      } else {
+        util.showErrorToast('下单失败');
+      }
+    });
+  },
+  pay: function() {
+    var that = this;
+    util.request(api.OrderSubmit, {
+      addressId: that.data.addressId,
+      couponId: that.data.couponId,
+      type: that.data.buyType
+    }, 'POST', 'application/json').then(res => {
+      if (res.errno === 0) {
+        const orderId = res.data.orderInfo.id;
+        pay.payOrder(parseInt(orderId)).then(res => {
+          wx.redirectTo({
+            url: '/pages/payResult/payResult?status=1&orderId=' + orderId
+          });
+        }).catch(res => {
+          wx.redirectTo({
+            url: '/pages/payResult/payResult?status=0&orderId=' + orderId
+          });
+        });
+      } else {
+        util.showErrorToast('下单失败');
+      }
+    });
+  },
   submitOrder: function() {
     if (this.data.addressId <= 0) {
       util.showErrorToast('请选择收货地址');
       return false;
     }
-    console.log(this.data)
     if (this.data.checkedAddress.provinceName.indexOf('海南') > -1 || this.data.checkedAddress.provinceName.indexOf('新疆') > -1 || this.data.checkedAddress.provinceName.indexOf('西藏') > -1) {
       wx.showModal({
         title: '以下地区暂未开通服务',
@@ -173,25 +223,22 @@ Page({
         return false;
       }
     }
-    util.request(api.OrderSubmit, {
-      addressId: this.data.addressId,
-      couponId: this.data.couponId,
-      type: this.data.buyType
-    }, 'POST', 'application/json').then(res => {
-      if (res.errno === 0) {
-        const orderId = res.data.orderInfo.id;
-        pay.payOrder(parseInt(orderId)).then(res => {
-          wx.redirectTo({
-            url: '/pages/payResult/payResult?status=1&orderId=' + orderId
-          });
-        }).catch(res => {
-          wx.redirectTo({
-            url: '/pages/payResult/payResult?status=0&orderId=' + orderId
-          });
-        });
-      } else {
-        util.showErrorToast('下单失败');
+
+    var that = this;
+    wx.showModal({
+      title: '提示',
+      content: '是否使用钱包余额支付?',
+      success: function(res) {
+        console.log(res);
+        if (res.confirm) {
+          that.balancePay();
+
+
+        } else if (res.cancel) {
+          that.pay();
+        }
       }
     });
+
   }
 })

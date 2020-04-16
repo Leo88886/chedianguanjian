@@ -2,7 +2,7 @@ var util = require('../../../utils/util.js');
 var api = require('../../../config/api.js');
 
 Page({
-  data:{
+  data: {
     orderList: [],
     page: 1,
     size: 10,
@@ -11,13 +11,13 @@ Page({
     nomore: false,
     totalPages: 1
   },
-  onLoad:function(options){
+  onLoad: function(options) {
     // 页面初始化 options为页面跳转所带来的参数
     // 页面显示
 
     wx.showLoading({
       title: '加载中...',
-      success: function () {
+      success: function() {
 
       }
     });
@@ -25,13 +25,13 @@ Page({
   },
 
   /**
-       * 页面上拉触底事件的处理函数
-       */
-  onReachBottom: function () {
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function() {
     this.getOrderList()
   },
 
-  getOrderList(){
+  getOrderList() {
     let that = this;
 
     if (that.data.totalPages <= that.data.page - 1) {
@@ -41,7 +41,10 @@ Page({
       return;
     }
 
-    util.request(api.OrderList, {page: that.data.page, size: that.data.size}).then(function (res) {
+    util.request(api.OrderList, {
+      page: that.data.page,
+      size: that.data.size
+    }).then(function(res) {
       if (res.errno === 0) {
         that.setData({
           orderList: that.data.orderList.concat(res.data.data),
@@ -52,24 +55,24 @@ Page({
       }
     });
   },
-  payOrder(event){
-      let that = this;
-      let orderIndex = event.currentTarget.dataset.orderIndex;
-      let order = that.data.orderList[orderIndex];
-      wx.redirectTo({
-          url: '/pages/pay/pay?orderId=' + order.id + '&actualPrice=' + order.actual_price,
-      })
+  payOrder(event) {
+    let that = this;
+    let orderIndex = event.currentTarget.dataset.orderIndex;
+    let order = that.data.orderList[orderIndex];
+    wx.redirectTo({
+      url: '/pages/pay/pay?orderId=' + order.id + '&actualPrice=' + order.actual_price,
+    })
   },
-  onReady:function(){
+  onReady: function() {
     // 页面渲染完成
   },
-  onShow:function(){
+  onShow: function() {
 
   },
-  onHide:function(){
+  onHide: function() {
     // 页面隐藏
   },
-  onUnload:function(){
+  onUnload: function() {
     // 页面关闭
   }
 })

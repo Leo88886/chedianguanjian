@@ -84,11 +84,11 @@ public class ApiWalletService {
      * 查询余额
      * @param openId
      */
-    public Integer queryBalance(String openId) {
-        int balance = 0;
+    public BigDecimal queryBalance(String openId) {
+         BigDecimal balance = new BigDecimal(0);
         WalletVo walletVo = apiWalletMapper.queryUserWallet(openId);
         if(null != walletVo){
-            balance = walletVo.getBalance().intValue();
+            balance = walletVo.getBalance();
         }
         return balance;
     }

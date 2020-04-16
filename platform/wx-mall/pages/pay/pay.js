@@ -7,32 +7,35 @@ Page({
     orderId: 0,
     actualPrice: 0.00
   },
-  onLoad: function (options) {
+  onLoad: function(options) {
     // 页面初始化 options为页面跳转所带来的参数
     this.setData({
       orderId: options.orderId,
       actualPrice: options.actualPrice
     })
   },
-  onReady: function () {
+  onReady: function() {
 
   },
-  onShow: function () {
+  onShow: function() {
     // 页面显示
 
   },
-  onHide: function () {
+  onHide: function() {
     // 页面隐藏
 
   },
-  onUnload: function () {
+  onUnload: function() {
     // 页面关闭
 
   },
   //向服务请求支付参数
   requestPayParam() {
     let that = this;
-    util.request(api.PayPrepayId, { orderId: that.data.orderId, payType: 1 }).then(function (res) {
+    util.request(api.PayPrepayId, {
+      orderId: that.data.orderId,
+      payType: 1
+    }).then(function(res) {
       if (res.errno === 0) {
         let payParam = res.data;
         console.log(payParam)
@@ -42,12 +45,12 @@ Page({
           'package': payParam.nonceStr,
           'signType': payParam.signType,
           'paySign': payParam.paySign,
-          'success': function (res) {
+          'success': function(res) {
             wx.redirectTo({
               url: '/pages/payResult/payResult?status=true',
             })
           },
-          'fail': function (res) {
+          'fail': function(res) {
             wx.redirectTo({
               url: '/pages/payResult/payResult?status=false',
             })
@@ -57,6 +60,34 @@ Page({
     });
   },
   startPay() {
-    this.requestPayParam();
+    let that = this;
+    wx.showModal({
+      title: '提示',
+      content: '是否使用钱包余额支付?',
+      success: function(res) {
+        console.log(res);
+        if (res.confirm) {
+          util.request(api.PayPrepayId, {
+            orderId: that.data.orderId,
+            payType: 1,
+            flag: 1
+          }).then(function(res) {
+            console.log(res.errno);
+            if (res.errno === 0) {
+              wx.redirectTo({
+                url: '/pages/payResult/payResult?status=1&orderId=' + that.data.orderId
+              });
+            }else{
+              wx.redirectTo({
+                url: '/pages/payResult/payResult?status=0&orderId=' + that.data.orderId
+              });
+            }
+          });
+        } else if (res.cancel) {
+          that.requestPayParam();
+        }
+      }
+    });
+
   }
 })

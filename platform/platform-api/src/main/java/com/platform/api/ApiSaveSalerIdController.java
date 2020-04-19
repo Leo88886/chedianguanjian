@@ -160,7 +160,7 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
                 List<ApiCusRelationVo> list = cusRelationService.getCusByFromOpenId( saleVo.getOpenId());
                 try {
                     if(null != list && list.size() > 0 ){
-                        cusRelationService.update(cusRelationVo);
+                        cusRelationService.update(list.get(0));
                     }else{  //第一次绑定发送优惠卷
                         cusRelationVo.setId(null);
                         cusRelationService.save(cusRelationVo);

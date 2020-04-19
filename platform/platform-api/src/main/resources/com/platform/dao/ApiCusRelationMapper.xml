@@ -29,7 +29,7 @@
     </select>
 
     <insert id="save" parameterType="com.platform.entity.ApiCusRelationVo" >
-		replace into nideshop_cus_relation(
+		insert into nideshop_cus_relation(
 			`id`,
 			`from_open_id`,
 			`to_open_id`,
@@ -45,17 +45,11 @@
 	</insert>
 
     <update id="update" parameterType="com.platform.entity.ApiCusRelationVo" >
-		replace into nideshop_cus_relation(
-			`from_open_id`,
-			`to_open_id`,
-			`saler_id`,
-			`create_time`)
-		values(
-			#{fromOpenId},
-			#{toOpenId},
-			#{salerId},
-			#{createTime}
-			)
+		update nideshop_cus_relation set
+			`from_open_id` =  #{fromOpenId},
+			`to_open_id` = #{toOpenId},
+			`saler_id` = #{salerId}
+			where id = #{id}
 	</update>
 
     <select id="getCusByToOpenid" resultType="com.platform.entity.ApiCusRelationVo">

@@ -127,10 +127,10 @@
             </foreach>
         </if>
         <if test="is_high_return != null and is_high_return != ''">
-            and (cash_back is not null or cash_back != '')
+            and cash_back is not null and cash_back != ''
         </if>
         <if test="is_high_coupon_return != null and is_high_coupon_return != ''">
-            and (coupon_back is not null or coupon_back != '')
+            and coupon_back is not null and coupon_back != ''
         </if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">

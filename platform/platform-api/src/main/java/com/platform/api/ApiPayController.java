@@ -187,7 +187,12 @@ public class ApiPayController extends ApiBaseAction {
             if(loginUser.getWeixin_openid()==null||orderId==null){
                 return toResponsObject(400, "支付接口异常", "");
             }
-            int result = walletService.reduceBalance(orderDetail.getOrder_price(),loginUser.getWeixin_openid(),3);
+            //查询推荐人
+            List<ApiCusRelationVo> cusRelationVo = cusRelationService.getCusByToOpenid(loginUser.getWeixin_openid());
+            int result = 1;
+            if(null != cusRelationVo && cusRelationVo.size() > 0){
+                result  = walletService.reduceBalance(orderDetail.getOrder_price(),loginUser.getWeixin_openid(),3);
+            }
             if(result == 1){
                 // 更改订单状态
                 // 业务处理
@@ -198,8 +203,38 @@ public class ApiPayController extends ApiBaseAction {
                 orderInfo.setShipping_status(0);
                 orderInfo.setPay_time(new Date());
                 orderService.update(orderInfo);
+                Map orderGoodsParam = new HashMap();
+                orderGoodsParam.put("order_id", orderId);
+                List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
 
-
+                BigDecimal cashBackSum = new BigDecimal(0);
+                if (null != orderGoods) {
+                    for (OrderGoodsVo orderGoodsVo : orderGoods) {
+                        GoodsVo goodsInfo = goodsService.queryObject(orderGoodsVo.getGoods_id());       //查询订单中的商品
+                        if (null != goodsInfo) {
+                            //计算返现金额
+                            if (null != goodsInfo.getCash_back() && goodsInfo.getCash_back().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
+                                if(null != cusRelationVo && cusRelationVo.size() > 0){
+                                    cashBackSum = cashBackSum.add(goodsInfo.getCash_back());
+                                }
+                            }
+                        /*//返卷
+                        if (null != goodsInfo.getCoupon_back() && !goodsInfo.getCoupon_back().equals("")) {
+                            UserVo user = userService.getUserByOpenId(loginUser.getWeixin_openid());
+                            UserCouponVo userCouponVo = new UserCouponVo();
+                            userCouponVo.setId(null);
+                            userCouponVo.setCoupon_id(Integer.valueOf(goodsInfo.getCoupon_back()));
+                            userCouponVo.setCoupon_number("1");
+                            userCouponVo.setUser_id(user.getUserId());
+                            userCouponVo.setAdd_time(new Date());
+                            userCouponService.save(userCouponVo);
+                        }*/
+                        }
+                    }
+                    if(null != cusRelationVo && cusRelationVo.size() > 0 && cashBackSum.compareTo(new BigDecimal(0)) > 0){      //返现
+                        walletService.addBalance(cashBackSum, cusRelationVo.get(0).getFromOpenId(),1);
+                    }
+                }
                 return toResponsObject(0, "支付成功", "");
             }else {
                 return toResponsObject(400, "支付失败", "");

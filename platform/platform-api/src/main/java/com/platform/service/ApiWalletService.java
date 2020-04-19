@@ -79,7 +79,7 @@ public class ApiWalletService {
             WalletWaterVo walletWaterVo = new WalletWaterVo();
             walletWaterVo.setOpenId(openId);
             walletWaterVo.setTime(new Date());
-            walletWaterVo.setDealNum(result);
+            walletWaterVo.setDealNum(reduceNum);
             walletWaterVo.setType(type);
             walletWaterMapper.saveWalletWater(walletWaterVo);
             return 1;

@@ -187,7 +187,7 @@ public class ApiPayController extends ApiBaseAction {
             if(loginUser.getWeixin_openid()==null||orderId==null){
                 return toResponsObject(400, "支付接口异常", "");
             }
-            int result = walletService.reduceBalance(orderDetail.getOrder_price(),loginUser.getWeixin_openid());
+            int result = walletService.reduceBalance(orderDetail.getOrder_price(),loginUser.getWeixin_openid(),1);
             if(result == 1){
                 // 更改订单状态
                 // 业务处理
@@ -198,6 +198,7 @@ public class ApiPayController extends ApiBaseAction {
                 orderInfo.setShipping_status(0);
                 orderInfo.setPay_time(new Date());
                 orderService.update(orderInfo);
+
 
                 return toResponsObject(0, "支付成功", "");
             }else {

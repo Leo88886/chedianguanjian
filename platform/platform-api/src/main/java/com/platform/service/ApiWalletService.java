@@ -58,7 +58,7 @@ public class ApiWalletService {
      * @return
      */
     @Transactional
-    public Integer reduceBalance(BigDecimal reduceNum, String openId) {
+    public Integer reduceBalance(BigDecimal reduceNum, String openId,Integer type) {
         WalletVo walletVo = apiWalletMapper.queryUserWallet(openId);
         WalletVo wo = new WalletVo();
         //第一次减少余额
@@ -76,6 +76,13 @@ public class ApiWalletService {
             wo.setOpenId(openId);
             wo.setBalance(result);
             apiWalletMapper.updateWalletBalance(wo);
+            // todo 流水维护
+            WalletWaterVo walletWaterVo = new WalletWaterVo();
+            walletWaterVo.setOpenId(openId);
+            walletWaterVo.setTime(new Date());
+            walletWaterVo.setDealNum(result);
+            walletWaterVo.setType(type);
+            walletWaterMapper.saveWalletWater(walletWaterVo);
             return 1;
         }
     }

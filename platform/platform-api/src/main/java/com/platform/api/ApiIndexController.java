@@ -249,7 +249,7 @@ public class ApiIndexController extends ApiBaseAction {
             //
             param = new HashMap<String, Object>();
             param.put("categoryIds", childCategoryIds);
-            param.put("fields", "a.id as id, a.name as name, a.list_pic_url as list_pic_url, a.retail_price as retail_price");
+            param.put("fields", "id as id, name as name, list_pic_url as list_pic_url, retail_price as retail_price");
             param.put("is_delete", "0");
             PageHelper.startPage(0, 7, false);
             List<GoodsVo> categoryGoods = goodsService.queryList(param);

@@ -29,20 +29,20 @@ public class ApiWalletService {
     public void addBalance(BigDecimal addNum, String openId,Integer type) {
         WalletVo walletVo = apiWalletMapper.queryUserWallet(openId);
         WalletVo wo = new WalletVo();
+        Date date = new Date();
         //第一次增加余额
         if (walletVo == null) {
             wo.setOpenId(openId);
             wo.setBalance(addNum);
-            // todo 改为insert
             apiWalletMapper.insertWalletBalance(wo);
-        } else {
+        } else { //对已有余额进行增加
             wo.setOpenId(openId);
             BigDecimal balance = walletVo.getBalance();
             BigDecimal afterAddNum = balance.add(addNum);
             wo.setBalance(afterAddNum);
             apiWalletMapper.updateWalletBalance(wo);
         }
-        // todo 流水维护
+        // 流水维护
         WalletWaterVo walletWaterVo = new WalletWaterVo();
         walletWaterVo.setOpenId(openId);
         walletWaterVo.setTime(new Date());
@@ -76,7 +76,6 @@ public class ApiWalletService {
             wo.setOpenId(openId);
             wo.setBalance(result);
             apiWalletMapper.updateWalletBalance(wo);
-            // todo 流水维护
             WalletWaterVo walletWaterVo = new WalletWaterVo();
             walletWaterVo.setOpenId(openId);
             walletWaterVo.setTime(new Date());

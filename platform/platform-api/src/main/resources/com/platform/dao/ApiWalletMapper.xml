@@ -23,15 +23,12 @@
 	 where open_id = #{walletVo.openId}
 	</update>
 
-	<insert id="insertWalletBalance" parameterType="com.platform.entity.WalletWaterVo" >
-		INSERT INTO nideshop_wallet_water
+	<insert id="insertWalletBalance" parameterType="com.platform.entity.WalletVo" >
+		INSERT INTO nideshop_wallet
 		VALUES
 	(
-		NULL,
-		#{walletWaterVo.openId},
-		#{walletWaterVo.time},
-		#{walletWaterVo.type},
-		#{walletWaterVo.dealNum}
+		#{walletVo.openId},
+		#{walletVo.balance}
 	)
 	</insert>
 </mapper>

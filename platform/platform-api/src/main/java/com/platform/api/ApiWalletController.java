@@ -141,6 +141,7 @@ public class ApiWalletController extends ApiBaseAction {
 
     }
 
+    @IgnoreAuth
     @PostMapping("buybanlanceresult")
     @ApiOperation(value = "余额充值结果")
     public Object buyBanlanceResult() {
@@ -197,7 +198,7 @@ public class ApiWalletController extends ApiBaseAction {
 
             String weixin_openid = openId;
             // 增加余额
-            apiWalletService.addBalance(balance, weixin_openid,2);
+            apiWalletService.addBalance(balance, weixin_openid,1);
 
             //维护流水
             WalletWaterVo wwo = new WalletWaterVo();

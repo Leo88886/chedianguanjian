@@ -187,14 +187,15 @@ Page({
   //充值\提现
   charge: function () {
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
+    var reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
     if (parseFloat(this.data.chargePrice) && this.data.chargePrice > 0
-      && openId != null && openId!='') {
+      && openId != null && openId != '' && reg.test(this.data.chargePrice)) {
       // action 0表示当前操作是充值操作，1表示当前操作是提现操作
       if (this.data.action == 0) { //充值操作
         //请调用充值接口，返回成功时候调用这个方法显示成功界面
         //this.charge_success();
        const balance = this.data.chargePrice
-      //  const that = this;
+       const that = this;
         wx.request({
           url: api.BuyBanlance,
           data: {
@@ -206,45 +207,43 @@ Page({
             'content-type': 'application/json'
           },
           success: function (res) {
-              console.log(res)
-          },
+              var payParam = res.data;
+            var orderId = payParam.data.orderId;
+            var balance = payParam.data.balance;
+              wx.requestPayment({
+                'timeStamp': payParam.data.timeStamp,
+                'nonceStr': payParam.data.nonceStr,
+                'package': payParam.data.package,
+                'signType': payParam.data.signType,
+                'paySign': payParam.data.paySign,
+                'success': function (res) {
+                  that.data.balanceOrderId = orderId
+                  that.data.buyBalance = balance
+
+                  //维护流水
+                  wx.request({
+                    url: api.BuyBanlanceResult,
+                    data: {
+                      openId: openId,
+                      balance: balance,
+                      orderId: orderId
+                    },
+                    method: 'POST',
+                    header: {
+                      'content-type': 'application/json'
+                    },
+                    success: function (res) {
+                      that.charge_success();
+                    },
+                    fail: function(res){
+                      that.charge_fail();
+                    }
+                  });
+                },
+              });
+
+          }
         });
-
-      //  return new Promise(function (resolve, reject) {
-      //     util.request(api.BuyBanlance, {
-      //       openId: openId,
-      //       balance: balance
-      //     }).then((res) => {
-      //       if (res.errno === 0) {
-      //         const payParam = res.data;
-      //         const orderId = payParam.orderId;
-      //         const balance = payParam.balance;
-      //         wx.requestPayment({
-      //           'timeStamp': payParam.timeStamp,
-      //           'nonceStr': payParam.nonceStr,
-      //           'package': payParam.package,
-      //           'signType': payParam.signType,
-      //           'paySign': payParam.paySign,
-      //           'success': function (res) {
-      //             that.data.balanceOrderId = orderId
-      //             that.data.buyBalance = balance 
-      //             that.data.buyResult = true
-      //             resolve(res);
-      //           },
-      //           'fail': function (res) {
-      //             // that.charge_fail();
-      //             reject(res);
-      //           },
-      //           'complete': function (res) {
-      //             reject(res);
-      //           }
-      //         });
-      //       } else {
-      //         reject(res);
-      //       }
-      //     });
-      //   });
-
       } 
       
       else { //提现操作
@@ -274,27 +273,7 @@ Page({
     wx.hideTabBar({
       animation: false,
     })
-    //获取当前充值金额以及orderId
-    const openId = wx.getStorageSync('openId'); //当前登陆用户openId
-    const balance = this.data.buyBalance
-    const orderId = this.data.balanceOrderId
-
-    wx.request({
-      url: api.BuyBanlanceResult,
-      data: {
-        openId: openId,
-        balance: balance,
-        orderId: orderId
-      },
-      method: 'POST',
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-       
-      }
-    });
-
+    this.onShow()
   },
 
   // 充值（提现）失败

@@ -13,8 +13,8 @@
   <view class="menuinfo">
     <view class='all'>
       <view class='verCodeView' style="margin-top:5px">
-        <text style='font-size:44rpx;color:#262626'>本月推广 {{saleMon}}人</text>
-        <text style='font-size:44rpx;color:#262626;margin-left:35px'>\n总计推广 {{saleAll}} 人</text>
+        <text style='font-size:44rpx;color:#262626'>本月推广 {{saleMon}}人(推广并下单)</text>
+        <text style='font-size:44rpx;color:#262626;margin-left:35px'>\n总计推广 {{saleAll}} 人(推广并下单)</text>
       </view>
     </view>
   </view>

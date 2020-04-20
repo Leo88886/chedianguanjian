@@ -1,6 +1,8 @@
 package com.platform.controller;
 
 import com.platform.entity.OrderEntity;
+import com.platform.entity.OrderGoodsEntity;
+import com.platform.service.OrderGoodsService;
 import com.platform.service.OrderService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
@@ -9,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +26,8 @@ import java.util.Map;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private OrderGoodsService orderGoodsService;
 
     /**
      * 列表
@@ -49,7 +54,10 @@ public class OrderController {
     @RequiresPermissions("order:info")
     public R info(@PathVariable("id") Integer id) {
         OrderEntity order = orderService.queryObject(id);
-
+        Map map = new HashMap();
+        map.put("orderId",order.getId());
+        List<OrderGoodsEntity> orderGoods = orderGoodsService.queryList(map);
+        order.setOrderGoodsEntity(orderGoods);
         return R.ok().put("order", order);
     }
 

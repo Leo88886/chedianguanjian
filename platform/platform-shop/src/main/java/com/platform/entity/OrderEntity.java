@@ -3,6 +3,7 @@ package com.platform.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -91,6 +92,7 @@ public class OrderEntity implements Serializable {
     //
     private String userName;
 
+    private List<OrderGoodsEntity> orderGoodsEntity;  //订单中商品
     public String getOrderType() {
         return orderType;
     }
@@ -561,5 +563,13 @@ public class OrderEntity implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public List<OrderGoodsEntity> getOrderGoodsEntity() {
+        return orderGoodsEntity;
+    }
+
+    public void setOrderGoodsEntity(List<OrderGoodsEntity> orderGoodsEntity) {
+        this.orderGoodsEntity = orderGoodsEntity;
     }
 }

@@ -72,7 +72,7 @@ public class ApiPayController extends ApiBaseAction {
         if (orderInfo.getPay_status() != 0 && orderInfo.getPay_status() != 1) {
             return toResponsObject(400, "订单已支付，请不要重复操作", "");
         }
-        if(flag.equals("1")){   //用钱包支付
+        if(null != flag && flag.equals("1")){   //用钱包支付
             BigDecimal balance = walletService.queryBalance(loginUser.getWeixin_openid());      //查询用户余额
             if(balance.compareTo(orderInfo.getOrder_price()) == 0 ||        //余额大于等于订单金额
                     balance.compareTo(orderInfo.getOrder_price()) == 1 ){
@@ -183,7 +183,7 @@ public class ApiPayController extends ApiBaseAction {
             return toResponsFail("订单不存在");
         }
         OrderVo orderDetail = orderService.queryObject(orderId);
-        if(flag.equals("1")){       //余额支付
+        if(null != flag && flag.equals("1")){       //余额支付
             if(loginUser.getWeixin_openid()==null||orderId==null){
                 return toResponsObject(400, "支付接口异常", "");
             }

@@ -69,7 +69,7 @@
                 </view>
                 <view class="price">
                   <text class="nowPrice">￥{{item.retail_price}}</text>
-                  <text class="oldPrice">￥{{item.market_price}}</text>
+                  <!-- <text class="oldPrice">￥{{item.market_price}}</text> -->
                 </view>
                 <image class="buyButton" src="../../static/images/ic_shop_buybutton.png"></image>
               </view>

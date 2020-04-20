@@ -21,12 +21,12 @@
       </view>
       <view class="item-down">充值</view>
     </view>
-    <!-- <view class="usermoney-item" data-action="1" bindtap="showChargeModal"> -->
-      <!-- <view class="item-up">
+    <view class="usermoney-item" data-action="1" bindtap="caocaocao">
+      <view class="item-up">
         <image src="../../../static/images/ic_userinfo_cash.png"></image>
       </view>
-      <view class="item-down">提现</view> -->
-    <!-- </view> -->
+      <view class="item-down">提现</view>
+    </view>
     <navigator url="/pages/ucenter/coupon/coupon" class="a">
       <view class="usermoney-item">
         <view class="item-up">0</view>

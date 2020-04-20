@@ -168,6 +168,16 @@ Page({
 
   },
 
+  //提现临时提示框
+  caocaocao: function (e) {
+    wx.showModal({
+      title: '提示',
+      content: '该功能35日后开放,您可以使用余额进行购买，或者耐心等待提现功能，抱歉~~',
+      success: function (res) {
+
+      }
+    });
+  },
 
   //充值（提现）弹出框
   showChargeModal: function (e) {

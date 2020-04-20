@@ -54,14 +54,14 @@ Page({
       }
     });
     //高返卷商品
-    util.request(api.IndexUrlHighCouponReturn).then(function(res) {
-      console.log(res.errno);
-      if (res.errno === 0) {
-        //res.data.highCouponReturnGoods[0].coupon_back 返卷金额
-        data.highCouponReturnGoods = res.data.highCouponReturnGoods
-        that.setData(data);
-      }
-    });
+    //util.request(api.IndexUrlHighCouponReturn).then(function(res) {
+    // console.log(res.errno);
+    //if (res.errno === 0) {
+    //res.data.highCouponReturnGoods[0].coupon_back 返卷金额
+    // data.highCouponReturnGoods = res.data.highCouponReturnGoods
+    //that.setData(data);
+    // }
+    //});
     //商品列表
     util.request(api.IndexUrlCategory).then(function(res) {
       if (res.errno === 0) {

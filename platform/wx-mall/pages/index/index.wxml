@@ -21,16 +21,16 @@
   </view>
   <view class="tab">
     <view class="btns">
-      <view class="{{0==active?'cur':''}}" data-index="0" bindtap="toggle">热门爆款</view>
-      <view class="{{1==active?'cur':''}}" data-index="1" bindtap="toggle">高返佣产品</view>
+      <!-- <view class="{{0==active?'cur':''}}" data-index="0" bindtap="toggle">热门爆款</view> -->
+      <view class="{{0==active?'cur':''}}" data-index="0" bindtap="toggle">高返佣产品</view>
     </view>
     <view class="cons">
-      <view class="{{0==active?'cur':'none'}}">
+      <!-- <view class="{{0==active?'cur':'none'}}">
         <view class="gooditem-view" wx:for="{{highCouponReturnGoods}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
           <navigator url="/pages/goods/goods?id={{item.id}}" class="gooditem">
             <view class="imgView">
               <image class="img" src="{{item.list_pic_url}}" background-size="cover"></image>
-              <!-- <text wx:if="{{item.cash_back}}">下单立返{{item.cash_back}}元</text> -->
+              <text wx:if="{{item.cash_back}}">下单立返{{item.cash_back}}元</text> 
             </view>
             <view class="right">
               <view class="text">
@@ -50,8 +50,8 @@
             </view>
           </navigator>
         </view>
-      </view>
-      <view class="{{1==active?'cur':'none'}}">
+      </view>-->
+      <view class="{{0==active?'cur':'none'}}">
         <view class="gooditem-view" wx:for="{{highReturnGoods}}" wx:for-index="index" wx:for-item="item" wx:key="{{item.id}}">
           <navigator url="/pages/goods/goods?id={{item.id}}" class="gooditem">
             <view class="imgView">

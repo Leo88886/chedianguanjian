@@ -183,8 +183,12 @@
                 <i-input v-model="order.freightPrice" readonly/>
             </Form-item>
 
-            <Form-item label="阿瑟东" prop="freightPrice">
-                <i-input v-model="order.orderGoodsEntity" readonly/>
+            <Form-item label="订单详情" prop="orderGoodsDetails">
+                <i-input v-model="order.orderGoodsDetails" readonly/>
+            </Form-item>
+
+            <Form-item label="订单总重" prop="weight">
+                <i-input v-model="order.weight" readonly/>
             </Form-item>
 
             <Form-item>

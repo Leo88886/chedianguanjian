@@ -1,9 +1,13 @@
 package com.platform.controller;
 
+import com.platform.entity.GoodsSpecificationEntity;
 import com.platform.entity.OrderEntity;
 import com.platform.entity.OrderGoodsEntity;
+import com.platform.entity.SpecificationEntity;
+import com.platform.service.GoodsSpecificationService;
 import com.platform.service.OrderGoodsService;
 import com.platform.service.OrderService;
+import com.platform.service.SpecificationService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
@@ -11,9 +15,12 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -28,6 +35,9 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private OrderGoodsService orderGoodsService;
+    @Autowired
+    private GoodsSpecificationService goodsSpecificationService;
+
 
     /**
      * 列表
@@ -56,8 +66,33 @@ public class OrderController {
         OrderEntity order = orderService.queryObject(id);
         Map map = new HashMap();
         map.put("orderId",order.getId());
-        List<OrderGoodsEntity> orderGoods = orderGoodsService.queryList(map);
-        order.setOrderGoodsEntity(orderGoods);
+        List<OrderGoodsEntity> orderGoods = orderGoodsService.queryOrderDateals(map);
+        String orderGoodsDetails = "";
+        if(null != orderGoods && orderGoods.size() > 0){
+            for(OrderGoodsEntity orderGood : orderGoods){
+                //名称
+                if(null != orderGood.getGoodsName() && !orderGood.getGoodsName().equals("")){
+                    orderGoodsDetails += orderGood.getGoodsName();
+                }
+                //规格
+                List<String> idList = Arrays.asList(orderGood.getGoodsSpecifitionIds().split("_"));
+                List<GoodsSpecificationEntity> list = goodsSpecificationService.queryListByIds(idList);       //查询规格
+                if(null != list && list.size() >0){
+                    for(int i=0;i<list.size();i++){
+                        if(null != list.get(i)){
+                            orderGoodsDetails += "-"+list.get(i).getValue();
+                        }
+                    }
+                }
+                //价格和数量
+                if(null != orderGood.getRetailPrice() && !orderGood.getRetailPrice().equals("")){
+                    orderGoodsDetails += "-"+orderGood.getRetailPrice()+"元x"+orderGood.getNumber()+",  ";
+                }
+            }
+            order.setOrderGoodsDetails(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1));
+            getWeight(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1));
+            order.setWeight(getWeight(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1)));
+        }
         return R.ok().put("order", order);
     }
 
@@ -142,4 +177,56 @@ public class OrderController {
 
         return R.ok();
     }
+
+
+    public String  getWeight(String str) {
+        String[] arr = str.split(",");
+        String number ="";
+        Double weightAll = 0.0;
+        for(int i=0;i<arr.length;i++){
+            if(arr[i].indexOf("x") > -1){
+                number = arr[i].substring(arr[i].indexOf("x")+1); //截取数量
+
+            }
+            double num = Double.parseDouble(number);
+            double weight = getNumber(arr[i]);  //截取规格（重量）
+            if(weight != 0) {
+                weightAll += num * weight;
+            }
+        }
+        return weightAll+"L";
+    }
+
+    /**
+     * 截取字符转中2个字符之间的内容
+     * @param str
+     * @return
+     */
+    public double  getNumber(String str) {
+        String regex="-(.*?)-";
+        Pattern p=Pattern.compile(regex);
+        Matcher m=p.matcher(str);
+        while(m.find()){
+            return getNumber2(m.group(1));
+        }
+        return 0.0;
+    }
+
+    /**
+     * 截取字符串中的数据
+     * @param str
+     * @return
+     */
+    public double  getNumber2(String str) {
+        String regEx = "[^0-9]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        if(str.indexOf("ML") > -1 || str.indexOf("mL") > -1  || str.indexOf("Ml") > -1  || str.indexOf("ml") > -1 ){
+            return Double.parseDouble(m.replaceAll("").trim()) / 1000;
+        }else{
+            return Double.parseDouble(m.replaceAll("").trim());
+        }
+
+    }
+
 }

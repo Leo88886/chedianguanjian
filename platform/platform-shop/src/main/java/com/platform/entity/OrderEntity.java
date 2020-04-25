@@ -92,7 +92,8 @@ public class OrderEntity implements Serializable {
     //
     private String userName;
 
-    private List<OrderGoodsEntity> orderGoodsEntity;  //订单中商品
+    private String orderGoodsDetails;  //订单中商品
+    private String weight;
     public String getOrderType() {
         return orderType;
     }
@@ -565,11 +566,19 @@ public class OrderEntity implements Serializable {
         this.userName = userName;
     }
 
-    public List<OrderGoodsEntity> getOrderGoodsEntity() {
-        return orderGoodsEntity;
+    public String getOrderGoodsDetails() {
+        return orderGoodsDetails;
     }
 
-    public void setOrderGoodsEntity(List<OrderGoodsEntity> orderGoodsEntity) {
-        this.orderGoodsEntity = orderGoodsEntity;
+    public void setOrderGoodsDetails(String orderGoodsDetails) {
+        this.orderGoodsDetails = orderGoodsDetails;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 }

@@ -69,4 +69,6 @@ public interface GoodsSpecificationService {
      * @return 删除条数
      */
     int deleteBatch(Integer[] ids);
+
+    List<GoodsSpecificationEntity> queryListByIds(List<String> idList);
 }

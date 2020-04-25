@@ -21,7 +21,8 @@ $(function () {
             {label: '商品序列号', name: 'goodsSn', index: 'goods_sn', width: 80},
             {label: '商品库存', name: 'goodsNumber', index: 'goods_number', width: 80},
             {label: '零售价格(元)', name: 'retailPrice', index: 'retail_price', width: 80},
-            {label: '市场价格(元)', name: 'marketPrice', index: 'market_price', width: 80}]
+            {label: '市场价格(元)', name: 'marketPrice', index: 'market_price', width: 80},
+            {label: '返现金额(元)', name: 'cashBack', index: 'cash_back', width: 80}]
     });
 });
 

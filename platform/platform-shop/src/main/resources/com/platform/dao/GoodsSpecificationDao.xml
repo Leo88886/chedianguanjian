@@ -22,6 +22,21 @@
 		where id = #{id}
 	</select>
 
+    <select id="queryListByIds" resultType="com.platform.entity.GoodsSpecificationEntity">
+		select
+			`id`,
+			`goods_id`,
+			`specification_id`,
+			`value`,
+			`pic_url`
+		from nideshop_goods_specification
+		where
+            id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+
     <select id="queryList" resultType="com.platform.entity.GoodsSpecificationEntity">
         select
         nideshop_goods_specification.id,

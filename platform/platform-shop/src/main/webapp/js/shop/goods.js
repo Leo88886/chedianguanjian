@@ -28,7 +28,7 @@ $(function () {
                 }
             },
             {label: '返现', name: 'cashBack', index: 'cash_back', width: 80},
-            {label: '返卷', name: 'couponBack', index: 'coupon_back', width: 80}
+            /*{label: '返卷', name: 'couponBack', index: 'coupon_back', width: 80}*/
             ]
     });
     $('#goodsDesc').editable({

@@ -50,5 +50,10 @@ public class OrderGoodsServiceImpl implements OrderGoodsService {
 	public void deleteBatch(Integer[] ids){
 		orderGoodsDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public List<OrderGoodsEntity> queryOrderDateals(Map<String, Object> map) {
+		return orderGoodsDao.queryOrderDateals(map);
+	}
+
 }

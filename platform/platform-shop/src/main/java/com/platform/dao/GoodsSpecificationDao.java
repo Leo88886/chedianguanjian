@@ -2,6 +2,8 @@ package com.platform.dao;
 
 import com.platform.entity.GoodsSpecificationEntity;
 
+import java.util.List;
+
 /**
  * 商品对应规格表值表Dao
  *
@@ -11,4 +13,5 @@ import com.platform.entity.GoodsSpecificationEntity;
  */
 public interface GoodsSpecificationDao extends BaseDao<GoodsSpecificationEntity> {
 
+    List<GoodsSpecificationEntity> queryListByIds(List<String> idList);
 }

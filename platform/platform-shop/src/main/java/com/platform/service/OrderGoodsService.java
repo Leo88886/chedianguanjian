@@ -27,4 +27,6 @@ public interface OrderGoodsService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
+	List<OrderGoodsEntity> queryOrderDateals(Map<String, Object> map);
 }

@@ -42,7 +42,41 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
-	
+
+	<select id="queryOrderDateals" resultType="com.platform.entity.OrderGoodsEntity">
+		SELECT
+		g.order_id,
+		g.goods_id,
+		g.goods_name,
+		g.goods_sn,
+		g.product_id,
+		g.number,
+		g.market_price,
+		g.retail_price,
+		g.goods_specifition_name_value,
+		g.is_real,
+		p.goods_specification_ids AS goods_specifition_ids,
+		g.list_pic_url
+		FROM
+		nideshop_order_goods g
+		LEFT JOIN nideshop_product p ON g.product_id = p.id
+		WHERE 1=1
+		<if test="orderId != null and orderId != ''">
+			AND g.order_id = #{orderId}
+		</if>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				order by g.id desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
  	<select id="queryTotal" resultType="int">
 		select count(*) from nideshop_order_goods
 		WHERE 1=1
@@ -50,42 +84,42 @@
 			AND order_id = #{orderId}
 		</if>
 	</select>
-	 
+
 	<insert id="save" parameterType="com.platform.entity.OrderGoodsEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_order_goods
 		(
-			`order_id`, 
-			`goods_id`, 
-			`goods_name`, 
-			`goods_sn`, 
-			`product_id`, 
-			`number`, 
-			`market_price`, 
-			`retail_price`, 
-			`goods_specifition_name_value`, 
-			`is_real`, 
-			`goods_specifition_ids`, 
+			`order_id`,
+			`goods_id`,
+			`goods_name`,
+			`goods_sn`,
+			`product_id`,
+			`number`,
+			`market_price`,
+			`retail_price`,
+			`goods_specifition_name_value`,
+			`is_real`,
+			`goods_specifition_ids`,
 			`list_pic_url`
 		)
 		values
 		(
-			#{orderId}, 
-			#{goodsId}, 
-			#{goodsName}, 
-			#{goodsSn}, 
-			#{productId}, 
-			#{number}, 
-			#{marketPrice}, 
-			#{retailPrice}, 
-			#{goodsSpecifitionNameValue}, 
-			#{isReal}, 
-			#{goodsSpecifitionIds}, 
+			#{orderId},
+			#{goodsId},
+			#{goodsName},
+			#{goodsSn},
+			#{productId},
+			#{number},
+			#{marketPrice},
+			#{retailPrice},
+			#{goodsSpecifitionNameValue},
+			#{isReal},
+			#{goodsSpecifitionIds},
 			#{listPicUrl}
 		)
 	</insert>
-	 
+
 	<update id="update" parameterType="com.platform.entity.OrderGoodsEntity">
-		update nideshop_order_goods 
+		update nideshop_order_goods
 		<set>
 			<if test="orderId != null">`order_id` = #{orderId}, </if>
 			<if test="goodsId != null">`goods_id` = #{goodsId}, </if>
@@ -102,13 +136,13 @@
 		</set>
 		where id = #{id}
 	</update>
-	
+
 	<delete id="delete">
 		delete from nideshop_order_goods where id = #{value}
 	</delete>
-	
+
 	<delete id="deleteBatch">
-		delete from nideshop_order_goods where id in 
+		delete from nideshop_order_goods where id in
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

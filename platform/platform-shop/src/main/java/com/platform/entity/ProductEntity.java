@@ -29,6 +29,10 @@ public class ProductEntity implements Serializable {
     private BigDecimal retailPrice;
     //市场价格
     private BigDecimal marketPrice;
+    //返现金额
+    private BigDecimal cashBack;
+    //非北京天津河北  不可以购买
+    private String isPurchase ;
 
 
 
@@ -145,5 +149,21 @@ public class ProductEntity implements Serializable {
 
     public void setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+    }
+
+    public BigDecimal getCashBack() {
+        return cashBack;
+    }
+
+    public void setCashBack(BigDecimal cashBack) {
+        this.cashBack = cashBack;
+    }
+
+    public String getIsPurchase() {
+        return isPurchase;
+    }
+
+    public void setIsPurchase(String isPurchase) {
+        this.isPurchase = isPurchase;
     }
 }

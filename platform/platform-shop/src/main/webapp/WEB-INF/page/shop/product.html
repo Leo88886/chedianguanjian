@@ -75,6 +75,10 @@
                 <Input-number :min="0" :step="1" v-model="product.marketPrice" placeholder="市场价格"
                               style="width: 188px;"/>
             </Form-item>
+            <Form-item label="返现金额" prop="marketPrice">
+                <Input-number :min="0" :step="1" v-model="product.cashBack" placeholder="市场价格"
+                              style="width: 188px;"/>
+            </Form-item>
             <Form-item>
                 <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>
                 <i-button type="warning" @click="reload" style="margin-left: 8px"/>

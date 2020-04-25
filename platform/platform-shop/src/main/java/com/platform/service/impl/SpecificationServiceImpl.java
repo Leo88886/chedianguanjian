@@ -50,5 +50,4 @@ public class SpecificationServiceImpl implements SpecificationService {
 	public void deleteBatch(Integer[] ids){
 		specificationDao.deleteBatch(ids);
 	}
-	
 }

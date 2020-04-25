@@ -39,6 +39,8 @@ public class OrderGoodsVo implements Serializable {
     private String goods_specifition_ids;
     //图片链接
     private String list_pic_url;
+    //返现金额
+    private BigDecimal cashBack;
 
     public Integer getId() {
         return id;
@@ -142,5 +144,13 @@ public class OrderGoodsVo implements Serializable {
 
     public void setList_pic_url(String list_pic_url) {
         this.list_pic_url = list_pic_url;
+    }
+
+    public BigDecimal getCashBack() {
+        return cashBack;
+    }
+
+    public void setCashBack(BigDecimal cashBack) {
+        this.cashBack = cashBack;
     }
 }

@@ -42,8 +42,6 @@ public class ApiPayController extends ApiBaseAction {
     @Autowired
     private ApiWalletService walletService;     //钱包接口
     @Autowired
-    private ApiGoodsService goodsService;       //商品接口
-    @Autowired
     private ApiCusRelationService cusRelationService;
 
     /**
@@ -206,29 +204,14 @@ public class ApiPayController extends ApiBaseAction {
                 Map orderGoodsParam = new HashMap();
                 orderGoodsParam.put("order_id", orderId);
                 List<OrderGoodsVo> orderGoods = orderGoodsService.queryList(orderGoodsParam);
-
                 BigDecimal cashBackSum = new BigDecimal(0);
                 if (null != orderGoods) {
                     for (OrderGoodsVo orderGoodsVo : orderGoods) {
-                        GoodsVo goodsInfo = goodsService.queryObject(orderGoodsVo.getGoods_id());       //查询订单中的商品
-                        if (null != goodsInfo) {
-                            //计算返现金额
-                            if (null != goodsInfo.getCash_back() && goodsInfo.getCash_back().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
-                                if(null != cusRelationVo && cusRelationVo.size() > 0){
-                                    cashBackSum = cashBackSum.add(goodsInfo.getCash_back());
-                                }
+                        //计算返现金额
+                        if (null != orderGoodsVo.getCashBack() && orderGoodsVo.getCashBack().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
+                            if(null != cusRelationVo && cusRelationVo.size() > 0){
+                                cashBackSum = cashBackSum.add(orderGoodsVo.getCashBack());
                             }
-                        /*//返卷
-                        if (null != goodsInfo.getCoupon_back() && !goodsInfo.getCoupon_back().equals("")) {
-                            UserVo user = userService.getUserByOpenId(loginUser.getWeixin_openid());
-                            UserCouponVo userCouponVo = new UserCouponVo();
-                            userCouponVo.setId(null);
-                            userCouponVo.setCoupon_id(Integer.valueOf(goodsInfo.getCoupon_back()));
-                            userCouponVo.setCoupon_number("1");
-                            userCouponVo.setUser_id(user.getUserId());
-                            userCouponVo.setAdd_time(new Date());
-                            userCouponService.save(userCouponVo);
-                        }*/
                         }
                     }
                     if(null != cusRelationVo && cusRelationVo.size() > 0 && cashBackSum.compareTo(new BigDecimal(0)) > 0){      //返现
@@ -294,25 +277,11 @@ public class ApiPayController extends ApiBaseAction {
                 BigDecimal cashBackSum = new BigDecimal(0);
                 if (null != orderGoods) {
                     for (OrderGoodsVo orderGoodsVo : orderGoods) {
-                        GoodsVo goodsInfo = goodsService.queryObject(orderGoodsVo.getGoods_id());       //查询订单中的商品
-                        if (null != goodsInfo) {
                             //计算返现金额
-                            if (null != goodsInfo.getCash_back() && goodsInfo.getCash_back().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
+                            if (null != orderGoodsVo.getCashBack() && orderGoodsVo.getCashBack().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
                                 if(null != cusRelationVo && cusRelationVo.size() > 0){
-                                    cashBackSum = cashBackSum.add(goodsInfo.getCash_back());
-                                }
+                                    cashBackSum = cashBackSum.add(orderGoodsVo.getCashBack());
                             }
-                        /*//返卷
-                        if (null != goodsInfo.getCoupon_back() && !goodsInfo.getCoupon_back().equals("")) {
-                            UserVo user = userService.getUserByOpenId(loginUser.getWeixin_openid());
-                            UserCouponVo userCouponVo = new UserCouponVo();
-                            userCouponVo.setId(null);
-                            userCouponVo.setCoupon_id(Integer.valueOf(goodsInfo.getCoupon_back()));
-                            userCouponVo.setCoupon_number("1");
-                            userCouponVo.setUser_id(user.getUserId());
-                            userCouponVo.setAdd_time(new Date());
-                            userCouponService.save(userCouponVo);
-                        }*/
                         }
                     }
                     if(null != cusRelationVo && cusRelationVo.size() > 0 && cashBackSum.compareTo(new BigDecimal(0)) > 0){      //返现

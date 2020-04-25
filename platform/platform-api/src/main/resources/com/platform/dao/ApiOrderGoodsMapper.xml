@@ -25,7 +25,7 @@
 	</select>
 
     <select id="queryList" resultMap="orderGoodsMap">
-        select * from nideshop_order_goods
+        select g.*,p.cash_back as cashBack from nideshop_order_goods g left join nideshop_product p on g.product_id = p.id
         <where>
             <if test="order_id != null and order_id != ''">
                 and order_id = #{order_id}

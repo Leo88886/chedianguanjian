@@ -2,6 +2,8 @@
     <view class="order-info">
         <view class="item-a">下单时间：{{orderInfo.add_time}}</view>
         <view class="item-b">订单编号：{{orderInfo.order_sn}}</view>
+         <view class="item-b">快递公司：{{orderInfo.shipping_name==null?'暂无':orderInfo.shipping_name}}</view>
+          <view class="item-b">快递单号：{{orderInfo.shipping_no==null?'暂无':orderInfo.shipping_no}}</view>
         <view class="item-c">
             <view class="l">实付：<text class="cost">￥{{orderInfo.actual_price}}</text></view>
             <view class="r">

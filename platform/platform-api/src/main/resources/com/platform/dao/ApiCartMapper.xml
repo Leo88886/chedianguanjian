@@ -20,6 +20,7 @@
         <result property="goods_specifition_ids" column="goods_specifition_ids"/>
         <result property="checked" column="checked"/>
         <result property="list_pic_url" column="list_pic_url"/>
+        <result property="is_purchase" column="is_purchase"/>
     </resultMap>
 
     <select id="queryObject" resultMap="cartMap">
@@ -29,7 +30,8 @@
     <select id="queryList" resultMap="cartMap">
         select a.*,
         b.list_pic_url as list_pic_url,
-        c.retail_price as retail_product_price
+        c.retail_price as retail_product_price,
+        c.is_purchase as is_purchase
         from nideshop_cart a
         left join nideshop_goods b on a.goods_id = b.id
         left join nideshop_product c on c.goods_id = a.goods_id and c.id = a.product_id

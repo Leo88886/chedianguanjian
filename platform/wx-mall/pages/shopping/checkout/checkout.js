@@ -205,6 +205,19 @@ Page({
       util.showErrorToast('请选择收货地址');
       return false;
     }
+    var list = this.data.checkedGoodsList;
+    if (list != null && list.length>=0) {
+      for (var i = 0; i < list.length;i++){
+        if (list[i].is_purchase != null && list[i].is_purchase=='1'){
+            wx.showModal({
+              title: '部分商品不支持京津冀地区外的配送' ,
+              content: '该订单中不支持的商品:' + list[i].goods_name,
+              success: function (res) { }
+            })
+          return false;
+          }
+      }
+    }
     if (this.data.checkedAddress.provinceName.indexOf('海南') > -1 || this.data.checkedAddress.provinceName.indexOf('新疆') > -1 || this.data.checkedAddress.provinceName.indexOf('西藏') > -1) {
       wx.showModal({
         title: '以下地区暂未开通服务',

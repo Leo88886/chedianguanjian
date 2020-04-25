@@ -34,6 +34,17 @@ public class ProductVo implements Serializable {
     //商品图片
     private String list_pic_url;
 
+    //是否北京天津河北可以购买 地区限制 特殊处理此处
+    private String is_purchase;
+
+    public String getIs_purchase() {
+        return is_purchase;
+    }
+
+    public void setIs_purchase(String is_purchase) {
+        this.is_purchase = is_purchase;
+    }
+
     public String getGoods_name() {
         return goods_name;
     }

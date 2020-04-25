@@ -10,6 +10,7 @@ import com.platform.util.ApiBaseAction;
 import com.qiniu.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,8 @@ public class ApiCartController extends ApiBaseAction {
     private ApiCouponService apiCouponService;
     @Autowired
     private ApiCouponMapper apiCouponMapper;
-
+    @Autowired
+    private ApiGoodsSpecificationService apiGoodsSpecificationService;
     /**
      * 获取购物车中的数据
      */
@@ -435,6 +437,7 @@ public class ApiCartController extends ApiBaseAction {
             cartVo.setNumber(goodsVO.getNumber());
             cartVo.setRetail_price(productInfo.getRetail_price());
             cartVo.setList_pic_url(productInfo.getList_pic_url());
+            cartVo.setIs_purchase(productInfo.getIs_purchase());
             checkedGoodsList.add(cartVo);
         }
 

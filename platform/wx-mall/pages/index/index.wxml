@@ -56,7 +56,7 @@
           <navigator url="/pages/goods/goods?id={{item.id}}" class="gooditem">
             <view class="imgView">
               <image class="img" src="{{item.list_pic_url}}" background-size="cover"></image>
-              <text wx:if="{{item.cash_back}}">下单立返{{item.cash_back}}元</text>
+              <text wx:if="{{item.cash_back}}">下单返{{item.cash_back}}元起</text>
             </view>
             <view class="right">
               <view class="text">

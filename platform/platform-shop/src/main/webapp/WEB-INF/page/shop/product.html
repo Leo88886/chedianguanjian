@@ -79,6 +79,10 @@
                 <Input-number :min="0" :step="1" v-model="product.cashBack" placeholder="市场价格"
                               style="width: 188px;"/>
             </Form-item>
+            <Form-item label="非北京天津河北不可以购买(配置1为不可购买)" prop="product.isPurchase">
+                <Input-number :min="0" :step="1" v-model="product.is_purchase" placeholder="市场价格"
+                              style="width: 188px;"/>
+            </Form-item>
             <Form-item>
                 <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>
                 <i-button type="warning" @click="reload" style="margin-left: 8px"/>

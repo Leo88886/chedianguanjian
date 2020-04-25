@@ -20,8 +20,9 @@ Page({
     userHasCollect: 0,
     number: 1,
     checkedSpecText: '请选择规格数量',
+    cashBack: '0',
     openAttr: false,
-    retail_price:"",
+    retail_price: "",
     noCollectImage: "/static/images/icon_collect.png",
     hasCollectImage: "/static/images/icon_collect_checked.png",
     collectBackImage: "/static/images/icon_collect.png"
@@ -34,7 +35,7 @@ Page({
           goods: res.data.info,
           retail_price: res.data.info.retail_price,
           gallery: res.data.gallery,
-         // attribute: res.data.attribute,
+          // attribute: res.data.attribute,
           issueList: res.data.issue,
           comment: res.data.comment,
           brand: res.data.brand,
@@ -42,8 +43,8 @@ Page({
           productList: res.data.productList,
           userHasCollect: res.data.userHasCollect
         });
-          //设置默认值
-          that.setDefSpecInfo(that.data.specificationList);
+        //设置默认值
+        that.setDefSpecInfo(that.data.specificationList);
         if (res.data.userHasCollect == 1) {
           that.setData({
             'collectBackImage': that.data.hasCollectImage
@@ -82,6 +83,15 @@ Page({
         that.setData({
           retail_price: this.data.productList[a].retail_price
         });
+        if (null != this.data.productList[a].cash_back && "undefined" != this.data.productList[a].cash_back) {
+          that.setData({
+            cashBack: this.data.productList[a].cash_back
+          });
+        }else{
+          that.setData({
+            cashBack: 0
+          });
+        }
 
       }
     }
@@ -264,7 +274,7 @@ Page({
         .then(function (res) {
           let _res = res;
           if (_res.errno == 0) {
-            if ( _res.data.type == 'add') {
+            if (_res.data.type == 'add') {
               that.setData({
                 'collectBackImage': that.data.hasCollectImage
               });
@@ -328,7 +338,7 @@ Page({
       }
 
       // 直接购买商品
-      util.request(api.BuyAdd, { goodsId: this.data.goods.id, number: this.data.number, productId: checkedProduct[0].id }, "POST",'application/json')
+      util.request(api.BuyAdd, { goodsId: this.data.goods.id, number: this.data.number, productId: checkedProduct[0].id }, "POST", 'application/json')
         .then(function (res) {
           let _res = res;
           if (_res.errno == 0) {
@@ -366,9 +376,9 @@ Page({
 
       //提示选择完整规格
       if (!this.isCheckedAllSpec()) {
-          wx.showToast({
-              title: '请选择完整规格'
-          });
+        wx.showToast({
+          title: '请选择完整规格'
+        });
         return false;
       }
 
@@ -432,22 +442,22 @@ Page({
       number: this.data.number + 1
     });
   },
-    setDefSpecInfo: function (specificationList) {
-        //未考虑规格联动情况
-        let that = this;
-        if (!specificationList)return;
-        for (let i = 0; i < specificationList.length;i++){
-            let specification = specificationList[i];
-            let specNameId = specification.specification_id;
-            //规格只有一个时自动选择规格
-            if (specification.valueList && specification.valueList.length == 1){
-                let specValueId = specification.valueList[0].id;
-                that.clickSkuValue({ currentTarget: { dataset: { "nameId": specNameId, "valueId": specValueId } } });
-            }
-        }
-        specificationList.map(function(item){
-
-        });
-
+  setDefSpecInfo: function (specificationList) {
+    //未考虑规格联动情况
+    let that = this;
+    if (!specificationList) return;
+    for (let i = 0; i < specificationList.length; i++) {
+      let specification = specificationList[i];
+      let specNameId = specification.specification_id;
+      //规格只有一个时自动选择规格
+      if (specification.valueList && specification.valueList.length == 1) {
+        let specValueId = specification.valueList[0].id;
+        that.clickSkuValue({ currentTarget: { dataset: { "nameId": specNameId, "valueId": specValueId } } });
+      }
     }
+    specificationList.map(function (item) {
+
+    });
+
+  }
 })

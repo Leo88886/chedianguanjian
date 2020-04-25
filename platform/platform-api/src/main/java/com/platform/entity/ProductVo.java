@@ -36,6 +36,8 @@ public class ProductVo implements Serializable {
 
     //是否北京天津河北可以购买 地区限制 特殊处理此处
     private String is_purchase;
+    //返现金额
+    private String cash_back;
 
     public String getIs_purchase() {
         return is_purchase;
@@ -123,5 +125,13 @@ public class ProductVo implements Serializable {
 
     public void setMarket_price(BigDecimal market_price) {
         this.market_price = market_price;
+    }
+
+    public String getCash_back() {
+        return cash_back;
+    }
+
+    public void setCash_back(String cash_back) {
+        this.cash_back = cash_back;
     }
 }

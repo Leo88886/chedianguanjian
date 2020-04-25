@@ -203,6 +203,9 @@ public class OrderController {
      * @return
      */
     public double  getNumber(String str) {
+        if(str.indexOf("2*20") > -1 || str.indexOf("2x20") > -1){
+            return 40;
+        }
         String regex="-(.*?)-";
         Pattern p=Pattern.compile(regex);
         Matcher m=p.matcher(str);

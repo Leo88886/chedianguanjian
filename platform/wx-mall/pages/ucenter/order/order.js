@@ -5,7 +5,7 @@ Page({
   data: {
     orderList: [],
     page: 1,
-    size: 10,
+    size: 1000,
     loadmoreText: '正在加载更多数据',
     nomoreText: '全部加载完成',
     nomore: false,
@@ -27,9 +27,9 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
-    this.getOrderList()
-  },
+ // onReachBottom: function() {
+  //  this.getOrderList()
+ // },
 
   getOrderList() {
     let that = this;

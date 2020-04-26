@@ -84,7 +84,7 @@
 			`goods_number`,
 			`retail_price`,
 			`market_price`,
-			`cash_back`
+			`cash_back`,
 			`is_purchase`)
 		values(
 			#{goodsId},

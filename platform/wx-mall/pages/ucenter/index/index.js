@@ -16,10 +16,26 @@ Page({
     chargeFailModalShow: false, //充值（提现）失败弹框
     balanceOrderId: '', //充值订单id
     buyBalance: 0 ,//最近一次充值金额
-    buyResult: false
+    buyResult: false,
+    salerId : '暂无'
   },
   onLoad: function (options) {
-    
+    var that = this;
+    wx.request({
+      url: api.GetRelation,
+      data: {
+        openId: wx.getStorageSync('openId'), //当前登陆用户openId
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        that.setData({
+          salerId: res.data.salerId
+        })
+      }
+    });
   },
   onReady: function () {
 

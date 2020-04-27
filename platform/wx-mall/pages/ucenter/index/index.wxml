@@ -7,7 +7,12 @@
       </view>
     </view>
     <view>
-      <text class="userinfo-xs">推荐人:{{referrer}}</text>
+      <view>
+        <text class="userinfo-xs">推荐人:{{referrer}} </text>
+      </view>
+      <view>
+        <text class="userinfo-xs">推荐码:{{salerId}} </text>
+      </view>
     </view>
   </button>
   <view class="usermoney">

@@ -17,7 +17,8 @@ Page({
     balanceOrderId: '', //充值订单id
     buyBalance: 0 ,//最近一次充值金额
     buyResult: false,
-    salerId : '暂无'
+    salerId : '暂无',
+    mySalerId : '暂无'
   },
   onLoad: function (options) {
     var that = this;
@@ -32,7 +33,8 @@ Page({
       },
       success: function (res) {
         that.setData({
-          salerId: res.data.salerId
+          salerId: res.data.salerId,
+          mySalerId: res.data.mySalerId
         })
       }
     });

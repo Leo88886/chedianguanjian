@@ -13,6 +13,9 @@
       <view>
         <text class="userinfo-xs">推荐码:{{salerId}} </text>
       </view>
+        <view>
+        <text class="userinfo-xs">我的销售码:{{mySalerId}} </text>
+      </view>
     </view>
   </button>
   <view class="usermoney">

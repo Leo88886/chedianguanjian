@@ -21,7 +21,7 @@
 
   <view style="background: white;margin: 15rpx 30rpx;padding: 25rpx 50rpx;justify-content: space-between;align-items:center;border-radius: 20rpx;">
     <view class='verCodeSendView' style="margin-top:25px">
-      <text style='font-size:35rpx;color:#9b9b9b；background-color:red'>绑定分销码：</text>
+      <text style='font-size:35rpx;color:#9b9b9b；background-color:red'>绑定推荐码：</text>
     </view>
 
     <view class="section">

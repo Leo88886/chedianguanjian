@@ -210,7 +210,7 @@ public class ApiPayController extends ApiBaseAction {
                         //计算返现金额
                         if (null != orderGoodsVo.getCashBack() && orderGoodsVo.getCashBack().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
                             if(null != cusRelationVo && cusRelationVo.size() > 0){
-                                cashBackSum = cashBackSum.add(orderGoodsVo.getCashBack());
+                                cashBackSum = cashBackSum.add(orderGoodsVo.getCashBack().multiply(new BigDecimal(orderGoodsVo.getNumber())));
                             }
                         }
                     }
@@ -280,7 +280,7 @@ public class ApiPayController extends ApiBaseAction {
                             //计算返现金额
                             if (null != orderGoodsVo.getCashBack() && orderGoodsVo.getCashBack().compareTo(new BigDecimal(0)) > 0) {  //返现金额大于0执行
                                 if(null != cusRelationVo && cusRelationVo.size() > 0){
-                                    cashBackSum = cashBackSum.add(orderGoodsVo.getCashBack());
+                                    cashBackSum = cashBackSum.add(orderGoodsVo.getCashBack().multiply(new BigDecimal(orderGoodsVo.getNumber())));
                             }
                         }
                     }

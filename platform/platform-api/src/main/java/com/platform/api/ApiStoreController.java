@@ -106,7 +106,7 @@ public class ApiStoreController extends ApiBaseAction {
             UserVo user = userService.getUserByOpenId(list.get(0).getFromOpenId());
             map.put("referrer",user.getNickname());             //推荐人
         }else{
-            map.put("referrer","暂未绑销售");
+            map.put("referrer","无");
         }
          return map;
     }

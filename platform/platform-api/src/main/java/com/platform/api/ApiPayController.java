@@ -215,7 +215,7 @@ public class ApiPayController extends ApiBaseAction {
                         }
                     }
                     if(null != cusRelationVo && cusRelationVo.size() > 0 && cashBackSum.compareTo(new BigDecimal(0)) > 0){      //返现
-                        walletService.addBalance(cashBackSum, cusRelationVo.get(0).getFromOpenId(),1);
+                        walletService.addBalance(cashBackSum, cusRelationVo.get(0).getFromOpenId(),2);
                     }
                 }
                 return toResponsObject(0, "支付成功", "");

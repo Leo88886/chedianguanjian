@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 作者: @author Harmon <br>
@@ -310,7 +307,14 @@ public class ApiIndexController extends ApiBaseAction {
         param.put("limit", "10");
         PageHelper.startPage(0, 3, false);
         List<GoodsVo> highReturnGoods = goodsService.queryList(param);
-        resultObj.put("highReturnGoods", highReturnGoods);
+        if(highReturnGoods!=null && highReturnGoods.size()<=5){
+            resultObj.put("highReturnGoods", highReturnGoods);
+        }else {
+            Collections.shuffle(highReturnGoods);
+            List<GoodsVo> goodsVos = highReturnGoods.subList(0, 5);
+            resultObj.put("highReturnGoods", goodsVos);
+        }
+
         return toResponsSuccess(resultObj);
     }
 

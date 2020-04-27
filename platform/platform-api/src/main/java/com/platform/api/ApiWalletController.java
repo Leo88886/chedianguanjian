@@ -198,15 +198,14 @@ public class ApiWalletController extends ApiBaseAction {
 
             String weixin_openid = openId;
             // 增加余额
-            apiWalletService.addBalance(balance, weixin_openid,1);
-
             //维护流水
-            WalletWaterVo wwo = new WalletWaterVo();
-            wwo.setOpenId(weixin_openid);
-            wwo.setDealNum(balance);
-            wwo.setTime(new Date());
-            wwo.setType(1);
-            apiWalletWaterMapper.saveWalletWater(wwo);
+            apiWalletService.addBalance(balance, weixin_openid,1);
+//            WalletWaterVo wwo = new WalletWaterVo();
+//            wwo.setOpenId(weixin_openid);
+//            wwo.setDealNum(balance);
+//            wwo.setTime(new Date());
+//            wwo.setType(1);
+//            apiWalletWaterMapper.saveWalletWater(wwo);
 
             return toResponsMsgSuccess("支付成功");
         } else if ("USERPAYING".equals(trade_state)) {

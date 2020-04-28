@@ -4,7 +4,7 @@ var user = require('../../../services/user.js');
 var app = getApp();
 Page({
   data: {
-    balance: 0 ,
+    balance: 0,
     userInfo: {},
     hasMobile: '',
     user: '',
@@ -15,25 +15,25 @@ Page({
     chargeSuccessModalShow: false, //充值（提现）成功弹框
     chargeFailModalShow: false, //充值（提现）失败弹框
     balanceOrderId: '', //充值订单id
-    buyBalance: 0 ,//最近一次充值金额
+    buyBalance: 0, //最近一次充值金额
     buyResult: false,
-    salerId : '暂无',
-    mySalerId : '暂无'
+    salerId: '暂无',
+    mySalerId: '暂无'
   },
-  onLoad: function (options) {
+  onLoad: function(options) {
 
   },
-  onReady: function () {
+  onReady: function() {
 
   },
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
     return {
       title: '车车店管家',
       path: '/pages/index/index?formOpenId=' + wx.getStorageSync('openId'), //当前登陆用户openId,
-      success: function (res) {}
+      success: function(res) {}
     }
   },
-  onShow: function () {
+  onShow: function() {
     let userInfo = wx.getStorageSync('userInfo');
     let token = wx.getStorageSync('token');
 
@@ -58,30 +58,11 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res.data)
         that.setData({
           referrer: res.data.referrer
         });
-      }
-    });
-
-
-    var that = this;
-    wx.request({
-      url: api.GetRelation,
-      data: {
-        openId: wx.getStorageSync('openId'), //当前登陆用户openId
-      },
-      method: 'POST',
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        that.setData({
-          salerId: res.data.salerId,
-          mySalerId: res.data.mySalerId
-        })
       }
     });
 
@@ -91,25 +72,42 @@ Page({
     wx.request({
       url: api.QueryBanlance,
       data: {
-      openId: openId
+        openId: openId
       },
       method: 'POST',
       header: {
         'content-type': 'application/json'
       },
-      success: function (res) {
+      success: function(res) {
         that.setData({
           balance: res.data.balance
         });
       }
     });
 
+    wx.request({
+      url: api.GetRelation,
+      data: {
+        openId: wx.getStorageSync('openId'), //当前登陆用户openId
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function(res) {
+        that.setData({
+          salerId: res.data.salerId,
+          mySalerId: res.data.mySalerId
+        })
+      }
+    });
+
   },
-  onHide: function () {
+  onHide: function() {
     // 页面隐藏
 
   },
-  onUnload: function () {
+  onUnload: function() {
     // 页面关闭
   },
   bindGetUserInfo(e) {
@@ -134,7 +132,7 @@ Page({
       wx.showModal({
         title: '警告通知',
         content: '您点击了拒绝授权,将无法正常显示个人信息,点击确定重新获取授权。',
-        success: function (res) {
+        success: function(res) {
           if (res.confirm) {
             wx.openSetting({
               success: (res) => {
@@ -156,12 +154,12 @@ Page({
       });
     }
   },
-  exitLogin: function () {
+  exitLogin: function() {
     wx.showModal({
       title: '',
       confirmColor: '#b4282d',
       content: '退出登录？',
-      success: function (res) {
+      success: function(res) {
         if (res.confirm) {
           wx.removeStorageSync('token');
           wx.removeStorageSync('userInfo');
@@ -174,7 +172,7 @@ Page({
   },
 
   //点击遮罩
-  hideChargeModal: function () {
+  hideChargeModal: function() {
     this.setData({
       chargeModalShow: false,
       chargeSuccessModalShow: false,
@@ -184,23 +182,23 @@ Page({
       animation: false,
     })
   },
-  preventTouchMove: function () {
+  preventTouchMove: function() {
 
   },
 
   //提现临时提示框
-  caocaocao: function (e) {
+  caocaocao: function(e) {
     wx.showModal({
       title: '提示',
       content: '该功能35日后开放,您可以使用余额进行购买，或者耐心等待提现功能，抱歉~~',
-      success: function (res) {
+      success: function(res) {
 
       }
     });
   },
 
   //充值（提现）弹出框
-  showChargeModal: function (e) {
+  showChargeModal: function(e) {
     this.setData({
       action: e.currentTarget.dataset.action,
       chargeModalShow: !this.data.chargeModalShow
@@ -208,24 +206,24 @@ Page({
   },
 
   //充值（提现）输入框事件
-  bindChargeInput: function (e) {
+  bindChargeInput: function(e) {
     this.setData({
       chargePrice: e.detail.value,
     })
   },
 
   //充值\提现
-  charge: function () {
+  charge: function() {
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
     var reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
-    if (parseFloat(this.data.chargePrice) && this.data.chargePrice > 0
-      && openId != null && openId != '' && reg.test(this.data.chargePrice)) {
+    if (parseFloat(this.data.chargePrice) && this.data.chargePrice > 0 &&
+      openId != null && openId != '' && reg.test(this.data.chargePrice)) {
       // action 0表示当前操作是充值操作，1表示当前操作是提现操作
       if (this.data.action == 0) { //充值操作
         //请调用充值接口，返回成功时候调用这个方法显示成功界面
         //this.charge_success();
-       const balance = this.data.chargePrice
-       const that = this;
+        const balance = this.data.chargePrice
+        const that = this;
         wx.request({
           url: api.BuyBanlance,
           data: {
@@ -236,47 +234,45 @@ Page({
           header: {
             'content-type': 'application/json'
           },
-          success: function (res) {
-              var payParam = res.data;
+          success: function(res) {
+            var payParam = res.data;
             var orderId = payParam.data.orderId;
             var balance = payParam.data.balance;
-              wx.requestPayment({
-                'timeStamp': payParam.data.timeStamp,
-                'nonceStr': payParam.data.nonceStr,
-                'package': payParam.data.package,
-                'signType': payParam.data.signType,
-                'paySign': payParam.data.paySign,
-                'success': function (res) {
-                  that.data.balanceOrderId = orderId
-                  that.data.buyBalance = balance
+            wx.requestPayment({
+              'timeStamp': payParam.data.timeStamp,
+              'nonceStr': payParam.data.nonceStr,
+              'package': payParam.data.package,
+              'signType': payParam.data.signType,
+              'paySign': payParam.data.paySign,
+              'success': function(res) {
+                that.data.balanceOrderId = orderId
+                that.data.buyBalance = balance
 
-                  //维护流水
-                  wx.request({
-                    url: api.BuyBanlanceResult,
-                    data: {
-                      openId: openId,
-                      balance: balance,
-                      orderId: orderId
-                    },
-                    method: 'POST',
-                    header: {
-                      'content-type': 'application/json'
-                    },
-                    success: function (res) {
-                      that.charge_success();
-                    },
-                    fail: function(res){
-                      that.charge_fail();
-                    }
-                  });
-                },
-              });
+                //维护流水
+                wx.request({
+                  url: api.BuyBanlanceResult,
+                  data: {
+                    openId: openId,
+                    balance: balance,
+                    orderId: orderId
+                  },
+                  method: 'POST',
+                  header: {
+                    'content-type': 'application/json'
+                  },
+                  success: function(res) {
+                    that.charge_success();
+                  },
+                  fail: function(res) {
+                    that.charge_fail();
+                  }
+                });
+              },
+            });
 
           }
         });
-      } 
-      
-      else { //提现操作
+      } else { //提现操作
         //请调用提现接口，返回成功时候调用这个方法显示成功界面
         //this.charge_success();
 
@@ -292,9 +288,9 @@ Page({
       })
     }
   },
- 
+
   // 充值（提现）成功
-  charge_success: function (msg) {
+  charge_success: function(msg) {
     this.setData({
       chargeModalShow: false,
       chargeSuccessModalShow: true,
@@ -307,7 +303,7 @@ Page({
   },
 
   // 充值（提现）失败
-  charge_fail: function (msg) {
+  charge_fail: function(msg) {
     this.setData({
       chargeModalShow: false,
       chargeSuccessModalShow: false,

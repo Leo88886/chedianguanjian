@@ -21,23 +21,7 @@ Page({
     mySalerId : '暂无'
   },
   onLoad: function (options) {
-    var that = this;
-    wx.request({
-      url: api.GetRelation,
-      data: {
-        openId: wx.getStorageSync('openId'), //当前登陆用户openId
-      },
-      method: 'POST',
-      header: {
-        'content-type': 'application/json'
-      },
-      success: function (res) {
-        that.setData({
-          salerId: res.data.salerId,
-          mySalerId: res.data.mySalerId
-        })
-      }
-    });
+
   },
   onReady: function () {
 
@@ -82,6 +66,24 @@ Page({
       }
     });
 
+
+    var that = this;
+    wx.request({
+      url: api.GetRelation,
+      data: {
+        openId: wx.getStorageSync('openId'), //当前登陆用户openId
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        that.setData({
+          salerId: res.data.salerId,
+          mySalerId: res.data.mySalerId
+        })
+      }
+    });
 
     //查询余额
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId

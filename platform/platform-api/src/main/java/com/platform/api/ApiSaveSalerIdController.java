@@ -152,16 +152,18 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
         ApiSaleVo saleVo = saleService.getSalerIdBySalerId(salerId);     //通過salerId查询fromOpenId
         if(!saleVo.getOpenId().equals(openId)){         //不能绑定自己
             if(null != saleVo){
-                ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
-                cusRelationVo.setFromOpenId( saleVo.getOpenId());
-                cusRelationVo.setToOpenId(openId);
-                cusRelationVo.setSalerId(Integer.valueOf(salerId));
-                cusRelationVo.setCreateTime(new Date());
-                List<ApiCusRelationVo> list = cusRelationService.getCusByFromOpenId( saleVo.getOpenId());
+                List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(openId);      //查看是否为第一绑定推荐码的用户
                 try {
-                    if(null != list && list.size() > 0 ){
+                    if(null != list && list.size() > 0 ){       //修改推荐码
+                        list.get(0).setFromOpenId(saleVo.getOpenId());
+                        list.get(0).setSalerId(saleVo.getSalerId());
                         cusRelationService.update(list.get(0));
                     }else{  //第一次绑定发送优惠卷
+                        ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
+                        cusRelationVo.setFromOpenId(saleVo.getOpenId());
+                        cusRelationVo.setToOpenId(openId);
+                        cusRelationVo.setSalerId(saleVo.getSalerId());
+                        cusRelationVo.setCreateTime(new Date());
                         cusRelationVo.setId(null);
                         cusRelationService.save(cusRelationVo);
 

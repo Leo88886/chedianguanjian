@@ -211,11 +211,11 @@
       </view>
       <view class="ipt-wrap border-b flex ai-center">
         <label for="" class="font14">详细地址</label>
-        <input type="text" class="ml40 flex1" maxlength="11" placeholder="请输入详细地址，精确到门牌号" bindinput="getStoreLocationDetails"></input>
+        <input type="text" class="ml40 flex1" placeholder="请输入详细地址，精确到门牌号" bindinput="getStoreLocationDetails"></input>
       </view>
       <view class="ipt-wrap border-b flex ai-center">
         <label for="" class="font14">营业执照编号</label>
-        <input type="text" class="ml40 flex1" maxlength="11" placeholder="请输入营业执照编号" bindinput="getBusinessLicenseNo"></input>
+        <input type="text" class="ml40 flex1" placeholder="请输入营业执照编号" bindinput="getBusinessLicenseNo"></input>
       </view>
     </view>
     <view class="btn_ok" bindtap="saveStore" data-statu="close">保存</view>

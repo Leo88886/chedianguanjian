@@ -31,7 +31,7 @@
     </view>
     <view class="ipt-wrap border-b flex ai-center">
       <label for="" class="font14">营业执照编号</label>
-      <input type="text" class="ml40 flex1" maxlength="11" placeholder="请输入营业执照编号" bindinput="getBusinessLicenseNo" value="{{businessLicenseNo}}"></input>
+      <input type="text" class="ml40 flex1" placeholder="请输入营业执照编号" bindinput="getBusinessLicenseNo" value="{{businessLicenseNo}}"></input>
     </view>
   </view>
 

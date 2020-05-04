@@ -1,26 +1,27 @@
 <view class="container">
   <button class="userinfo" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">
     <view style="width:100%">
-      <view style="width:25%;float:left">
-        <image wx:if="{{userInfo && userInfo.avatarUrl}}" class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
-        
-    <view style="flex-direction: column;justify-content:center;">
-      <view class="userinfo-nickname">{{userInfo.nickName}}</view>
-    </view>
-      </view>
-      <view style="width:75%;float:left">
-        <view>
-          <text class="userinfo-xs">推荐人:{{referrer}} </text>
+      <view style="width:100%">
+        <view style="width:25%;float:left">
+          <image wx:if="{{userInfo && userInfo.avatarUrl}}" class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
         </view>
-        <view>
-          <text class="userinfo-xs">推荐码:{{salerId}} </text>
-        </view>
-        <view>
-          <text class="userinfo-xs">我的销售码:{{mySalerId}} </text>
+        <view style="width:75%;float:left">
+          <view>
+            <text class="userinfo-xs">推荐人:{{referrer}} </text>
+          </view>
+          <view>
+            <text class="userinfo-xs">推荐码:{{salerId}} </text>
+          </view>
+          <view>
+            <text class="userinfo-xs">我的销售码:{{mySalerId}} </text>
+          </view>
         </view>
       </view>
-    </view>
 
+      <view style="flex-direction: column;justify-content:center;">
+        <view class="userinfo-nickname" style="text-align:left;margin-left:10%">{{userInfo.nickName}}</view>
+      </view>
+    </view>
   </button>
   <view class="usermoney">
     <view class="usermoney-item">

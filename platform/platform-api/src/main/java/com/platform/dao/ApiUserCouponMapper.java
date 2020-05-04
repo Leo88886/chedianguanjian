@@ -15,4 +15,6 @@ public interface ApiUserCouponMapper extends BaseDao<UserCouponVo> {
     UserCouponVo queryByCouponNumber(@Param("coupon_number") String coupon_number);
 
     void saveUserCouponList(List<UserCouponVo> userCouponList);
+
+    String queryCouponNum(@Param("userId")  String userId);
 }

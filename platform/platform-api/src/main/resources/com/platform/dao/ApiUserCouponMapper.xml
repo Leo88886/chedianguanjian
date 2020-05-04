@@ -60,6 +60,10 @@
 		select count(*) from nideshop_user_coupon 
 	</select>
 
+    <select id="queryCouponNum" resultType="String">
+		select count(*) from nideshop_user_coupon where user_id = ${userId}
+	</select>
+
     <insert id="save" parameterType="com.platform.entity.UserCouponVo" useGeneratedKeys="true" keyProperty="id">
 		insert into nideshop_user_coupon
 		(

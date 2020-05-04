@@ -190,7 +190,9 @@
             <Form-item label="订单总重" prop="weight">
                 <i-input v-model="order.weight" readonly/>
             </Form-item>
-
+            <Form-item label="订单地址" prop="orderAddress">
+                <i-input v-model="order.orderAddress" readonly/>
+            </Form-item>
             <Form-item>
                 <i-button type="warning" @click="reload" style="margin-left: 8px"/>
                 返回</i-button>

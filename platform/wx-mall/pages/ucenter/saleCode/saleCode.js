@@ -69,7 +69,13 @@ Page({
           setTimeout(function() {
             wx.hideLoading()
           }, 2000)
-        } else {
+        } else if (res.data == '4') {
+          wx.showToast({
+            title: '已绑定过销售码',
+            icon: 'none',
+            duration: 2000
+          })
+        }  else {
           wx.showToast({
             title: '暂无该销售码',
             icon: 'none',

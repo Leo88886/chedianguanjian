@@ -18,22 +18,24 @@ Page({
     buyBalance: 0, //最近一次充值金额
     buyResult: false,
     salerId: '暂无',
-    mySalerId: '暂无'
+    mySalerId: '暂无',
+    couponNum: '0',
+    color: 'black'
   },
-  onLoad: function(options) {
+  onLoad: function (options) {
 
   },
-  onReady: function() {
+  onReady: function () {
 
   },
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
     return {
       title: '车车店管家',
       path: '/pages/index/index?formOpenId=' + wx.getStorageSync('openId'), //当前登陆用户openId,
-      success: function(res) {}
+      success: function (res) { }
     }
   },
-  onShow: function() {
+  onShow: function () {
     let userInfo = wx.getStorageSync('userInfo');
     let token = wx.getStorageSync('token');
 
@@ -42,13 +44,22 @@ Page({
       app.globalData.userInfo = userInfo;
       app.globalData.token = token;
     }
-
-    this.setData({
+    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
+    var that = this;
+    that.setData({
       userInfo: app.globalData.userInfo,
     });
 
+    util.request(api.QueryCouponNum, {}).then(function (res) {
+      if (res != '0') {
+        that.setData({
+          couponNum: res,
+          color: 'red'
+        });
+      }
+    });
+
     //查推荐人
-    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
     wx.request({
       url: api.QueryReferrer,
       data: {
@@ -58,7 +69,7 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function(res) {
+      success: function (res) {
         console.log(res.data)
         that.setData({
           referrer: res.data.referrer
@@ -67,8 +78,6 @@ Page({
     });
 
     //查询余额
-    var openId = wx.getStorageSync('openId'); //当前登陆用户openId
-    var that = this;
     wx.request({
       url: api.QueryBanlance,
       data: {
@@ -78,7 +87,7 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function(res) {
+      success: function (res) {
         that.setData({
           balance: res.data.balance
         });
@@ -94,7 +103,7 @@ Page({
       header: {
         'content-type': 'application/json'
       },
-      success: function(res) {
+      success: function (res) {
         that.setData({
           salerId: res.data.salerId,
           mySalerId: res.data.mySalerId
@@ -103,11 +112,11 @@ Page({
     });
 
   },
-  onHide: function() {
+  onHide: function () {
     // 页面隐藏
 
   },
-  onUnload: function() {
+  onUnload: function () {
     // 页面关闭
   },
   bindGetUserInfo(e) {
@@ -132,7 +141,7 @@ Page({
       wx.showModal({
         title: '警告通知',
         content: '您点击了拒绝授权,将无法正常显示个人信息,点击确定重新获取授权。',
-        success: function(res) {
+        success: function (res) {
           if (res.confirm) {
             wx.openSetting({
               success: (res) => {
@@ -154,12 +163,12 @@ Page({
       });
     }
   },
-  exitLogin: function() {
+  exitLogin: function () {
     wx.showModal({
       title: '',
       confirmColor: '#b4282d',
       content: '退出登录？',
-      success: function(res) {
+      success: function (res) {
         if (res.confirm) {
           wx.removeStorageSync('token');
           wx.removeStorageSync('userInfo');
@@ -172,7 +181,7 @@ Page({
   },
 
   //点击遮罩
-  hideChargeModal: function() {
+  hideChargeModal: function () {
     this.setData({
       chargeModalShow: false,
       chargeSuccessModalShow: false,
@@ -182,23 +191,23 @@ Page({
       animation: false,
     })
   },
-  preventTouchMove: function() {
+  preventTouchMove: function () {
 
   },
 
   //提现临时提示框
-  caocaocao: function(e) {
+  caocaocao: function (e) {
     wx.showModal({
       title: '提示',
       content: '该功能35日后开放,您可以使用余额进行购买，或者耐心等待提现功能，抱歉~~',
-      success: function(res) {
+      success: function (res) {
 
       }
     });
   },
 
   //充值（提现）弹出框
-  showChargeModal: function(e) {
+  showChargeModal: function (e) {
     this.setData({
       action: e.currentTarget.dataset.action,
       chargeModalShow: !this.data.chargeModalShow
@@ -206,14 +215,14 @@ Page({
   },
 
   //充值（提现）输入框事件
-  bindChargeInput: function(e) {
+  bindChargeInput: function (e) {
     this.setData({
       chargePrice: e.detail.value,
     })
   },
 
   //充值\提现
-  charge: function() {
+  charge: function () {
     var openId = wx.getStorageSync('openId'); //当前登陆用户openId
     var reg = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
     if (parseFloat(this.data.chargePrice) && this.data.chargePrice > 0 &&
@@ -234,7 +243,7 @@ Page({
           header: {
             'content-type': 'application/json'
           },
-          success: function(res) {
+          success: function (res) {
             var payParam = res.data;
             var orderId = payParam.data.orderId;
             var balance = payParam.data.balance;
@@ -244,7 +253,7 @@ Page({
               'package': payParam.data.package,
               'signType': payParam.data.signType,
               'paySign': payParam.data.paySign,
-              'success': function(res) {
+              'success': function (res) {
                 that.data.balanceOrderId = orderId
                 that.data.buyBalance = balance
 
@@ -260,10 +269,10 @@ Page({
                   header: {
                     'content-type': 'application/json'
                   },
-                  success: function(res) {
+                  success: function (res) {
                     that.charge_success();
                   },
-                  fail: function(res) {
+                  fail: function (res) {
                     that.charge_fail();
                   }
                 });
@@ -290,7 +299,7 @@ Page({
   },
 
   // 充值（提现）成功
-  charge_success: function(msg) {
+  charge_success: function (msg) {
     this.setData({
       chargeModalShow: false,
       chargeSuccessModalShow: true,
@@ -303,7 +312,7 @@ Page({
   },
 
   // 充值（提现）失败
-  charge_fail: function(msg) {
+  charge_fail: function (msg) {
     this.setData({
       chargeModalShow: false,
       chargeSuccessModalShow: false,

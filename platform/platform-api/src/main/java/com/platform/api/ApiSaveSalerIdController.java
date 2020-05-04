@@ -155,9 +155,10 @@ public class ApiSaveSalerIdController extends ApiBaseAction {
                 List<ApiCusRelationVo> list = cusRelationService.getCusByToOpenid(openId);      //查看是否为第一绑定推荐码的用户
                 try {
                     if(null != list && list.size() > 0 ){       //修改推荐码
-                        list.get(0).setFromOpenId(saleVo.getOpenId());
-                        list.get(0).setSalerId(saleVo.getSalerId());
-                        cusRelationService.update(list.get(0));
+                        //.get(0).setFromOpenId(saleVo.getOpenId());
+                        //list.get(0).setSalerId(saleVo.getSalerId());
+                        //cusRelationService.update(list.get(0));
+                        return "4";        // 不能修改分销码字
                     }else{  //第一次绑定发送优惠卷
                         ApiCusRelationVo cusRelationVo = new ApiCusRelationVo();
                         cusRelationVo.setFromOpenId(saleVo.getOpenId());

@@ -222,4 +222,16 @@ public class ApiCouponController extends ApiBaseAction {
             return toResponsFail("领取失败");
         }
     }
+
+    /**
+     * 　　查询优惠卷数量
+     */
+    @ApiOperation(value = "查询优惠卷数量")
+    @PostMapping("QueryCouponNum")
+    public String  QueryCouponNum(@LoginUser UserVo loginUser) {
+        //JSONObject jsonParam = getJsonRequest();
+        //String openId = jsonParam.getString("openId");
+        String num = apiUserCouponService.queryCouponNum(loginUser.getUserId().toString());
+        return  num;
+    }
 }

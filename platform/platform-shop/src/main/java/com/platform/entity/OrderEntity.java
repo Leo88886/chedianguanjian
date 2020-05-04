@@ -94,6 +94,7 @@ public class OrderEntity implements Serializable {
 
     private String orderGoodsDetails;  //订单中商品
     private String weight;
+    private String orderAddress;       //订单地址
     public String getOrderType() {
         return orderType;
     }
@@ -580,5 +581,13 @@ public class OrderEntity implements Serializable {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getOrderAddress() {
+        return orderAddress;
+    }
+
+    public void setOrderAddress(String orderAddress) {
+        this.orderAddress = orderAddress;
     }
 }

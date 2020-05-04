@@ -1,22 +1,26 @@
 <view class="container">
   <button class="userinfo" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">
-    <view style="display:flex;">
-      <image wx:if="{{userInfo && userInfo.avatarUrl}}" class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
-      <view style="display:flex;flex-direction: column;justify-content:center;">
-        <view class="userinfo-nickname">{{userInfo.nickName}}</view>
+    <view style="width:100%">
+      <view style="width:25%;float:left">
+        <image wx:if="{{userInfo && userInfo.avatarUrl}}" class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"></image>
+
+        <view style="flex-direction: column;justify-content:center;">
+          <view class="userinfo-nickname">盛大汽车华北区负责人康颖啊</view>
+        </view>
       </view>
-    </view>
-    <view>
-      <view>
-        <text class="userinfo-xs">推荐人:{{referrer}} </text>
-      </view>
-      <view>
-        <text class="userinfo-xs">推荐码:{{salerId}} </text>
-      </view>
+      <view style="width:75%;float:left">
         <view>
-        <text class="userinfo-xs">我的销售码:{{mySalerId}} </text>
+          <text class="userinfo-xs">推荐人:盛大汽车华北区负责人康颖啊 </text>
+        </view>
+        <view>
+          <text class="userinfo-xs">推荐码:{{salerId}} </text>
+        </view>
+        <view>
+          <text class="userinfo-xs">我的销售码:{{mySalerId}} </text>
+        </view>
       </view>
     </view>
+
   </button>
   <view class="usermoney">
     <view class="usermoney-item">
@@ -37,7 +41,7 @@
     </view>
     <navigator url="/pages/ucenter/coupon/coupon" class="a">
       <view class="usermoney-item">
-        <view class="item-up">0</view>
+        <view class="item-up" style="color:{{color}}">{{couponNum}}</view>
         <view class="item-down">优惠券</view>
       </view>
     </navigator>

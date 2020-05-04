@@ -21,11 +21,11 @@
 
   <view style="background: white;margin: 15rpx 30rpx;padding: 25rpx 50rpx;justify-content: space-between;align-items:center;border-radius: 20rpx;">
     <view class='verCodeSendView' style="margin-top:25px">
-      <text style='font-size:35rpx;color:#9b9b9b；background-color:red'>绑定推荐码：</text>
+      <text style='font-size:35rpx;color:#9b9b9b；background-color:red'>绑定推荐码（一经绑定，不能修改，如有问题，请联系客服）：</text>
     </view>
 
     <view class="section">
-      <input class="input" bindinput="salerId" value='{{salerId}}' />
+      <input class="input" bindinput="salerId" value='{{salerId}}' readonly="{{editor}}" />
     </view>
 
     <view style="width:97%;margin:auto;margin-top:20px">

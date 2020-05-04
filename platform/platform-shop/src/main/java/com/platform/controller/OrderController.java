@@ -92,6 +92,7 @@ public class OrderController {
             order.setOrderGoodsDetails(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1));
             getWeight(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1));
             order.setWeight(getWeight(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1)));
+            order.setOrderAddress(order.getProvince()+"("+order.getCity()+")-"+order.getDistrict()+"-"+order.getAddress());
         }
         return R.ok().put("order", order);
     }

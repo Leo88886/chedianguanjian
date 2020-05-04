@@ -63,4 +63,8 @@ public class ApiUserCouponService {
         }
         return result;
     }
+
+    public String queryCouponNum(String userId) {
+        return userCouponDao.queryCouponNum(userId);
+    }
 }

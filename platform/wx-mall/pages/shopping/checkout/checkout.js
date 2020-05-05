@@ -161,7 +161,6 @@ Page({
           orderId: orderId,
           flag: 1
         }).then(function(res) {
-          console.log(res.errno);
           if (res.errno === 0) {
             wx.redirectTo({
               url: '/pages/payResult/payResult?flag=1&status=1&orderId=' + orderId

@@ -52,7 +52,7 @@ Page({
           },
           'fail': function(res) {
             wx.redirectTo({
-              url: '/pages/payResult/payResult?status=false',
+              url: '/pages/payResult/payResult?status=false&orderId=' + that.data.orderId,
             })
           }
         })

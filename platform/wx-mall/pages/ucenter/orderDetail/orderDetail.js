@@ -55,10 +55,14 @@ Page({
           'signType': payParam.signType,
           'paySign': payParam.paySign,
           'success': function(res) {
-            console.log(res);
+            wx.redirectTo({
+              url: '/pages/payResult/payResult?status=true&orderId=' + that.data.orderId,
+            })
           },
           'fail': function(res) {
-            console.log(res);
+            wx.redirectTo({
+              url: '/pages/payResult/payResult?status=0&orderId=' + that.data.orderId,
+            })
           }
         });
       }

@@ -41,13 +41,13 @@ Page({
         console.log(payParam)
         wx.requestPayment({
           'timeStamp': payParam.timeStamp,
-          'nonceStr': payParam.timeStamp,
-          'package': payParam.nonceStr,
+          'nonceStr': payParam.nonceStr,
+          'package': payParam.package,
           'signType': payParam.signType,
           'paySign': payParam.paySign,
           'success': function(res) {
             wx.redirectTo({
-              url: '/pages/payResult/payResult?status=true',
+              url: '/pages/payResult/payResult?status=true&orderId=' + that.data.orderId,
             })
           },
           'fail': function(res) {
@@ -60,24 +60,24 @@ Page({
     });
   },
   startPay() {
+  
     let that = this;
     wx.showModal({
       title: '提示',
       content: '是否使用钱包余额支付?',
-      success: function(res) {
+      success: function (res) {
         console.log(res);
         if (res.confirm) {
           util.request(api.PayPrepayId, {
-            orderId: that.data.orderId,
-            payType: 1,
+            orderId: that.data.orderId || 15,
             flag: 1
-          }).then(function(res) {
+          }).then(function (res) {
             console.log(res.errno);
             if (res.errno === 0) {
               wx.redirectTo({
-                url: '/pages/payResult/payResult?status=1&orderId=' + that.data.orderId
-              });
-            }else{
+                url: '/pages/payResult/payResult?status=true',
+              })
+            } else {
               wx.redirectTo({
                 url: '/pages/payResult/payResult?status=0&orderId=' + that.data.orderId
               });
@@ -88,6 +88,6 @@ Page({
         }
       }
     });
+  },
 
-  }
 })

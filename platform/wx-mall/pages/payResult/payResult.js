@@ -34,17 +34,30 @@ Page({
   
   updateSuccess: function () {
     let that = this
-    util.request(api.OrderQuery, { orderId: this.data.orderId}).then(function (res) {
+    util.request(api.OrderQuery, {
+       orderId: this.data.orderId}).then(function (res) {
+         if (res.errno === 0){
+           that.setData({
+             status: true
+           });
+         }else{
+           that.setData({
+             status: false
+           });
+         }
     })
   },
 
   payOrder() {
-    pay.payOrder(parseInt(this.data.orderId)).then(res => {
-      this.setData({
-        status: true
+    let orderId = this.data.orderId;
+    pay.payOrder(parseInt(orderId)).then(res => {
+      wx.redirectTo({
+        url: '/pages/payResult/payResult?status=true&orderId=' + orderId
       });
     }).catch(res => {
-      util.showErrorToast('支付失败');
+      wx.redirectTo({
+        url: '/pages/payResult/payResult?status=0&orderId=' + orderId
+      });
     });
   }
 })

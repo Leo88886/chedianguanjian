@@ -164,11 +164,11 @@ Page({
           console.log(res.errno);
           if (res.errno === 0) {
             wx.redirectTo({
-              url: '/pages/payResult/payResult?status=1&orderId=' + orderId
+              url: '/pages/payResult/payResult?flag=1&status=1&orderId=' + orderId
             });
           } else {
             wx.redirectTo({
-              url: '/pages/payResult/payResult?status=0&orderId=' + orderId
+              url: '/pages/payResult/payResult?flag=1&status=0&orderId=' + orderId
             });
           }
         });

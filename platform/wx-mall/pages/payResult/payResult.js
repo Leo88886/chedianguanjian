@@ -14,6 +14,9 @@ Page({
       orderId: options.orderId || 24,
       status: options.status
     })
+    if (options.flag === '1'){
+     return;
+    }
     this.updateSuccess()
   },
   onReady: function () {

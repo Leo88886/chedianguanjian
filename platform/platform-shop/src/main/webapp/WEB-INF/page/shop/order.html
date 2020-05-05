@@ -146,8 +146,8 @@
             <Form-item label="收货人" prop="consignee">
                 <i-input v-model="order.consignee" readonly/>
             </Form-item>
-            <Form-item label="收货地址" prop="address">
-                <i-input v-model="order.address" readonly/>
+            <Form-item label="收货地址" prop="orderAddress">
+                <i-input v-model="order.orderAddress" readonly/>
             </Form-item>
             <Form-item label="联系电话" prop="mobile">
                 <i-input v-model="order.mobile" readonly/>
@@ -189,9 +189,6 @@
 
             <Form-item label="订单总重" prop="weight">
                 <i-input v-model="order.weight" readonly/>
-            </Form-item>
-            <Form-item label="订单地址" prop="orderAddress">
-                <i-input v-model="order.orderAddress" readonly/>
             </Form-item>
             <Form-item>
                 <i-button type="warning" @click="reload" style="margin-left: 8px"/>

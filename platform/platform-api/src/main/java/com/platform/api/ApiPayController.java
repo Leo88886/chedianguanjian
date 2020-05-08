@@ -189,7 +189,7 @@ public class ApiPayController extends ApiBaseAction {
             List<ApiCusRelationVo> cusRelationVo = cusRelationService.getCusByToOpenid(loginUser.getWeixin_openid());
             int result = 1;
             if(null != cusRelationVo && cusRelationVo.size() > 0){
-                result  = walletService.reduceBalance(orderDetail.getOrder_price(),loginUser.getWeixin_openid(),3);
+                result  = walletService.reduceBalance(orderDetail.getActual_price(),loginUser.getWeixin_openid(),3);
             }
             if(result == 1){
                 // 更改订单状态

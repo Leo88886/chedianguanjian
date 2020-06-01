@@ -34,7 +34,7 @@
       </view>
       <view class="item-down">充值</view>
     </view>
-    <view class="usermoney-item" data-action="1" bindtap="caocaocao">
+    <view class="usermoney-item" data-action="1" bindtap="showWithdrawal">
       <view class="item-up">
         <image src="../../../static/images/ic_userinfo_cash.png"></image>
       </view>

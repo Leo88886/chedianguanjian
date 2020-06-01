@@ -278,9 +278,9 @@ Page({
         });
       } else { //提现操作
         //请调用提现接口，返回成功时候调用这个方法显示成功界面
-        const balance = this.data.chargePrice;
+        const picNum = this.data.chargePrice;
         const that = this;
-        if (balance < 50) { //提现金额需大于50
+        if (picNum < 0.5) { //提现金额需大于50
           wx.showToast({
             icon: 'none',
             title: '最小提现金额为50元！',
@@ -288,51 +288,17 @@ Page({
           return;
         } else {
           wx.request({
-            url: api.BuyBanlance,
+            url: api.PickBanlance,
             data: {
               openId: openId,
-              balance: balance
+              picNum: picNum
             },
             method: 'POST',
             header: {
               'content-type': 'application/json'
             },
             success: function(res) {
-              var payParam = res.data;
-              var orderId = payParam.data.orderId;
-              var balance = payParam.data.balance;
-              wx.requestPayment({
-                'timeStamp': payParam.data.timeStamp,
-                'nonceStr': payParam.data.nonceStr,
-                'package': payParam.data.package,
-                'signType': payParam.data.signType,
-                'paySign': payParam.data.paySign,
-                'success': function(res) {
-                  that.data.balanceOrderId = orderId
-                  that.data.buyBalance = balance
-                  that.charge_success();
-                  that.charge_fail();
-                  //维护流水
-                  wx.request({
-                    url: api.BuyBanlanceResult,
-                    data: {
-                      openId: openId,
-                      balance: balance,
-                      orderId: orderId
-                    },
-                    method: 'POST',
-                    header: {
-                      'content-type': 'application/json'
-                    },
-                    success: function(res) {
-                      
-                    },
-                    fail: function(res) {
-                     
-                    }
-                  });
-                },
-              });
+              console.log(res)
             }
           });
         }

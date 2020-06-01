@@ -231,5 +231,67 @@ public class ApiWalletController extends ApiBaseAction {
 
     }
 
+    @IgnoreAuth
+    @PostMapping("pickBalance")
+    @ApiOperation(value = "余额提现")
+    public Object pickBalance(){
+
+        JSONObject jsonParam = this.getJsonRequest();
+        String openId = jsonParam.getString("openId");
+        String picNum = jsonParam.getString("picNum");
+        BigDecimal pkNumberDe = new BigDecimal(picNum);
+
+        //https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=7_7&index=3
+        Map<Object, Object> resultObj = new TreeMap();
+
+        try {
+            Map<Object, Object> parame = new TreeMap<Object, Object>();
+            parame.put("mch_appid", ResourceUtil.getConfigByName("wx.appId"));
+            // 商家账号。
+            parame.put("mchid", ResourceUtil.getConfigByName("wx.mchId"));
+            String randomStr = CharUtil.getRandomNum(18).toUpperCase();
+            // 随机字符串
+            parame.put("nonce_str", randomStr);
+            // 商户订单编号
+            String orderId = CommonUtil.generateOrderNumber();
+            parame.put("partner_trade_no", orderId);
+
+            parame.put("openid", openId);
+            parame.put("check_name", "NO_CHECK");
+
+            //支付金额
+            parame.put("amount", pkNumberDe.multiply(new BigDecimal(100)).intValue());
+
+            parame.put("desc", "车车店管家提现");
+            String sign = WechatUtil.arraySign(parame, ResourceUtil.getConfigByName("wx.paySignKey"));
+            // 数字签证
+            parame.put("sign", sign);
+
+            String xml = MapUtils.convertMap2Xml(parame);
+            logger.info("xml:" + xml);
+            Map<String, Object> resultUn = XmlUtil.xmlStrToMap(WechatUtil.requestOnce(ResourceUtil.getConfigByName("wx.pickurl"), xml));
+            // 响应报文
+            String return_code = MapUtils.getString("return_code", resultUn);
+            String return_msg = MapUtils.getString("return_msg", resultUn);
+            //
+            if (return_code.equalsIgnoreCase("FAIL")) {
+                return toResponsFail("提现失败," + return_msg);
+            } else if (return_code.equalsIgnoreCase("SUCCESS")) {
+                // 返回数据
+                String result_code = MapUtils.getString("result_code", resultUn);
+                String err_code_des = MapUtils.getString("err_code_des", resultUn);
+                if (result_code.equalsIgnoreCase("FAIL")) {
+                    return toResponsFail("支付失败," + err_code_des);
+                } else if (result_code.equalsIgnoreCase("SUCCESS")) {
+                    return toResponsObject(0, "微信统一订单下单成功", resultObj);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return toResponsFail("提现失败,error=" + e.getMessage());
+        }
+        return toResponsFail("提现失败");
+
+    }
 
 }

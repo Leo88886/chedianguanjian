@@ -91,7 +91,9 @@ public class UserController {
                         continue;
                     }
                     UserEntity userEntities = salerIdMap.get(userAllNum.getSalerId());
-                    userEntities.setSalesAll(userAllNum.getSalesAll());
+                    if(null != userEntities){
+                        userEntities.setSalesAll(userAllNum.getSalesAll());
+                    }
                 }
             }
 
@@ -102,7 +104,9 @@ public class UserController {
                         continue;
                     }
                     UserEntity userEntities = salerIdMap.get(userMonthNum.getSalerId());
-                    userEntities.setSalesMon(userMonthNum.getSalesMon());
+                    if(null != userEntities){
+                        userEntities.setSalesMon(userMonthNum.getSalesMon());
+                    }
                 }
             }
         } catch (Exception e) {

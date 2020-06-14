@@ -280,35 +280,47 @@ Page({
         //请调用提现接口，返回成功时候调用这个方法显示成功界面
         const picNum = this.data.chargePrice;
         const that = this;
-        if (picNum < 0.5) { //提现金额需大于50
+        if (picNum < 50) { //提现金额需大于50
           wx.showToast({
             icon: 'none',
             title: '最小提现金额为50元！',
           })
           return;
         } else {
-          wx.request({
-            url: api.PickBanlance,
-            data: {
-              openId: openId,
-              picNum: picNum
-            },
-            method: 'POST',
-            header: {
-              'content-type': 'application/json'
-            },
-            success: function(res) {        
-              console.log(res.data.errno)
-              if (res.data.errno = 0){
-                that.charge_success();
-              }else{
-                that.charge_fail();
-              }           
-            },
-            fail: function (res) {
-              that.charge_fail();
-            }
-          });
+          // wx.request({
+          //   url: api.PickBanlance,
+          //   data: {
+          //     openId: openId,
+          //     picNum: picNum
+          //   },
+          //   method: 'POST',
+          //   header: {
+          //     'content-type': 'application/json'
+          //   },
+          //   success: function(res) {
+          //     console.log(res.data.errno)
+          //     if (res.data.errno = 0){
+          //       that.charge_success();
+          //     }else{
+          //       that.charge_fail();
+          //     }
+          //   },
+          //   fail: function (res) {
+          //     that.charge_fail();
+          //   }
+          // });
+
+            util.request(api.PickBanlance, {
+                openId: openId,
+                picNum: picNum
+            }).then(function(res) {
+                if (res.errno === 0) {
+
+                }
+            });
+
+
+
         }
       }
     } else {

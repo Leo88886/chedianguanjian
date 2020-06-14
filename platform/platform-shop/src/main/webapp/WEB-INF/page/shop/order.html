@@ -78,12 +78,16 @@
             <Form-item label="会员" prop="userName">
                 <i-input v-model="order.userName" readonly/>
             </Form-item>
+            <Form-item label="openId" prop="openId">
+                <i-input v-model="order.openId" readonly/>
+            </Form-item>
             <Form-item label="订单类型" prop="orderType">
                 <i-select v-model="order.orderType" disabled>
                     <i-option value="1">普通订单</i-option>
                     <i-option value="2">团购订单</i-option>
                     <i-option value="3">砍价订单</i-option>
                     <i-option value="4">立即购买</i-option>
+                    <i-option value="5">提现订单</i-option>
                 </i-select>
             </Form-item>
             <Form-item label="订单状态" prop="orderStatus" readonly>

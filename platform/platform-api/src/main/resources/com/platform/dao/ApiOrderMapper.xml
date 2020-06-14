@@ -60,6 +60,7 @@
         <where>
             <if test="user_id != null">
                 and user_id = #{user_id}
+                and order_type != '5'
             </if>
         </where>
         <choose>

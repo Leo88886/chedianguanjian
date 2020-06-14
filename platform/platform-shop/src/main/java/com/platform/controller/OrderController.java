@@ -1,13 +1,7 @@
 package com.platform.controller;
 
-import com.platform.entity.GoodsSpecificationEntity;
-import com.platform.entity.OrderEntity;
-import com.platform.entity.OrderGoodsEntity;
-import com.platform.entity.SpecificationEntity;
-import com.platform.service.GoodsSpecificationService;
-import com.platform.service.OrderGoodsService;
-import com.platform.service.OrderService;
-import com.platform.service.SpecificationService;
+import com.platform.entity.*;
+import com.platform.service.*;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
@@ -37,6 +31,9 @@ public class OrderController {
     private OrderGoodsService orderGoodsService;
     @Autowired
     private GoodsSpecificationService goodsSpecificationService;
+    @Autowired
+    private UserService userService;
+
 
 
     /**
@@ -66,6 +63,13 @@ public class OrderController {
         OrderEntity order = orderService.queryObject(id);
         Map map = new HashMap();
         map.put("orderId",order.getId());
+        if(null != order){
+            //查询用户信息
+            UserEntity user = userService.queryObject(order.getUserId());
+            if(null != user){
+                order.setOpenId(user.getWeixinOpenid());
+            }
+        }
         List<OrderGoodsEntity> orderGoods = orderGoodsService.queryOrderDateals(map);
         String orderGoodsDetails = "";
         if(null != orderGoods && orderGoods.size() > 0){
@@ -89,10 +93,9 @@ public class OrderController {
                     orderGoodsDetails += "-"+orderGood.getRetailPrice()+"元x"+orderGood.getNumber()+",  ";
                 }
             }
-            order.setOrderGoodsDetails(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1));
-            getWeight(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1));
-            order.setWeight(getWeight(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1)));
-            order.setOrderAddress(order.getProvince()+"("+order.getCity()+")-"+order.getDistrict()+"-"+order.getAddress());
+            order.setOrderGoodsDetails(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1));    //订单详情
+            order.setWeight(getWeight(orderGoodsDetails.substring(0,orderGoodsDetails.length()-1)));    //订单总重
+            order.setOrderAddress(order.getProvince()+"("+order.getCity()+")-"+order.getDistrict()+"-"+order.getAddress());     //订单地址
         }
         return R.ok().put("order", order);
     }

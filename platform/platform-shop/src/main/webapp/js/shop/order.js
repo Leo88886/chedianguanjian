@@ -33,6 +33,8 @@ $(function () {
                         return '砍价订单';
                     } else if (value == '4') {
                         return '立即购买';
+                    }else if(value == '5'){
+                        return '提现订单';
                     }
                     return '-';
                 }

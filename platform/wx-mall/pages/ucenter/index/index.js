@@ -297,8 +297,16 @@ Page({
             header: {
               'content-type': 'application/json'
             },
-            success: function(res) {
-              console.log(res)
+            success: function(res) {        
+              console.log(res.data.errno)
+              if (res.data.errno = 0){
+                that.charge_success();
+              }else{
+                that.charge_fail();
+              }           
+            },
+            fail: function (res) {
+              that.charge_fail();
             }
           });
         }

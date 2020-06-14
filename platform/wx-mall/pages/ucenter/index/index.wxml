@@ -105,7 +105,7 @@
     <view class="mask" catchtouchmove="preventTouchMove" catchtap="hideChargeModal"></view>
     <view class="charge_modalDlg">
       <image src="../../../static/images/ic_charge_success.png"></image>
-      <text class="charge_title">{{action == 0? '充值成功' : '提现成功'}}</text>
+      <text class="charge_title">{{action == 0? '充值成功' : '提现成功,预计5个工作日内提现的微信零钱'}}</text>
       <view class="charge_input">
         <text>¥</text>
         <text>{{chargePrice}}</text>

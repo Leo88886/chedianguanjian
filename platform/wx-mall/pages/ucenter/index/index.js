@@ -287,40 +287,16 @@ Page({
           })
           return;
         } else {
-          // wx.request({
-          //   url: api.PickBanlance,
-          //   data: {
-          //     openId: openId,
-          //     picNum: picNum
-          //   },
-          //   method: 'POST',
-          //   header: {
-          //     'content-type': 'application/json'
-          //   },
-          //   success: function(res) {
-          //     console.log(res.data.errno)
-          //     if (res.data.errno = 0){
-          //       that.charge_success();
-          //     }else{
-          //       that.charge_fail();
-          //     }
-          //   },
-          //   fail: function (res) {
-          //     that.charge_fail();
-          //   }
-          // });
-
             util.request(api.PickBanlance, {
                 openId: openId,
                 picNum: picNum
             }).then(function(res) {
                 if (res.errno === 0) {
-
+                  that.charge_success();
+                }else{
+                  that.charge_fail();
                 }
             });
-
-
-
         }
       }
     } else {
